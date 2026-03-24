@@ -2,7 +2,7 @@
 
 A portable skill and reference system that transforms plain text into Canvas LMS-compatible HTML. 
 
-[Documentation Site](https://npuckett.github.io/canvas-design-agent/) · [Element Catalog](https://npuckett.github.io/canvas-design-agent/elements.html) · [Examples](https://npuckett.github.io/canvas-design-agent/examples.html) · [Guide](https://npuckett.github.io/canvas-design-agent/guide.html) · [About](https://npuckett.github.io/canvas-design-agent/about.html)
+[Documentation Site](https://npuckett.github.io/canvas-design-agent/docs/) · [Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html) · [Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html) · [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html) · [About](https://npuckett.github.io/canvas-design-agent/docs/about.html)
 
 ## Table of Contents
 
@@ -57,7 +57,7 @@ If you already have a project and just need the skill, download [SKILL.md](.gith
 4. Save the generated HTML as an `.html` file in your project for reference and reuse.
 5. Open the HTML file, copy its contents into Canvas RCE (switch to HTML editor view), and save.
 
-> **See also:** The [Guide](https://npuckett.github.io/canvas-design-agent/guide.html) on the docs site walks through both workflows in detail, with template examples and a comparison table.
+> **See also:** The [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html) on the docs site walks through both workflows in detail, with template examples and a comparison table.
 
 ## How It Works: Prompt Files
 
@@ -101,17 +101,18 @@ These example prompt files show the markdown input that generates each example p
 
 | Prompt File | Generated Example | Key Elements |
 |---|---|---|
-| [course-timeline.md](docs/prompts/course-timeline.md) | [Course Timeline](https://npuckett.github.io/canvas-design-agent/example-course-timeline.html) | V05, D05, D07, C01 |
-| [class-page.md](docs/prompts/class-page.md) | [Class Page](https://npuckett.github.io/canvas-design-agent/example-class-page.html) | V02, L03, C06, C01 |
-| [project-brief.md](docs/prompts/project-brief.md) | [Project Brief](https://npuckett.github.io/canvas-design-agent/example-project-brief.html) | V05, L04, D01, D07 |
+| [course-timeline.md](docs/prompts/course-timeline.md) | [Course Timeline](https://npuckett.github.io/canvas-design-agent/docs/example-course-timeline.html) | V05, D05, D07, C01 |
+| [class-page.md](docs/prompts/class-page.md) | [Class Page](https://npuckett.github.io/canvas-design-agent/docs/example-class-page.html) | V02, L03, C06, C01 |
+| [project-brief.md](docs/prompts/project-brief.md) | [Project Brief](https://npuckett.github.io/canvas-design-agent/docs/example-project-brief.html) | V05, L04, D01, D07 |
 
-See the [Prompt Files section](https://npuckett.github.io/canvas-design-agent/guide.html#prompt-files) of the Guide for a full explanation of the format and tips for writing effective prompts.
+See the [Prompt Files section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#prompt-files) of the Guide for a full explanation of the format and tips for writing effective prompts.
 
 ## File Structure
 
 ```
 canvas-design-agent/
   README.md                       -- This file
+  LICENSE                         -- CC BY-NC-SA 4.0
   .github/
     SKILL.md                      -- Portable agent skill (the core instruction set)
   docs/
@@ -119,6 +120,7 @@ canvas-design-agent/
     elements.html                 -- Visual element catalog with numbered previews
     examples.html                 -- Example page gallery
     guide.html                    -- Workflows, templates, constraints reference
+    about.html                    -- About this project and its author
     example-course-timeline.html  -- Example: 14-week course schedule
     example-class-page.html       -- Example: reusable class/lecture page
     example-project-brief.html    -- Example: project assignment brief
@@ -132,12 +134,13 @@ canvas-design-agent/
 
 The full reference site is hosted on GitHub Pages:
 
-**[npuckett.github.io/canvas-design-agent](https://npuckett.github.io/canvas-design-agent/)**
+**[npuckett.github.io/canvas-design-agent/docs](https://npuckett.github.io/canvas-design-agent/docs/)**
 
 The site includes:
-- **[Element Catalog](https://npuckett.github.io/canvas-design-agent/elements.html)** -- Visual preview of every Canvas-safe HTML element with its ID number
-- **[Examples](https://npuckett.github.io/canvas-design-agent/examples.html)** -- Three full page examples (course timeline, class page, project brief) showing realistic Canvas pages built from the element library
-- **[Guide](https://npuckett.github.io/canvas-design-agent/guide.html)** -- Step-by-step workflows for both local and web-based agents, course templates, prompt file format, and a constraints quick reference
+- **[Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html)** -- Visual preview of every Canvas-safe HTML element with its ID number
+- **[Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html)** -- Three full page examples (course timeline, class page, project brief) showing realistic Canvas pages built from the element library
+- **[Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html)** -- Step-by-step workflows for both local and web-based agents, course templates, prompt file format, and a constraints quick reference
+- **[About](https://npuckett.github.io/canvas-design-agent/docs/about.html)** -- About this project and its author
 
 You can also run the site locally by opening `docs/index.html` in a browser.
 
@@ -163,7 +166,7 @@ Faculty reference elements by number (e.g., "use C01 for collapsible sections").
 
 **Stripped:** `<style>` blocks, `<script>`, SVG, meter/progress, fieldset/legend, box-shadow, text-shadow, opacity, transform, letter-spacing, external CSS/JS, data URIs.
 
-See [SKILL.md](.github/SKILL.md) for the complete constraint reference, or the [Constraints section](https://npuckett.github.io/canvas-design-agent/guide.html#constraints) on the docs site.
+See [SKILL.md](.github/SKILL.md) for the complete constraint reference, or the [Constraints section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#constraints) on the docs site.
 
 ## License
 
