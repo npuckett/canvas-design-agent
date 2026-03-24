@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About -- Canvas Design Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #222;
+      line-height: 1.6;
+      background: #fff;
+    }
+    a { color: #222; }
+    a:hover { color: #000; }
+
+    /* NAV */
+    nav {
+      background: #000;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav .brand { font-weight: 700; font-size: 18px; color: #fff; text-decoration: none; }
+    nav .links a { color: #999; margin-left: 24px; font-size: 15px; text-decoration: none; }
+    nav .links a:hover { color: #fff; }
+
+    /* LAYOUT */
+    .header {
+      padding: 64px 24px 0;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #000;
+    }
+    .header p {
+      font-size: 15px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    p { margin-bottom: 14px; color: #444; }
+    a { color: #222; }
+    strong { color: #222; }
+
+    .license-note {
+      border-left: 3px solid #ccc;
+      background: #fafafa;
+      padding: 14px 18px;
+      margin: 24px 0;
+      border-radius: 0 4px 4px 0;
+      font-size: 14px;
+      color: #555;
+    }
+    .license-note p:last-child { margin-bottom: 0; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Canvas Design Agent</span>
+  <span class="links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
+  </span>
+</nav>
+
+<div class="header">
+  <h1>About</h1>
+  <p>About this project and its author.</p>
+</div>
+
+<div class="content">
+
+  <p>This tool was developed by <strong>Nick Puckett</strong>, Associate Professor at <a href="https://www.ocadu.ca/academics/explore-faculty/npuckett">OCAD University</a>.</p>
+
+  <p>Canvas Design Agent grew out of the practical challenge of creating well-designed, consistently formatted course pages in Canvas LMS without writing HTML by hand. It packages the knowledge of what Canvas will and will not render into a portable skill file that any AI agent can use to generate valid, visually polished page content from plain text.</p>
+
+  <p>This tool can be used, modified, or extended freely and openly for academic purposes.</p>
+
+  <div class="license-note">
+    <p>Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a> (CC BY-NC-SA 4.0). Free to use and adapt for academic and non-commercial purposes. Attribution required. Derivatives must carry the same license. Commercial use is not permitted.</p>
+  </div>
+
+  <p>Source code and documentation are available on <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>. Contributions and adaptations for academic use are welcome.</p>
+
+</div>
+
+<footer>
+  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md" style="color:#999;">SKILL.md</a>
+</footer>
+
+</body>
+</html>

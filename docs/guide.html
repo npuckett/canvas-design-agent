@@ -191,6 +191,8 @@
     <a href="elements.html">Elements</a>
     <a href="examples.html">Examples</a>
     <a href="guide.html">Guide</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
   </span>
 </nav>
 
@@ -204,6 +206,7 @@
   <a href="#local-workflow">Local Workflow</a>
   <a href="#web-workflow">Web Workflow</a>
   <a href="#comparison">Comparison</a>
+  <a href="#prompt-files">Prompt Files</a>
   <a href="#templates">Templates</a>
   <a href="#constraints">Constraints</a>
 </div>
@@ -233,13 +236,14 @@
 
     <ol class="steps">
       <li><strong>Set up the skill.</strong> Copy <code>SKILL.md</code> into your project's <code>.github/</code> directory. Most AI-enabled editors automatically read instruction files from this location.</li>
-      <li><strong>Create a content file.</strong> Write your page content in a <code>.txt</code> or <code>.md</code> file. Use plain language -- describe what the page should contain, its structure, and any specific elements you want.</li>
-      <li><strong>Ask the agent to transform it.</strong> In your editor's AI chat, ask it to convert your content file into Canvas HTML. Example: <em>"Transform this into a Canvas page using the skill. Use a gradient header and collapsible sections."</em></li>
-      <li><strong>Copy to Canvas.</strong> Open your Canvas page, switch to the HTML editor view, paste the generated HTML, and save.</li>
+      <li><strong>Create a prompt file.</strong> Write your page content in a <code>.md</code> file. Use plain language -- describe what the page should contain, its structure, and reference any element IDs you want (see <a href="#prompt-files">Prompt Files</a>).</li>
+      <li><strong>Ask the agent to generate HTML.</strong> In your editor's AI chat, ask it to convert your prompt file into a Canvas HTML file. Example: <em>"Transform this into a Canvas HTML file using the skill. Use a gradient header and collapsible sections."</em></li>
+      <li><strong>Review the HTML file.</strong> The agent writes an <code>.html</code> file in your project. You can preview it in a browser, keep it under version control, and regenerate it any time your content changes.</li>
+      <li><strong>Paste into Canvas.</strong> Open the generated HTML file, copy its contents, switch to the HTML editor view in Canvas RCE, paste, and save.</li>
     </ol>
 
     <div class="callout">
-      <p><strong>Tip:</strong> Keep your content files organized by course. Create a folder per course and place a course-specific template alongside the content files.</p>
+      <p><strong>Tip:</strong> Keep your prompt files and generated HTML organized by course. A typical structure is one folder per course with <code>.md</code> prompt files alongside their generated <code>.html</code> output files.</p>
     </div>
   </section>
 
@@ -251,8 +255,9 @@
     <ol class="steps">
       <li><strong>Upload the skill.</strong> Start a new conversation. Upload or paste the contents of <code>SKILL.md</code>. This gives the agent all Canvas constraints and element templates it needs.</li>
       <li><strong>Provide your content.</strong> Type or paste your page content in the same conversation. Describe what kind of page it is and what elements you want.</li>
-      <li><strong>Get the HTML.</strong> The agent generates Canvas-ready HTML. Copy the entire output.</li>
-      <li><strong>Paste into Canvas.</strong> Switch to HTML editor view, paste, and save.</li>
+      <li><strong>Get the HTML.</strong> The agent generates Canvas-ready HTML. Copy the entire output (or download it as an <code>.html</code> file if the tool supports it).</li>
+      <li><strong>Save the HTML file.</strong> Save the generated HTML to your project so you can reference, revise, and reuse it later.</li>
+      <li><strong>Paste into Canvas.</strong> Open the HTML file, copy its contents into Canvas RCE's HTML editor view, and save.</li>
     </ol>
 
     <div class="callout">
@@ -289,8 +294,8 @@
         </tr>
         <tr>
           <td><strong>File management</strong></td>
-          <td>Content files saved locally, version controlled</td>
-          <td>Content in chat history only</td>
+          <td>Prompt files and generated HTML saved locally, version controlled</td>
+          <td>Save generated HTML manually to your project</td>
         </tr>
         <tr>
           <td><strong>Prerequisites</strong></td>
@@ -299,6 +304,85 @@
         </tr>
       </tbody>
     </table>
+  </section>
+
+  <!-- PROMPT FILES -->
+  <section id="prompt-files">
+    <h2>Writing Prompt Files</h2>
+    <p>A <strong>prompt file</strong> is a plain markdown file that describes your Canvas page. You write your content naturally, reference element IDs where you want specific formatting, and let the agent generate an HTML file. The generated HTML file is your reusable output -- keep it in your project, preview it in a browser, revise it by editing the prompt and regenerating, and paste it into Canvas when ready.</p>
+
+    <h3>Anatomy of a Prompt File</h3>
+    <p>A prompt file has three parts:</p>
+    <ol>
+      <li><strong>Instruction block</strong> -- A blockquote at the top telling the agent what to do and which elements to use.</li>
+      <li><strong>Content sections</strong> -- Your actual page content organized with markdown headings.</li>
+      <li><strong>Element hints</strong> -- Parenthetical notes like "(collapsible)" or "(use D07 progress bars)" guiding the agent's choices.</li>
+    </ol>
+
+    <h3>Minimal Example</h3>
+    <div class="template-example"># Week 3 Class Page
+
+> Transform this into a Canvas page using the skill.
+> Use V02 blue header, C06 agenda list, C01 collapsible for resources.
+
+## Header
+Class 03: Sensor Fundamentals
+CART 310 · Week 3 · September 22, 2026
+
+## Agenda
+1. Review: Input/Output exercise (10 min)
+2. Lecture: Sensor types and applications (40 min)
+3. Break (10 min)
+4. Lab: Sensor workshop (60 min)
+
+## Resources (collapsible)
+- Slides: sensor-fundamentals.pdf
+- Arduino sensor starter kit docs
+- Recommended: Igoe, "Making Things Talk" Ch. 4</div>
+
+    <p>The agent reads this file plus SKILL.md and outputs complete Canvas-ready HTML with inline styles.</p>
+
+    <h3>Tips for Good Prompt Files</h3>
+    <ul>
+      <li><strong>Reference elements by ID</strong> -- Write "V05 gradient header" or "D01 data table" so the agent uses the exact element you want.</li>
+      <li><strong>Use markdown structure</strong> -- Headings (<code>##</code>) become page sections. Lists become formatted lists. Tables become data tables.</li>
+      <li><strong>Add hints in parentheses</strong> -- Write "(collapsible)" after a heading to get C01, or "(3 cards in a row)" to get L03 flexbox.</li>
+      <li><strong>Keep it natural</strong> -- You don't need to know HTML. Write like you're describing the page to a colleague.</li>
+      <li><strong>One file per page</strong> -- Each prompt file produces one Canvas page. Keep them organized by course or week.</li>
+    </ul>
+
+    <h3>Example Prompt Files</h3>
+    <p>These are the prompt files that generated the <a href="examples.html">example pages</a> on this site. View them on GitHub to see exactly what input produces each output:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Prompt File</th>
+          <th>Generated Page</th>
+          <th>Key Elements</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/course-timeline.md">course-timeline.md</a></td>
+          <td><a href="example-course-timeline.html">Course Timeline</a></td>
+          <td><code>V05</code> <code>D05</code> <code>D07</code> <code>C01</code></td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/class-page.md">class-page.md</a></td>
+          <td><a href="example-class-page.html">Class Page</a></td>
+          <td><code>V02</code> <code>L03</code> <code>C06</code> <code>C01</code></td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/project-brief.md">project-brief.md</a></td>
+          <td><a href="example-project-brief.html">Project Brief</a></td>
+          <td><code>V05</code> <code>L04</code> <code>D01</code> <code>D07</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <p><strong>Try it yourself:</strong> Copy one of the prompt files above, modify it with your own course content, and ask an AI agent to generate the Canvas HTML. The <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md">SKILL.md</a> file gives the agent everything it needs to produce the output.</p>
+    </div>
   </section>
 
   <!-- TEMPLATES -->
@@ -440,7 +524,8 @@ Important dates: T02 highlighted in yellow</div>
 </div>
 
 <footer>
-  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.
+  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md" style="color:#999;">SKILL.md</a>
 </footer>
 
 </body>
