@@ -1,21 +1,22 @@
 # Project Brief — Final Project
 
-> Transform this into a Canvas project brief using the skill.
-> Use V05 gradient header (orange #e67e22 to #d35400),
-> L04 CSS grid for overview (sidebar with quick facts + main description),
-> D01 data table for milestones, L03 flexbox cards for deliverables
-> with V04 "REQUIRED" badges, D07 progress bars for grading weights,
-> C01 collapsibles for detailed rubric and technical specs,
-> V03 alert for late policy, V01 accent box for equipment note,
-> N02 button links for submissions, V06 dark section for submission area.
+Transform this into a Canvas project brief using the skill.
 
-## Header
+## Style
+
+- Layout: CSS grid with sidebar for quick facts + main content (L04)
+- Header: gradient orange #e67e22 to #d35400 (V05)
+- Section headings: styled with orange underline (T01)
+- Submission area: dark background section (V06)
+- Buttons: styled button links for all submissions (N02)
+
+## Header (V05)
 
 CART 310 — Interactive Environments
 Final Project: Interactive Installation
 Worth 30% of final grade · Due December 10, 2026
 
-## Quick Facts (sidebar)
+## Quick Facts (L04 — sidebar)
 
 - Weight: 30%
 - Format: Individual or Pair
@@ -23,7 +24,7 @@ Worth 30% of final grade · Due December 10, 2026
 - Prototype Due: Nov 26
 - Final Due: Dec 10
 
-## Project Description
+## Project Description (T01)
 
 Design and build an interactive installation that responds to human presence,
 movement, or input. Your installation should demonstrate a clear feedback loop
@@ -32,7 +33,7 @@ and consider the relationship between physical space and digital response.
 You may work individually or in pairs. Pair projects are expected to be
 proportionally more ambitious in scope.
 
-## Learning Objectives
+## Learning Objectives (C06)
 
 1. Design an interactive system with clear input/output relationships
 2. Implement real-time sensor-based interaction using physical computing
@@ -40,7 +41,7 @@ proportionally more ambitious in scope.
 4. Document your design process from concept to completion
 5. Present and critique interactive work in a studio context
 
-## Milestones
+## Milestones (D01)
 
 M1 — Proposal (due Nov 17, 10%)
 One-page concept with sketch, interaction description, and materials list
@@ -54,7 +55,7 @@ Complete project with documentation
 M4 — Presentation (due Dec 8/10, 20%)
 8-minute presentation + live demo + Q&A
 
-## Deliverables (3 cards with REQUIRED badges)
+## Deliverables (L03 — 3 cards with V04 REQUIRED badges)
 
 ### Concept Document
 - Project title and description
@@ -74,13 +75,13 @@ M4 — Presentation (due Dec 8/10, 20%)
 - High-res install photos
 - Reflection essay (500 words)
 
-## Late Policy (warning alert)
+## Late Policy (V03)
 
 Milestones lose 10% per day late, up to 3 days.
 After 3 days, the milestone receives a zero.
 Extensions must be requested at least 48 hours in advance.
 
-## Evaluation Criteria (show as D07 progress bars)
+## Evaluation Criteria (D07)
 
 - Concept & Design: 25%
 - Technical Execution: 30%
@@ -88,7 +89,7 @@ Extensions must be requested at least 48 hours in advance.
 - Documentation & Process: 15%
 - Presentation: 10%
 
-## Detailed Rubric (collapsible)
+## Detailed Rubric (C01)
 
 ### Concept & Design (25%)
 - Excellent: Original concept with clear artistic intent. Strong connection between concept and interaction design. Thoughtful consideration of spatial context.
@@ -110,27 +111,33 @@ Extensions must be requested at least 48 hours in advance.
 - Excellent: Clear, well-rehearsed. Live demo works. Engages with questions.
 - Needs improvement: Unprepared, demo fails, unable to discuss design decisions.
 
-## Technical Requirements & Resources (collapsible)
+## Technical Requirements & Resources (C01)
 
-Note: All hardware is available for sign-out from the Equipment Room (EV 5.601).
+### Equipment Note (V01)
+
+All hardware is available for sign-out from the Equipment Room (EV 5.601).
 Reserve at least one week in advance.
 
-Minimum requirements:
+### Minimum Requirements
+
 - At least one physical sensor or input device
 - Real-time processing (latency under 100ms)
 - At least one output modality (visual, audio, or haptic)
 - Must function as a standalone installation
 
-Available equipment:
+### Available Equipment
+
 - Arduino Uno / Mega boards
 - Raspberry Pi 4 units
 - Kinect v2 depth sensors
 - Ultrasonic distance sensors, PIR motion sensors, pressure mats
 - LED strips (NeoPixel), projectors, speakers
 
-Buttons: Equipment Reservation, Code Examples Repo, Past Projects Gallery
+### Links (N02)
 
-## Submission (dark section with buttons)
+Equipment Reservation, Code Examples Repo, Past Projects Gallery
+
+## Submission (V06 + N02)
 
 Submit all milestones through Canvas. Final submission must include all three
 deliverables (concept document, source code, documentation) as a single submission.
