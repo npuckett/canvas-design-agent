@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Example: Course Timeline -- Canvas Design Agent</title>
+  <style>
+    :root {
+      --color-bg: #fff;
+      --color-text: #333;
+      --color-text-muted: #495057;
+      --color-heading: #000;
+      --color-border: #dee2e6;
+      --color-surface: #f8f8f8;
+      --color-nav-bg: #000;
+      --color-hero-bg: #111;
+      --color-accent: #555;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", "Fira Mono", Menlo, monospace;
+      --container-max: 860px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 48px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      line-height: 1.6;
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--color-heading); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--color-accent); }
+
+    /* NAV */
+    .site-nav {
+      background: var(--color-nav-bg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-nav__brand { font-weight: 700; font-size: 1.125rem; color: #fff; }
+    .site-nav__links { display: flex; gap: var(--space-lg); }
+    .site-nav__links a { color: #999; font-size: 0.9375rem; }
+    .site-nav__links a:hover { color: #fff; }
+    .site-nav__toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: var(--space-xs);
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--color-hero-bg);
+      color: #fff;
+      padding: clamp(2rem, 5vw, 3.5rem) var(--space-lg);
+      text-align: center;
+    }
+    .hero__title {
+      font-size: clamp(1.5rem, 3vw, 1.75rem);
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .hero__subtitle {
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      color: #999;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+    .page-section {
+      padding: var(--space-xl) 0;
+    }
+    .page-section + .page-section {
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* HEADINGS */
+    .section-heading {
+      font-size: clamp(1.25rem, 2.5vw, 1.375rem);
+      font-weight: 700;
+      color: var(--color-heading);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* TEXT */
+    p { margin-bottom: 0.75rem; color: var(--color-text-muted); }
+    code {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+    }
+
+    /* ELEMENTS USED — tag grid */
+    .elements-used {
+      margin: var(--space-lg) 0;
+    }
+    .elements-used__title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: var(--space-md);
+    }
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      list-style: none;
+      padding: 0;
+    }
+    .tag-grid li {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+    .tag-grid .tag-id {
+      font-weight: 700;
+      color: var(--color-heading);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    /* CALLOUT */
+    .callout {
+      border-left: 3px solid #ccc;
+      background: var(--color-surface);
+      padding: var(--space-md) 20px;
+      margin: 20px 0;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout strong { color: var(--color-text); }
+
+    /* CANVAS PREVIEW */
+    .canvas-preview {
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: var(--space-lg) 0;
+    }
+    .canvas-preview-label {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 10px var(--space-md);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .canvas-preview-label::before { content: "Canvas Preview"; }
+    .canvas-preview-body {
+      padding: var(--space-lg);
+      background: #fff;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      border-top: 1px solid #e0e0e0;
+      padding: var(--space-lg);
+      text-align: center;
+      font-size: 0.8125rem;
+      color: #999;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .site-nav__toggle { display: block; }
+      .site-nav__links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--color-nav-bg);
+        flex-direction: column;
+        padding: 0 var(--space-lg) var(--space-md);
+        gap: var(--space-md);
+      }
+      .site-nav__links.open { display: flex; }
+      .site-nav { flex-wrap: wrap; }
+      .container { padding: 0 var(--space-md); }
+      .page-section { padding: clamp(1.5rem, 5vw, 3rem) 0; }
+      .canvas-preview-body { padding: var(--space-md); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="site-nav__brand">Canvas Design Agent</span>
+  <button class="site-nav__toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">&#9776;</button>
+  <div class="site-nav__links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1 class="hero__title">Example: Course Timeline / Week Plan</h1>
+  <p class="hero__subtitle">A 14-week course schedule page built entirely from Canvas-safe elements.</p>
+</header>
+
+<main class="container">
+
+  <!-- ABOUT THIS EXAMPLE -->
+  <section class="page-section">
+    <h2 class="section-heading">About This Example</h2>
+    <p>This page shows what a <strong>course timeline or week plan</strong> looks like when generated by the Canvas Design Agent. The preview below is built using only inline styles and Canvas-compatible HTML&mdash;ready to paste into Canvas RCE.</p>
+
+    <div class="elements-used">
+      <h3 class="elements-used__title">Elements Used</h3>
+      <ul class="tag-grid">
+        <li><span class="tag-id">V05</span> Gradient Header</li>
+        <li><span class="tag-id">D05</span> Schedule Grid</li>
+        <li><span class="tag-id">V01</span> Left-Border Accent Box</li>
+        <li><span class="tag-id">V03</span> Alert / Callout Box</li>
+        <li><span class="tag-id">D07</span> Progress Bar</li>
+        <li><span class="tag-id">N01</span> Anchor Links</li>
+        <li><span class="tag-id">T01</span> Styled Headings</li>
+        <li><span class="tag-id">T02</span> Highlighted Text</li>
+        <li><span class="tag-id">C01</span> Collapsible Section</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><strong>How to replicate:</strong> Give the agent your list of weeks, topics, and due dates as plain text. Reference element numbers like <em>"Use a V05 header, D05 schedule grid, and highlight major deadlines with T02."</em></p>
+    </div>
+  </section>
+
+  <!-- CANVAS PREVIEW -->
+  <section class="page-section">
+    <h2 class="section-heading">Canvas Preview</h2>
+    <p>This is exactly what appears in Canvas after pasting the generated HTML.</p>
+
+    <div class="canvas-preview">
+      <div class="canvas-preview-label"></div>
+      <div class="canvas-preview-body">
+
+        <!-- V05: Gradient Header -->
+        <div style="background: linear-gradient(135deg, #2c3e50, #1a252f); color: #ffffff; padding: 24px 20px; margin-bottom: 24px; border-radius: 4px;">
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;">CART 310 &mdash; Interactive Environments</h1>
+          <p style="margin: 8px 0 0; font-size: 15px; color: #b3d9ff;">Fall 2026 &bull; Course Timeline</p>
+        </div>
+
+        <!-- N01: Anchor Link TOC -->
+        <div style="background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; padding: 16px; margin-bottom: 24px;">
+          <h3 style="margin-top: 0; color: #333333; font-size: 16px;">Jump To</h3>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <a href="#unit-1" style="color: #0066cc;">Unit 1: Foundations</a>
+            <a href="#unit-2" style="color: #0066cc;">Unit 2: Interaction</a>
+            <a href="#unit-3" style="color: #0066cc;">Unit 3: Systems</a>
+            <a href="#grading" style="color: #0066cc;">Grading Breakdown</a>
+          </div>
+        </div>
+
+        <!-- D07: Semester Progress -->
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: #495057; margin-bottom: 4px;">
+            <span>Semester Progress</span><span>Week 5 of 14</span>
+          </div>
+          <div style="background: #dee2e6; border-radius: 4px; overflow: hidden; height: 12px;">
+            <div style="background: linear-gradient(90deg, #2c3e50, #3498db); height: 100%; width: 36%; border-radius: 4px;"></div>
+          </div>
+        </div>
+
+        <!-- V01: Important Dates -->
+        <div style="border-left: 4px solid #e74c3c; padding: 16px; margin: 16px 0 24px; background: #f8f8f8; border-radius: 0 4px 4px 0;">
+          <strong style="color: #333333;">Key Dates:</strong>
+          <span style="color: #495057;"> Midterm Project due <mark style="background-color: #fff3cd; padding: 2px 6px; border-radius: 2px;">Oct 22</mark> &bull; Final Project due <mark style="background-color: #fff3cd; padding: 2px 6px; border-radius: 2px;">Dec 10</mark> &bull; No class Nov 11</span>
+        </div>
+
+        <!-- T01: Unit 1 Heading -->
+        <h2 id="unit-1" style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #2c3e50; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+          Unit 1: Foundations (Weeks 1&ndash;5)
+        </h2>
+
+        <!-- D05: Schedule Grid Unit 1 -->
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; margin-bottom: 24px;">
+          <thead>
+            <tr style="background: #2c3e50; color: #ffffff;">
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 70px;" scope="col">Week</th>
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 100px;" scope="col">Date</th>
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6;" scope="col">Topic</th>
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 160px;" scope="col">Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #f8f8f8;">
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">1</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 8</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Course Introduction &amp; Syllabus Review</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #6c757d;">&mdash;</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 10</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Tools Setup &amp; Environment Config</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Software Install</td>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">2</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 15</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Interaction Design Principles</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Reading 1</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 17</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Input/Output Workshop</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Exercise 1</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">3</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 22</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sensor Fundamentals</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Reading 2</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 24</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sensor Lab</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Exercise 2</td>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">4</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 29</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Physical Computing Basics</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Reading 3</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Oct 1</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Prototyping Workshop</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Exercise 3</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">5</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Oct 6</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">User Testing Methods</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Reading 4</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Oct 8</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Peer Testing Session</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;"><mark style="background-color: #f8d7da; padding: 2px 6px; border-radius: 2px;">Assignment 1 Due</mark></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- T01: Unit 2 Heading -->
+        <h2 id="unit-2" style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #2c3e50; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+          Unit 2: Interaction (Weeks 6&ndash;10)
+        </h2>
+
+        <!-- D05: Schedule Grid Unit 2 -->
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; margin-bottom: 24px;">
+          <thead>
+            <tr style="background: #2c3e50; color: #ffffff;">
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 70px;" scope="col">Week</th>
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 100px;" scope="col">Date</th>
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6;" scope="col">Topic</th>
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 160px;" scope="col">Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">6</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Oct 13</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Feedback Loops &amp; Responsiveness</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #6c757d;">&mdash;</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Oct 15</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Studio Work</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Midterm Proposal</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">7</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Oct 20</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Midterm Development</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #6c757d;">&mdash;</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Oct 22</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;"><strong>Midterm Presentations</strong></td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;"><mark style="background-color: #f8d7da; padding: 2px 6px; border-radius: 2px;">Midterm Project Due</mark></td>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">8</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Oct 27</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Connected Systems &amp; APIs</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Reading 5</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Oct 29</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">API Integration Lab</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Exercise 4</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">9</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Nov 3</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Multi-User Experiences</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Reading 6</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Nov 5</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Networking Workshop</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Exercise 5</td>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">10</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Nov 10</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Spatial Interaction</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #6c757d;">&mdash;</td>
+            </tr>
+            <tr>
+              <!-- V03: No class alert -->
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #856404; background: #fff3cd;">Nov 11</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #856404; background: #fff3cd;">&#9888; No Class &mdash; Reading Week</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #856404; background: #fff3cd;">&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- T01: Unit 3 Heading -->
+        <h2 id="unit-3" style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #2c3e50; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+          Unit 3: Systems (Weeks 11&ndash;14)
+        </h2>
+
+        <!-- D05: Schedule Grid Unit 3 -->
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; margin-bottom: 24px;">
+          <thead>
+            <tr style="background: #2c3e50; color: #ffffff;">
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 70px;" scope="col">Week</th>
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 100px;" scope="col">Date</th>
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6;" scope="col">Topic</th>
+              <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 160px;" scope="col">Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #f8f8f8;">
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">11</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Nov 17</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Installation &amp; Exhibition Design</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Final Proposal</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Nov 19</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Studio Work</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #6c757d;">&mdash;</td>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">12</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Nov 24</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Final Project Development</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #6c757d;">&mdash;</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Nov 26</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Peer Feedback Session</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Draft Prototype</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">13</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Dec 1</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Polish &amp; Documentation</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #6c757d;">&mdash;</td>
+            </tr>
+            <tr style="background: #f8f8f8;">
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Dec 3</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Studio Work &mdash; Open Lab</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #6c757d;">&mdash;</td>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">14</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Dec 8</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;"><strong>Final Presentations (Group A)</strong></td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #6c757d;">&mdash;</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Dec 10</td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;"><strong>Final Presentations (Group B)</strong></td>
+              <td style="padding: 10px 12px; border: 1px solid #dee2e6;"><mark style="background-color: #f8d7da; padding: 2px 6px; border-radius: 2px;">Final Project Due</mark></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- C01: Grading Breakdown -->
+        <details id="grading" style="margin-bottom: 12px; border: 1px solid #dee2e6; border-radius: 4px;">
+          <summary style="padding: 12px 16px; background: #f8f8f8; cursor: pointer; font-weight: 600; color: #333333;">
+            Grading Breakdown
+          </summary>
+          <div style="padding: 16px;">
+            <!-- D07: Progress bars for grading -->
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #495057; margin-bottom: 4px;">
+                <span>Exercises (5)</span><span>20%</span>
+              </div>
+              <div style="background: #dee2e6; border-radius: 4px; overflow: hidden; height: 12px;">
+                <div style="background: #3498db; height: 100%; width: 20%; border-radius: 4px;"></div>
+              </div>
+            </div>
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #495057; margin-bottom: 4px;">
+                <span>Assignment 1</span><span>15%</span>
+              </div>
+              <div style="background: #dee2e6; border-radius: 4px; overflow: hidden; height: 12px;">
+                <div style="background: #2ecc71; height: 100%; width: 15%; border-radius: 4px;"></div>
+              </div>
+            </div>
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #495057; margin-bottom: 4px;">
+                <span>Midterm Project</span><span>25%</span>
+              </div>
+              <div style="background: #dee2e6; border-radius: 4px; overflow: hidden; height: 12px;">
+                <div style="background: #e67e22; height: 100%; width: 25%; border-radius: 4px;"></div>
+              </div>
+            </div>
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #495057; margin-bottom: 4px;">
+                <span>Final Project</span><span>30%</span>
+              </div>
+              <div style="background: #dee2e6; border-radius: 4px; overflow: hidden; height: 12px;">
+                <div style="background: #e74c3c; height: 100%; width: 30%; border-radius: 4px;"></div>
+              </div>
+            </div>
+            <div style="margin-bottom: 0;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #495057; margin-bottom: 4px;">
+                <span>Participation &amp; Readings</span><span>10%</span>
+              </div>
+              <div style="background: #dee2e6; border-radius: 4px; overflow: hidden; height: 12px;">
+                <div style="background: #9b59b6; height: 100%; width: 10%; border-radius: 4px;"></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  Canvas Design Agent &mdash; Example: Course Timeline / Week Plan
+</footer>
+
+</body>
+</html>

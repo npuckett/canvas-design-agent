@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Design Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #222;
+      line-height: 1.6;
+      background: #fff;
+    }
+    a { color: #222; text-decoration: none; }
+    a:hover { color: #000; }
+
+    /* NAV */
+    nav {
+      background: #000;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav .brand { font-weight: 700; font-size: 18px; color: #fff; }
+    nav .links a { color: #999; margin-left: 24px; font-size: 15px; }
+    nav .links a:hover { color: #fff; }
+
+    /* LAYOUT */
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+    /* HEADER */
+    .header {
+      padding: 80px 24px 48px;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 36px;
+      font-weight: 800;
+      color: #000;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+    .header p {
+      font-size: 17px;
+      color: #666;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* CARDS */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 0 24px 64px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    @media (max-width: 540px) { .card-grid { grid-template-columns: 1fr; } }
+    .card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 24px;
+      transition: border-color 0.15s;
+    }
+    .card:hover { border-color: #999; }
+    .card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 6px;
+    }
+    .card p {
+      font-size: 14px;
+      color: #666;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .card .arrow {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #000;
+    }
+
+    /* HOW IT WORKS */
+    .how {
+      border-top: 1px solid #e0e0e0;
+      padding: 48px 24px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .how h2 {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin-bottom: 24px;
+    }
+    .how-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 540px) { .how-steps { grid-template-columns: 1fr; } }
+    .how-step .num {
+      font-size: 12px;
+      font-weight: 700;
+      color: #999;
+      margin-bottom: 4px;
+    }
+    .how-step h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 4px;
+    }
+    .how-step p {
+      font-size: 14px;
+      color: #666;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* ELEMENT CATEGORIES */
+    .categories {
+      border-top: 1px solid #e0e0e0;
+      padding: 48px 24px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .categories h2 {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin-bottom: 20px;
+    }
+    .cat-list {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 8px 16px;
+      align-items: baseline;
+    }
+    .cat-prefix {
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 15px;
+      color: #000;
+    }
+    .cat-desc {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Canvas Design Agent</span>
+  <span class="links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+  </span>
+</nav>
+
+<div class="header">
+  <h1>Canvas Design Agent</h1>
+  <p>An AI skill that transforms plain text into visually rich, Canvas LMS-compatible HTML pages.</p>
+</div>
+
+<div class="card-grid">
+  <a href="elements.html" class="card">
+    <h3>Element Catalog</h3>
+    <p>Browse every Canvas-safe HTML element with live previews and copy-ready code.</p>
+    <span class="arrow">&rarr;</span>
+  </a>
+  <a href="examples.html" class="card">
+    <h3>Examples</h3>
+    <p>Full page examples -- course timelines, class pages, and project briefs.</p>
+    <span class="arrow">&rarr;</span>
+  </a>
+  <a href="guide.html" class="card">
+    <h3>Guide</h3>
+    <p>Step-by-step workflows for using the skill with any AI agent, plus course templates.</p>
+    <span class="arrow">&rarr;</span>
+  </a>
+  <a href="https://github.com/npuckett/canvas-design-agent" class="card">
+    <h3>GitHub</h3>
+    <p>Get the SKILL.md file, clone the repo, or contribute to the project.</p>
+    <span class="arrow">&rarr;</span>
+  </a>
+</div>
+
+<div class="how">
+  <h2>How It Works</h2>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="num">01</div>
+      <h3>Get the skill</h3>
+      <p>Download SKILL.md and place it in your project or upload it to a web-based AI chat.</p>
+    </div>
+    <div class="how-step">
+      <div class="num">02</div>
+      <h3>Write your content</h3>
+      <p>Describe your Canvas page in plain text -- schedules, assignments, resources, anything.</p>
+    </div>
+    <div class="how-step">
+      <div class="num">03</div>
+      <h3>Ask the agent</h3>
+      <p>The AI generates Canvas-compatible HTML using only inline styles and tested elements.</p>
+    </div>
+    <div class="how-step">
+      <div class="num">04</div>
+      <h3>Paste into Canvas</h3>
+      <p>Switch to the HTML editor in Canvas RCE, paste, and save. Done.</p>
+    </div>
+  </div>
+</div>
+
+<div class="categories">
+  <h2>Element Categories</h2>
+  <div class="cat-list">
+    <span class="cat-prefix">L</span><span class="cat-desc">Layout -- columns, flexbox, CSS grid, containers</span>
+    <span class="cat-prefix">C</span><span class="cat-desc">Content -- collapsibles, cards, definition lists, checklists</span>
+    <span class="cat-prefix">T</span><span class="cat-desc">Typography -- headings, highlights, blockquotes, keyboard shortcuts</span>
+    <span class="cat-prefix">D</span><span class="cat-desc">Data -- tables, schedule grids, comparison tables, progress bars</span>
+    <span class="cat-prefix">V</span><span class="cat-desc">Visual -- accent boxes, color headers, alerts, badges, gradients</span>
+    <span class="cat-prefix">N</span><span class="cat-desc">Navigation -- anchor links, button-styled links</span>
+    <span class="cat-prefix">X</span><span class="cat-desc">Canvas -- assignment links, file embeds, video/audio players</span>
+  </div>
+</div>
+
+<footer>
+  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.
+</footer>
+
+</body>
+</html>

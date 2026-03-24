@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examples -- Canvas Design Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #222;
+      line-height: 1.6;
+      background: #fff;
+    }
+    a { color: #222; text-decoration: none; }
+    a:hover { color: #000; }
+
+    /* NAV */
+    nav {
+      background: #000;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav .brand { font-weight: 700; font-size: 18px; color: #fff; }
+    nav .links a { color: #999; margin-left: 24px; font-size: 15px; }
+    nav .links a:hover { color: #fff; }
+
+    /* LAYOUT */
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+    /* HEADER */
+    .header {
+      padding: 64px 24px 16px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #000;
+    }
+    .header p {
+      font-size: 15px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    /* EXAMPLE CARDS */
+    .examples {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .example-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+      transition: border-color 0.15s;
+    }
+    .example-card:hover { border-color: #999; }
+    .example-card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 6px;
+    }
+    .example-card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .example-card .elements {
+      margin-top: 10px;
+      font-size: 12px;
+      font-family: monospace;
+      color: #999;
+    }
+    .example-card .arrow {
+      font-size: 20px;
+      color: #ccc;
+      margin-top: 4px;
+    }
+    .example-card:hover .arrow { color: #000; }
+
+    @media (max-width: 540px) {
+      .example-card { grid-template-columns: 1fr; }
+      .example-card .arrow { display: none; }
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Canvas Design Agent</span>
+  <span class="links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+  </span>
+</nav>
+
+<div class="header">
+  <h1>Examples</h1>
+  <p>Complete Canvas page examples built from the element library. Each one is ready to paste into Canvas RCE.</p>
+</div>
+
+<div class="examples">
+
+  <a href="example-course-timeline.html" class="example-card">
+    <div>
+      <h2>Course Timeline</h2>
+      <p>A 14-week course schedule with unit headings, milestone table, progress indicator, and collapsible grading breakdown. Good starting point for a semester overview or syllabus schedule page.</p>
+      <div class="elements">V05 &middot; D05 &middot; V01 &middot; V03 &middot; D07 &middot; N01 &middot; T01 &middot; T02 &middot; C01</div>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </a>
+
+  <a href="example-class-page.html" class="example-card">
+    <div>
+      <h2>Class Page</h2>
+      <p>A reusable single-class template with color-coded header, today's agenda, content area, activity card with checklist, and collapsible resource sections. Designed to be duplicated week to week.</p>
+      <div class="elements">V02 &middot; L03 &middot; C06 &middot; V01 &middot; T06 &middot; C01 &middot; C03 &middot; T02 &middot; N02 &middot; V03 &middot; C07</div>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </a>
+
+  <a href="example-project-brief.html" class="example-card">
+    <div>
+      <h2>Project Brief</h2>
+      <p>A structured assignment page with project overview sidebar, milestone schedule table, deliverable cards, grading rubric in a collapsible, and a dark submission section with button links.</p>
+      <div class="elements">V05 &middot; L04 &middot; L03 &middot; D01 &middot; D07 &middot; C01 &middot; C03 &middot; V01 &middot; V03 &middot; V04 &middot; N02</div>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </a>
+
+</div>
+
+<footer>
+  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Element Catalog -- Canvas Design Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #333;
+      line-height: 1.6;
+      background: #fff;
+    }
+    a { color: #222; text-decoration: none; }
+    a:hover { color: #000; }
+
+    /* NAV */
+    nav {
+      background: #000;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav .brand { font-weight: 700; font-size: 18px; color: #fff; }
+    nav .links a { color: #999; margin-left: 24px; font-size: 15px; text-decoration: none; }
+    nav .links a:hover { color: #fff; }
+
+    /* PAGE LAYOUT */
+    .page { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: #f8f8f8;
+      border-right: 1px solid #dee2e6;
+      padding: 24px 16px;
+      position: sticky;
+      top: 56px;
+      height: calc(100vh - 56px);
+      overflow-y: auto;
+    }
+    .sidebar h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6c757d;
+      margin: 16px 0 8px;
+    }
+    .sidebar h4:first-child { margin-top: 0; }
+    .sidebar a {
+      display: block;
+      font-size: 13px;
+      color: #495057;
+      padding: 3px 0;
+      line-height: 1.4;
+    }
+    .sidebar a:hover { color: #000; text-decoration: none; }
+    .sidebar .id { font-family: monospace; font-weight: 600; display: inline-block; width: 32px; }
+    .main { flex: 1; padding: 32px 40px; max-width: 900px; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { padding: 24px 16px; }
+    }
+
+    /* HEADINGS */
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #000;
+      margin: 48px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    h2:first-child { margin-top: 0; }
+
+    /* ELEMENT CARD */
+    .el {
+      margin-bottom: 32px;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .el-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #f8f8f8;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .el-id {
+      background: #000;
+      color: #fff;
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .el-name { font-weight: 600; font-size: 16px; color: #333; }
+    .el-desc { padding: 12px 16px 0; font-size: 14px; color: #6c757d; }
+    .el-preview {
+      padding: 16px;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .el details {
+      border-top: 1px solid #dee2e6;
+    }
+    .el summary {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #222;
+      cursor: pointer;
+      background: #fafafa;
+    }
+    .el summary:hover { background: #f0f0f0; }
+    .el pre {
+      margin: 0;
+      padding: 16px;
+      background: #f8f8f8;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre;
+      border-radius: 0;
+    }
+
+    /* Reset for preview areas -- prevent site styles from affecting demos */
+    .el-preview table { border-collapse: collapse; }
+    .el-preview p { margin-bottom: 8px; color: #495057; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Canvas Design Agent</span>
+  <span class="links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+  </span>
+</nav>
+
+<div class="page">
+
+<!-- SIDEBAR TOC -->
+<aside class="sidebar">
+  <h4>Layout</h4>
+  <a href="#L01"><span class="id">L01</span> Two-Column Table</a>
+  <a href="#L02"><span class="id">L02</span> Three-Column Table</a>
+  <a href="#L03"><span class="id">L03</span> Flexbox Row</a>
+  <a href="#L04"><span class="id">L04</span> CSS Grid</a>
+  <a href="#L05"><span class="id">L05</span> Centered Container</a>
+  <a href="#L06"><span class="id">L06</span> Full-Width Section</a>
+
+  <h4>Content Org</h4>
+  <a href="#C01"><span class="id">C01</span> Collapsible</a>
+  <a href="#C02"><span class="id">C02</span> Nested Collapsibles</a>
+  <a href="#C03"><span class="id">C03</span> Info Card</a>
+  <a href="#C04"><span class="id">C04</span> Definition List</a>
+  <a href="#C05"><span class="id">C05</span> Styled Def. List</a>
+  <a href="#C06"><span class="id">C06</span> Ordered Lists</a>
+  <a href="#C07"><span class="id">C07</span> Checklist</a>
+  <a href="#C08"><span class="id">C08</span> Code Block</a>
+
+  <h4>Typography</h4>
+  <a href="#T01"><span class="id">T01</span> Styled Heading</a>
+  <a href="#T02"><span class="id">T02</span> Highlighted Text</a>
+  <a href="#T03"><span class="id">T03</span> Abbreviation</a>
+  <a href="#T04"><span class="id">T04</span> Insert / Delete</a>
+  <a href="#T05"><span class="id">T05</span> Keyboard Shortcut</a>
+  <a href="#T06"><span class="id">T06</span> Blockquote</a>
+  <a href="#T07"><span class="id">T07</span> Horizontal Rule</a>
+  <a href="#T08"><span class="id">T08</span> Super / Subscript</a>
+  <a href="#T09"><span class="id">T09</span> Text Truncation</a>
+
+  <h4>Data Display</h4>
+  <a href="#D01"><span class="id">D01</span> Data Table</a>
+  <a href="#D02"><span class="id">D02</span> Merged Cells</a>
+  <a href="#D03"><span class="id">D03</span> Column-Styled</a>
+  <a href="#D04"><span class="id">D04</span> Captioned Table</a>
+  <a href="#D05"><span class="id">D05</span> Schedule Grid</a>
+  <a href="#D06"><span class="id">D06</span> Comparison Table</a>
+  <a href="#D07"><span class="id">D07</span> Progress Bar</a>
+
+  <h4>Visual</h4>
+  <a href="#V01"><span class="id">V01</span> Accent Box</a>
+  <a href="#V02"><span class="id">V02</span> Color Header</a>
+  <a href="#V03"><span class="id">V03</span> Alert Box</a>
+  <a href="#V04"><span class="id">V04</span> Status Badge</a>
+  <a href="#V05"><span class="id">V05</span> Gradient Header</a>
+  <a href="#V06"><span class="id">V06</span> Dark Section</a>
+
+  <h4>Navigation</h4>
+  <a href="#N01"><span class="id">N01</span> Anchor TOC</a>
+  <a href="#N02"><span class="id">N02</span> Button Links</a>
+
+  <h4>Canvas</h4>
+  <a href="#X01"><span class="id">X01</span> Assignment Link</a>
+  <a href="#X02"><span class="id">X02</span> File Embed</a>
+  <a href="#X03"><span class="id">X03</span> Page Link</a>
+  <a href="#X04"><span class="id">X04</span> Video Embed</a>
+  <a href="#X05"><span class="id">X05</span> Audio Player</a>
+  <a href="#X06"><span class="id">X06</span> Video Player</a>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ==================== LAYOUT ==================== -->
+<h2>Layout (L series)</h2>
+
+<!-- L01 -->
+<div class="el" id="L01">
+  <div class="el-head"><span class="el-id">L01</span><span class="el-name">Two-Column Table Layout</span></div>
+  <p class="el-desc">Side-by-side content using a borderless table. Reliable across all Canvas versions.</p>
+  <div class="el-preview">
+    <table style="width: 100%; border-collapse: collapse; border: none;">
+      <tr>
+        <td style="width: 50%; padding: 16px; vertical-align: top; background: #f8f8f8; border: 1px dashed #dee2e6;">
+          <strong>Left column</strong><br>Content goes here. This could be text, images, or any other elements.
+        </td>
+        <td style="width: 50%; padding: 16px; vertical-align: top; background: #f8f8f8; border: 1px dashed #dee2e6;">
+          <strong>Right column</strong><br>Second column content. Widths can be adjusted via percentages.
+        </td>
+      </tr>
+    </table>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;table style="width: 100%; border-collapse: collapse; border: none;"&gt;
+  &lt;tr&gt;
+    &lt;td style="width: 50%; padding: 16px; vertical-align: top;"&gt;
+      LEFT CONTENT
+    &lt;/td&gt;
+    &lt;td style="width: 50%; padding: 16px; vertical-align: top;"&gt;
+      RIGHT CONTENT
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</pre>
+  </details>
+</div>
+
+<!-- L02 -->
+<div class="el" id="L02">
+  <div class="el-head"><span class="el-id">L02</span><span class="el-name">Three-Column Table Layout</span></div>
+  <p class="el-desc">Three even content areas using a borderless table.</p>
+  <div class="el-preview">
+    <table style="width: 100%; border-collapse: collapse; border: none;">
+      <tr>
+        <td style="width: 33.33%; padding: 16px; vertical-align: top; background: #f8f8f8; border: 1px dashed #dee2e6;">
+          <strong>Column 1</strong><br>First third
+        </td>
+        <td style="width: 33.33%; padding: 16px; vertical-align: top; background: #f8f8f8; border: 1px dashed #dee2e6;">
+          <strong>Column 2</strong><br>Second third
+        </td>
+        <td style="width: 33.33%; padding: 16px; vertical-align: top; background: #f8f8f8; border: 1px dashed #dee2e6;">
+          <strong>Column 3</strong><br>Third third
+        </td>
+      </tr>
+    </table>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;table style="width: 100%; border-collapse: collapse; border: none;"&gt;
+  &lt;tr&gt;
+    &lt;td style="width: 33.33%; padding: 16px; vertical-align: top;"&gt;
+      COLUMN 1
+    &lt;/td&gt;
+    &lt;td style="width: 33.33%; padding: 16px; vertical-align: top;"&gt;
+      COLUMN 2
+    &lt;/td&gt;
+    &lt;td style="width: 33.33%; padding: 16px; vertical-align: top;"&gt;
+      COLUMN 3
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</pre>
+  </details>
+</div>
+
+<!-- L03 -->
+<div class="el" id="L03">
+  <div class="el-head"><span class="el-id">L03</span><span class="el-name">Flexbox Row</span></div>
+  <p class="el-desc">Modern flexible layout. Columns wrap on narrow screens when flex-wrap is set.</p>
+  <div class="el-preview">
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 200px; padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;">
+        <strong>Column 1</strong><br>Flexbox child with min-width ensures wrapping.
+      </div>
+      <div style="flex: 1; min-width: 200px; padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;">
+        <strong>Column 2</strong><br>Equal flex means equal width when space allows.
+      </div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="display: flex; gap: 16px; flex-wrap: wrap;"&gt;
+  &lt;div style="flex: 1; min-width: 200px; padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;"&gt;
+    COLUMN 1
+  &lt;/div&gt;
+  &lt;div style="flex: 1; min-width: 200px; padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;"&gt;
+    COLUMN 2
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- L04 -->
+<div class="el" id="L04">
+  <div class="el-head"><span class="el-id">L04</span><span class="el-name">CSS Grid</span></div>
+  <p class="el-desc">Precise column control. Adjust grid-template-columns for different proportions (e.g., sidebar + main).</p>
+  <div class="el-preview">
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 16px;">
+      <div style="padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;">
+        <strong>Sidebar</strong><br>1fr (one-third)
+      </div>
+      <div style="padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;">
+        <strong>Main Content</strong><br>2fr (two-thirds)
+      </div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="display: grid; grid-template-columns: 1fr 2fr; gap: 16px;"&gt;
+  &lt;div style="padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;"&gt;
+    SIDEBAR
+  &lt;/div&gt;
+  &lt;div style="padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;"&gt;
+    MAIN CONTENT
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- L05 -->
+<div class="el" id="L05">
+  <div class="el-head"><span class="el-id">L05</span><span class="el-name">Centered Container</span></div>
+  <p class="el-desc">Constrains content width for readability. Centers on page.</p>
+  <div class="el-preview">
+    <div style="max-width: 600px; margin: 0 auto; padding: 24px; background: #f8f8f8; border: 1px dashed #dee2e6; border-radius: 4px;">
+      This content is constrained to a maximum width and centered horizontally. Useful for long-form text pages.
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="max-width: 800px; margin: 0 auto; padding: 24px;"&gt;
+  CONTENT
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- L06 -->
+<div class="el" id="L06">
+  <div class="el-head"><span class="el-id">L06</span><span class="el-name">Full-Width Section with Background</span></div>
+  <p class="el-desc">Visual separation between major page sections using background color and borders.</p>
+  <div class="el-preview">
+    <div style="background: #f8f8f8; padding: 24px 16px; margin: 16px 0; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;">
+      <strong>Section Title</strong>
+      <p style="margin: 8px 0 0; color: #495057;">This section uses a subtle background to distinguish it from surrounding content.</p>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="background: #f8f8f8; padding: 24px 16px; margin: 24px 0; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;"&gt;
+  SECTION CONTENT
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- ==================== CONTENT ORGANIZATION ==================== -->
+<h2>Content Organization (C series)</h2>
+
+<!-- C01 -->
+<div class="el" id="C01">
+  <div class="el-head"><span class="el-id">C01</span><span class="el-name">Collapsible Section</span></div>
+  <p class="el-desc">Click to expand/collapse. All sections start closed in Canvas (the open attribute gets stripped).</p>
+  <div class="el-preview">
+    <details style="margin-bottom: 12px; border: 1px solid #dee2e6; border-radius: 4px;">
+      <summary style="padding: 12px 16px; background: #f8f8f8; cursor: pointer; font-weight: 600; color: #333333;">
+        Click to expand this section
+      </summary>
+      <div style="padding: 16px;">
+        This content is hidden until the user clicks the summary. Great for reducing page length while keeping information accessible.
+      </div>
+    </details>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;details style="margin-bottom: 12px; border: 1px solid #dee2e6; border-radius: 4px;"&gt;
+  &lt;summary style="padding: 12px 16px; background: #f8f8f8; cursor: pointer; font-weight: 600; color: #333333;"&gt;
+    SECTION TITLE
+  &lt;/summary&gt;
+  &lt;div style="padding: 16px;"&gt;
+    SECTION CONTENT
+  &lt;/div&gt;
+&lt;/details&gt;</pre>
+  </details>
+</div>
+
+<!-- C02 -->
+<div class="el" id="C02">
+  <div class="el-head"><span class="el-id">C02</span><span class="el-name">Nested Collapsibles</span></div>
+  <p class="el-desc">Multi-level expandable content. Good for outlines and hierarchical information.</p>
+  <div class="el-preview">
+    <details style="margin-bottom: 12px; border: 1px solid #dee2e6; border-radius: 4px;">
+      <summary style="padding: 12px 16px; background: #f8f8f8; cursor: pointer; font-weight: 600;">
+        Outer Section
+      </summary>
+      <div style="padding: 16px;">
+        <p style="margin: 0 0 12px;">Introductory text for this section.</p>
+        <details style="border: 1px solid #dee2e6; border-radius: 4px;">
+          <summary style="padding: 10px 14px; background: #ffffff; cursor: pointer; font-weight: 600;">
+            Inner Section
+          </summary>
+          <div style="padding: 14px;">
+            Nested content revealed on second click.
+          </div>
+        </details>
+      </div>
+    </details>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;details style="margin-bottom: 12px; border: 1px solid #dee2e6; border-radius: 4px;"&gt;
+  &lt;summary style="padding: 12px 16px; background: #f8f8f8; cursor: pointer; font-weight: 600;"&gt;
+    OUTER SECTION
+  &lt;/summary&gt;
+  &lt;div style="padding: 16px;"&gt;
+    &lt;p&gt;Introductory text here.&lt;/p&gt;
+    &lt;details style="margin-top: 12px; border: 1px solid #dee2e6; border-radius: 4px;"&gt;
+      &lt;summary style="padding: 10px 14px; background: #ffffff; cursor: pointer; font-weight: 600;"&gt;
+        INNER SECTION
+      &lt;/summary&gt;
+      &lt;div style="padding: 14px;"&gt;
+        INNER CONTENT
+      &lt;/div&gt;
+    &lt;/details&gt;
+  &lt;/div&gt;
+&lt;/details&gt;</pre>
+  </details>
+</div>
+
+<!-- C03 -->
+<div class="el" id="C03">
+  <div class="el-head"><span class="el-id">C03</span><span class="el-name">Info Card</span></div>
+  <p class="el-desc">Boxed content with a header strip. Use for announcements, key info, or resource blocks.</p>
+  <div class="el-preview">
+    <div style="border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 16px; overflow: hidden;">
+      <div style="background: #f8f8f8; padding: 12px 16px; font-weight: 600; color: #333333; border-bottom: 1px solid #dee2e6;">
+        Course Resources
+      </div>
+      <div style="padding: 16px; color: #495057;">
+        Links to the textbook, course software, and reference materials go here.
+      </div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 16px; overflow: hidden;"&gt;
+  &lt;div style="background: #f8f8f8; padding: 12px 16px; font-weight: 600; color: #333333; border-bottom: 1px solid #dee2e6;"&gt;
+    CARD TITLE
+  &lt;/div&gt;
+  &lt;div style="padding: 16px;"&gt;
+    CARD CONTENT
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- C04 -->
+<div class="el" id="C04">
+  <div class="el-head"><span class="el-id">C04</span><span class="el-name">Definition List</span></div>
+  <p class="el-desc">Term-definition pairs. Good for glossaries, FAQs, key terms.</p>
+  <div class="el-preview">
+    <dl style="margin: 0; padding: 0;">
+      <dt style="font-weight: 600; color: #333333; margin-top: 12px;">Canvas RCE</dt>
+      <dd style="margin: 4px 0 0 20px; color: #495057;">The Rich Content Editor used for creating and editing Canvas pages.</dd>
+      <dt style="font-weight: 600; color: #333333; margin-top: 12px;">Inline Styles</dt>
+      <dd style="margin: 4px 0 0 20px; color: #495057;">CSS applied directly to elements via the style attribute. The only CSS method Canvas preserves.</dd>
+    </dl>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;dl style="margin: 0; padding: 0;"&gt;
+  &lt;dt style="font-weight: 600; color: #333333; margin-top: 12px;"&gt;TERM&lt;/dt&gt;
+  &lt;dd style="margin: 4px 0 0 20px; color: #495057;"&gt;Definition text.&lt;/dd&gt;
+  &lt;dt style="font-weight: 600; color: #333333; margin-top: 12px;"&gt;TERM&lt;/dt&gt;
+  &lt;dd style="margin: 4px 0 0 20px; color: #495057;"&gt;Definition text.&lt;/dd&gt;
+&lt;/dl&gt;</pre>
+  </details>
+</div>
+
+<!-- C05 -->
+<div class="el" id="C05">
+  <div class="el-head"><span class="el-id">C05</span><span class="el-name">Styled Definition List with Border Accent</span></div>
+  <p class="el-desc">Definition list with a left border for visual hierarchy.</p>
+  <div class="el-preview">
+    <dl style="margin: 0; padding: 0;">
+      <dt style="font-weight: 600; color: #333333; margin-top: 16px; padding-bottom: 4px; border-bottom: 1px solid #dee2e6;">Formative Assessment</dt>
+      <dd style="margin: 8px 0 0 0; padding-left: 16px; border-left: 3px solid #0066cc; color: #495057;">
+        Ongoing evaluation during the learning process. Aims to monitor student learning and provide feedback.
+      </dd>
+      <dt style="font-weight: 600; color: #333333; margin-top: 16px; padding-bottom: 4px; border-bottom: 1px solid #dee2e6;">Summative Assessment</dt>
+      <dd style="margin: 8px 0 0 0; padding-left: 16px; border-left: 3px solid #0066cc; color: #495057;">
+        Evaluation at the end of a unit or course. Used to measure achievement against standards.
+      </dd>
+    </dl>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;dl style="margin: 0; padding: 0;"&gt;
+  &lt;dt style="font-weight: 600; color: #333333; margin-top: 16px; padding-bottom: 4px; border-bottom: 1px solid #dee2e6;"&gt;TERM&lt;/dt&gt;
+  &lt;dd style="margin: 8px 0 0 0; padding-left: 16px; border-left: 3px solid #0066cc; color: #495057;"&gt;
+    Definition with left border accent.
+  &lt;/dd&gt;
+&lt;/dl&gt;</pre>
+  </details>
+</div>
+
+<!-- C06 -->
+<div class="el" id="C06">
+  <div class="el-head"><span class="el-id">C06</span><span class="el-name">Ordered List Variants</span></div>
+  <p class="el-desc">Numbered, lettered, and roman numeral lists. Supports custom start numbers.</p>
+  <div class="el-preview">
+    <div style="display: flex; gap: 32px; flex-wrap: wrap;">
+      <div>
+        <strong style="font-size: 13px; color: #6c757d;">Numbered</strong>
+        <ol style="padding-left: 24px; color: #495057; margin: 4px 0;">
+          <li>First item</li>
+          <li>Second item</li>
+          <li>Third item</li>
+        </ol>
+      </div>
+      <div>
+        <strong style="font-size: 13px; color: #6c757d;">Lettered (type="A")</strong>
+        <ol type="A" style="padding-left: 24px; color: #495057; margin: 4px 0;">
+          <li>Item A</li>
+          <li>Item B</li>
+          <li>Item C</li>
+        </ol>
+      </div>
+      <div>
+        <strong style="font-size: 13px; color: #6c757d;">Roman (type="i")</strong>
+        <ol type="i" style="padding-left: 24px; color: #495057; margin: 4px 0;">
+          <li>Item i</li>
+          <li>Item ii</li>
+          <li>Item iii</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Numbered --&gt;
+&lt;ol style="padding-left: 24px; color: #495057;"&gt;
+  &lt;li&gt;First item&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;!-- Lettered --&gt;
+&lt;ol type="A" style="padding-left: 24px; color: #495057;"&gt;
+  &lt;li&gt;Item A&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;!-- Roman numerals --&gt;
+&lt;ol type="i" style="padding-left: 24px; color: #495057;"&gt;
+  &lt;li&gt;Item i&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;!-- Start at custom number --&gt;
+&lt;ol start="5" style="padding-left: 24px; color: #495057;"&gt;
+  &lt;li&gt;Fifth item&lt;/li&gt;
+&lt;/ol&gt;</pre>
+  </details>
+</div>
+
+<!-- C07 -->
+<div class="el" id="C07">
+  <div class="el-head"><span class="el-id">C07</span><span class="el-name">Checklist</span></div>
+  <p class="el-desc">Visual checklist using Unicode markers. Not interactive -- purely visual.</p>
+  <div class="el-preview">
+    <ul style="list-style: none; padding-left: 8px; color: #495057;">
+      <li style="margin-bottom: 6px;">&#9745; Read Chapter 3</li>
+      <li style="margin-bottom: 6px;">&#9745; Complete worksheet</li>
+      <li style="margin-bottom: 6px;">&#9744; Submit reflection</li>
+      <li style="margin-bottom: 6px;">&#9744; Peer review (due Friday)</li>
+    </ul>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;ul style="list-style: none; padding-left: 8px; color: #495057;"&gt;
+  &lt;li style="margin-bottom: 6px;"&gt;&amp;#9745; Completed task&lt;/li&gt;
+  &lt;li style="margin-bottom: 6px;"&gt;&amp;#9744; Incomplete task&lt;/li&gt;
+&lt;/ul&gt;</pre>
+  </details>
+</div>
+
+<!-- C08 -->
+<div class="el" id="C08">
+  <div class="el-head"><span class="el-id">C08</span><span class="el-name">Captioned Code Block</span></div>
+  <p class="el-desc">Code with a descriptive caption using figure and figcaption.</p>
+  <div class="el-preview">
+    <figure style="margin: 16px 0;">
+      <pre style="background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; padding: 16px; overflow-x: auto; font-family: monospace; font-size: 14px; color: #333333;"><code>function greet(name) {
+  return "Hello, " + name;
+}</code></pre>
+      <figcaption style="margin-top: 8px; font-size: 13px; color: #6c757d; font-style: italic;">
+        Figure 1: A simple greeting function
+      </figcaption>
+    </figure>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;figure style="margin: 16px 0;"&gt;
+  &lt;pre style="background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; padding: 16px; overflow-x: auto; font-family: monospace; font-size: 14px; color: #333333;"&gt;&lt;code&gt;YOUR CODE HERE&lt;/code&gt;&lt;/pre&gt;
+  &lt;figcaption style="margin-top: 8px; font-size: 13px; color: #6c757d; font-style: italic;"&gt;
+    Caption text
+  &lt;/figcaption&gt;
+&lt;/figure&gt;</pre>
+  </details>
+</div>
+
+<!-- ==================== TYPOGRAPHY ==================== -->
+<h2>Typography (T series)</h2>
+
+<!-- T01 -->
+<div class="el" id="T01">
+  <div class="el-head"><span class="el-id">T01</span><span class="el-name">Styled Heading</span></div>
+  <p class="el-desc">Heading with bottom border for clear section separation.</p>
+  <div class="el-preview">
+    <h2 style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #0066cc; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+      Section Title
+    </h2>
+    <p style="color: #495057;">Content following the styled heading.</p>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;h2 style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #0066cc; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;"&gt;
+  SECTION TITLE
+&lt;/h2&gt;</pre>
+  </details>
+</div>
+
+<!-- T02 -->
+<div class="el" id="T02">
+  <div class="el-head"><span class="el-id">T02</span><span class="el-name">Highlighted Text</span></div>
+  <p class="el-desc">Draw attention to key terms or phrases with colored highlights.</p>
+  <div class="el-preview">
+    <p style="color: #495057;">
+      The assignment is due <mark style="background-color: #fff3cd; padding: 2px 6px; border-radius: 2px;">Friday at midnight</mark>.
+      Please review the <mark style="background-color: #d4edda; padding: 2px 6px; border-radius: 2px;">grading rubric</mark>
+      and note the <mark style="background-color: #f8d7da; padding: 2px 6px; border-radius: 2px;">late policy</mark>
+      as well as the <mark style="background-color: #cce5ff; padding: 2px 6px; border-radius: 2px;">submission format</mark>.
+    </p>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Yellow (default) --&gt;
+&lt;mark style="background-color: #fff3cd; padding: 2px 6px; border-radius: 2px;"&gt;text&lt;/mark&gt;
+
+&lt;!-- Green --&gt;
+&lt;mark style="background-color: #d4edda; padding: 2px 6px; border-radius: 2px;"&gt;text&lt;/mark&gt;
+
+&lt;!-- Red --&gt;
+&lt;mark style="background-color: #f8d7da; padding: 2px 6px; border-radius: 2px;"&gt;text&lt;/mark&gt;
+
+&lt;!-- Blue --&gt;
+&lt;mark style="background-color: #cce5ff; padding: 2px 6px; border-radius: 2px;"&gt;text&lt;/mark&gt;</pre>
+  </details>
+</div>
+
+<!-- T03 -->
+<div class="el" id="T03">
+  <div class="el-head"><span class="el-id">T03</span><span class="el-name">Abbreviation with Tooltip</span></div>
+  <p class="el-desc">Hover over the abbreviation to see the full term. Good for acronyms and jargon.</p>
+  <div class="el-preview">
+    <p style="color: #495057;">
+      This course uses the <abbr title="Rich Content Editor" style="text-decoration: underline dotted; cursor: help;">RCE</abbr>
+      for all <abbr title="Canvas Learning Management System" style="text-decoration: underline dotted; cursor: help;">Canvas LMS</abbr> page editing.
+    </p>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;abbr title="Rich Content Editor"&gt;RCE&lt;/abbr&gt;</pre>
+  </details>
+</div>
+
+<!-- T04 -->
+<div class="el" id="T04">
+  <div class="el-head"><span class="el-id">T04</span><span class="el-name">Inserted and Deleted Text</span></div>
+  <p class="el-desc">Show additions and removals. Useful for revision tracking or changelogs.</p>
+  <div class="el-preview">
+    <p style="color: #495057;">
+      The deadline has been changed from
+      <del style="color: #dc3545; text-decoration: line-through;">October 15</del>
+      to
+      <ins style="color: #28a745; text-decoration: underline;">October 22</ins>.
+    </p>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;del style="color: #dc3545; text-decoration: line-through;"&gt;removed text&lt;/del&gt;
+&lt;ins style="color: #28a745; text-decoration: underline;"&gt;added text&lt;/ins&gt;</pre>
+  </details>
+</div>
+
+<!-- T05 -->
+<div class="el" id="T05">
+  <div class="el-head"><span class="el-id">T05</span><span class="el-name">Keyboard Shortcut</span></div>
+  <p class="el-desc">Display keyboard keys, terminal commands, and code variables.</p>
+  <div class="el-preview">
+    <p style="color: #495057;">
+      Save your work:
+      <kbd style="background: #f8f8f8; border: 1px solid #cccccc; border-radius: 3px; padding: 2px 6px; font-family: monospace; font-size: 13px;">Ctrl</kbd>
+      +
+      <kbd style="background: #f8f8f8; border: 1px solid #cccccc; border-radius: 3px; padding: 2px 6px; font-family: monospace; font-size: 13px;">S</kbd>
+    </p>
+    <p style="color: #495057;">
+      Terminal output: <samp style="font-family: monospace; color: #6c757d;">Build completed successfully</samp>
+    </p>
+    <p style="color: #495057;">
+      Set the variable <var style="font-style: italic; color: #0066cc;">x</var> to 10.
+    </p>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;kbd style="background: #f8f8f8; border: 1px solid #cccccc; border-radius: 3px; padding: 2px 6px; font-family: monospace; font-size: 13px;"&gt;Ctrl&lt;/kbd&gt;
+&lt;samp style="font-family: monospace; color: #6c757d;"&gt;output text&lt;/samp&gt;
+&lt;var style="font-style: italic; color: #0066cc;"&gt;variable&lt;/var&gt;</pre>
+  </details>
+</div>
+
+<!-- T06 -->
+<div class="el" id="T06">
+  <div class="el-head"><span class="el-id">T06</span><span class="el-name">Styled Blockquote</span></div>
+  <p class="el-desc">Visually distinct quotation or callout with left border.</p>
+  <div class="el-preview">
+    <blockquote style="margin: 16px 0; padding: 16px 20px; border-left: 4px solid #0066cc; background: #f8f8f8; color: #495057; font-style: italic; border-radius: 0 4px 4px 0;">
+      <p style="margin: 0;">Design is not just what it looks like and feels like. Design is how it works.</p>
+      <footer style="margin-top: 8px; font-size: 13px; color: #6c757d; font-style: normal;">-- Steve Jobs</footer>
+    </blockquote>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;blockquote style="margin: 16px 0; padding: 16px 20px; border-left: 4px solid #0066cc; background: #f8f8f8; color: #495057; font-style: italic; border-radius: 0 4px 4px 0;"&gt;
+  &lt;p style="margin: 0;"&gt;Quote text here.&lt;/p&gt;
+  &lt;footer style="margin-top: 8px; font-size: 13px; color: #6c757d; font-style: normal;"&gt;-- Attribution&lt;/footer&gt;
+&lt;/blockquote&gt;</pre>
+  </details>
+</div>
+
+<!-- T07 -->
+<div class="el" id="T07">
+  <div class="el-head"><span class="el-id">T07</span><span class="el-name">Styled Horizontal Rule</span></div>
+  <p class="el-desc">Visual section dividers with customized appearance.</p>
+  <div class="el-preview">
+    <p style="font-size: 13px; color: #6c757d; margin-bottom: 4px;">Standard:</p>
+    <hr style="border: none; border-top: 2px solid #dee2e6; margin: 12px 0;">
+    <p style="font-size: 13px; color: #6c757d; margin-bottom: 4px;">Accent (short):</p>
+    <hr style="border: none; border-top: 3px solid #0066cc; margin: 12px 0; max-width: 100px;">
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Standard --&gt;
+&lt;hr style="border: none; border-top: 2px solid #dee2e6; margin: 24px 0;"&gt;
+
+&lt;!-- Accent (short) --&gt;
+&lt;hr style="border: none; border-top: 3px solid #0066cc; margin: 24px 0; max-width: 100px;"&gt;</pre>
+  </details>
+</div>
+
+<!-- T08 -->
+<div class="el" id="T08">
+  <div class="el-head"><span class="el-id">T08</span><span class="el-name">Superscript and Subscript</span></div>
+  <p class="el-desc">For footnotes, chemical formulas, or mathematical notation.</p>
+  <div class="el-preview">
+    <p style="color: #495057;">
+      Footnote reference<sup style="color: #0066cc; font-size: 11px;">[1]</sup> |
+      Water: H<sub>2</sub>O |
+      Pythagorean: a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup>
+    </p>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;sup style="color: #0066cc; font-size: 11px;"&gt;[1]&lt;/sup&gt;
+H&lt;sub&gt;2&lt;/sub&gt;O
+x&lt;sup&gt;2&lt;/sup&gt;</pre>
+  </details>
+</div>
+
+<!-- T09 -->
+<div class="el" id="T09">
+  <div class="el-head"><span class="el-id">T09</span><span class="el-name">Text Truncation</span></div>
+  <p class="el-desc">Long text that truncates with an ellipsis when it overflows. Good for constrained label widths.</p>
+  <div class="el-preview">
+    <div style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #495057; background: #f8f8f8; padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 4px;">
+      This is a very long title that should be truncated with an ellipsis when it overflows the container
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #495057;"&gt;
+  Long text that will truncate...
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- ==================== DATA DISPLAY ==================== -->
+<h2>Data Display (D series)</h2>
+
+<!-- D01 -->
+<div class="el" id="D01">
+  <div class="el-head"><span class="el-id">D01</span><span class="el-name">Data Table</span></div>
+  <p class="el-desc">Standard table with header, body, and accessible scope attributes.</p>
+  <div class="el-preview">
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;">
+      <thead>
+        <tr style="background: #f8f8f8;">
+          <th style="padding: 10px 12px; text-align: left; border: 1px solid #dee2e6; font-weight: 600; color: #333333;" scope="col">Assignment</th>
+          <th style="padding: 10px 12px; text-align: left; border: 1px solid #dee2e6; font-weight: 600; color: #333333;" scope="col">Due Date</th>
+          <th style="padding: 10px 12px; text-align: left; border: 1px solid #dee2e6; font-weight: 600; color: #333333;" scope="col">Weight</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">Project 1</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">Oct 15</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">25%</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">Project 2</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">Nov 20</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">35%</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">Final Exam</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">Dec 15</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">40%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;"&gt;
+  &lt;thead&gt;
+    &lt;tr style="background: #f8f8f8;"&gt;
+      &lt;th style="padding: 10px 12px; text-align: left; border: 1px solid #dee2e6; font-weight: 600; color: #333333;" scope="col"&gt;HEADER&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;"&gt;Data&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+  </details>
+</div>
+
+<!-- D02 -->
+<div class="el" id="D02">
+  <div class="el-head"><span class="el-id">D02</span><span class="el-name">Merged Cell Table</span></div>
+  <p class="el-desc">Uses colspan and rowspan for complex table structures.</p>
+  <div class="el-preview">
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;">
+      <tr style="background: #f8f8f8;">
+        <th colspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center; font-weight: 600;">Contact Information</th>
+      </tr>
+      <tr>
+        <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; vertical-align: top; font-weight: 600; color: #333; width: 30%;">Instructor</td>
+        <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">Email: instructor@university.edu</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 12px; border: 1px solid #dee2e6; color: #495057;">Office: Room 204, Building A</td>
+      </tr>
+    </table>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;"&gt;
+  &lt;tr style="background: #f8f8f8;"&gt;
+    &lt;th colspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center;"&gt;MERGED HEADER&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; vertical-align: top;"&gt;SPANNING ROW&lt;/td&gt;
+    &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6;"&gt;Row 1&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6;"&gt;Row 2&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</pre>
+  </details>
+</div>
+
+<!-- D03 -->
+<div class="el" id="D03">
+  <div class="el-head"><span class="el-id">D03</span><span class="el-name">Column-Styled Table</span></div>
+  <p class="el-desc">Apply consistent styling to entire columns using colgroup.</p>
+  <div class="el-preview">
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;">
+      <colgroup>
+        <col style="background: #f8f8f8; width: 30%;">
+        <col style="width: 70%;">
+      </colgroup>
+      <tr>
+        <th style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: left; font-weight: 600;">Course</th>
+        <td style="padding: 10px 12px; border: 1px solid #dee2e6;">ART 205: Interactive Design</td>
+      </tr>
+      <tr>
+        <th style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: left; font-weight: 600;">Instructor</th>
+        <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Dr. Smith</td>
+      </tr>
+      <tr>
+        <th style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: left; font-weight: 600;">Schedule</th>
+        <td style="padding: 10px 12px; border: 1px solid #dee2e6;">T/Th 10:00-11:30</td>
+      </tr>
+    </table>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;"&gt;
+  &lt;colgroup&gt;
+    &lt;col style="background: #f8f8f8; width: 30%;"&gt;
+    &lt;col style="width: 70%;"&gt;
+  &lt;/colgroup&gt;
+  &lt;tr&gt;
+    &lt;th style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: left; font-weight: 600;"&gt;Label&lt;/th&gt;
+    &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6;"&gt;Value&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</pre>
+  </details>
+</div>
+
+<!-- D04 -->
+<div class="el" id="D04">
+  <div class="el-head"><span class="el-id">D04</span><span class="el-name">Captioned Table</span></div>
+  <p class="el-desc">Table with a visible caption/title element.</p>
+  <div class="el-preview">
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;">
+      <caption style="padding: 10px; font-weight: 600; font-size: 16px; color: #333333; text-align: left; caption-side: top;">
+        Grade Breakdown
+      </caption>
+      <thead>
+        <tr style="background: #f8f8f8;">
+          <th style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: left;" scope="col">Component</th>
+          <th style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: left;" scope="col">Weight</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Participation</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">20%</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Projects</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">50%</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Final</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">30%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;"&gt;
+  &lt;caption style="padding: 10px; font-weight: 600; font-size: 16px; color: #333333; text-align: left;"&gt;
+    TABLE TITLE
+  &lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr style="background: #f8f8f8;"&gt;
+      &lt;th style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: left;" scope="col"&gt;Column&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6;"&gt;Data&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+  </details>
+</div>
+
+<!-- D05 -->
+<div class="el" id="D05">
+  <div class="el-head"><span class="el-id">D05</span><span class="el-name">Schedule Grid</span></div>
+  <p class="el-desc">Week-by-week course schedule with merged week cells and alternating row backgrounds.</p>
+  <div class="el-preview">
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;">
+      <thead>
+        <tr style="background: #333333; color: #ffffff;">
+          <th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 60px;" scope="col">Week</th>
+          <th style="padding: 10px 12px; border: 1px solid #dee2e6;" scope="col">Date</th>
+          <th style="padding: 10px 12px; border: 1px solid #dee2e6;" scope="col">Topic</th>
+          <th style="padding: 10px 12px; border: 1px solid #dee2e6;" scope="col">Due</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background: #f8f8f8;">
+          <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">1</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 3</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Introduction</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">--</td>
+        </tr>
+        <tr style="background: #f8f8f8;">
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 5</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Tools Setup</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Reading 1</td>
+        </tr>
+        <tr>
+          <td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;">2</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 10</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Core Concepts</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">--</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Sep 12</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Workshop</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6;">Assignment 1</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;"&gt;
+  &lt;thead&gt;
+    &lt;tr style="background: #333333; color: #ffffff;"&gt;
+      &lt;th style="padding: 10px 12px; border: 1px solid #dee2e6; width: 80px;" scope="col"&gt;Week&lt;/th&gt;
+      &lt;th style="padding: 10px 12px; border: 1px solid #dee2e6;" scope="col"&gt;Date&lt;/th&gt;
+      &lt;th style="padding: 10px 12px; border: 1px solid #dee2e6;" scope="col"&gt;Topic&lt;/th&gt;
+      &lt;th style="padding: 10px 12px; border: 1px solid #dee2e6;" scope="col"&gt;Due&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr style="background: #f8f8f8;"&gt;
+      &lt;td rowspan="2" style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600; text-align: center; vertical-align: top;"&gt;1&lt;/td&gt;
+      &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6;"&gt;Sep 3&lt;/td&gt;
+      &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6;"&gt;Introduction&lt;/td&gt;
+      &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6;"&gt;--&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;!-- repeat rows, alternating background #f8f8f8 and transparent --&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+  </details>
+</div>
+
+<!-- D06 -->
+<div class="el" id="D06">
+  <div class="el-head"><span class="el-id">D06</span><span class="el-name">Comparison Table</span></div>
+  <p class="el-desc">Side-by-side feature or option comparison with visual check/cross indicators.</p>
+  <div class="el-preview">
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;">
+      <thead>
+        <tr>
+          <th style="padding: 10px 12px; border: 1px solid #dee2e6; background: #f8f8f8;" scope="col">Feature</th>
+          <th style="padding: 10px 12px; border: 1px solid #dee2e6; background: #d4edda; text-align: center;" scope="col">Option A</th>
+          <th style="padding: 10px 12px; border: 1px solid #dee2e6; background: #cce5ff; text-align: center;" scope="col">Option B</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600;">Collaboration</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center;">&#9745;</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center;">&#9745;</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600;">Offline Access</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center;">&#9745;</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center;">&#9744;</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600;">Free Tier</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center;">&#9744;</td>
+          <td style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center;">&#9745;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style="padding: 10px 12px; border: 1px solid #dee2e6; background: #f8f8f8;" scope="col"&gt;Feature&lt;/th&gt;
+      &lt;th style="padding: 10px 12px; border: 1px solid #dee2e6; background: #d4edda; text-align: center;" scope="col"&gt;Option A&lt;/th&gt;
+      &lt;th style="padding: 10px 12px; border: 1px solid #dee2e6; background: #cce5ff; text-align: center;" scope="col"&gt;Option B&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6; font-weight: 600;"&gt;Feature&lt;/td&gt;
+      &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center;"&gt;&amp;#9745;&lt;/td&gt;
+      &lt;td style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: center;"&gt;&amp;#9744;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+  </details>
+</div>
+
+<!-- D07 -->
+<div class="el" id="D07">
+  <div class="el-head"><span class="el-id">D07</span><span class="el-name">Div-Based Progress Bar</span></div>
+  <p class="el-desc">Visual progress indicator using only divs. Replaces &lt;meter&gt; and &lt;progress&gt; which Canvas strips.</p>
+  <div class="el-preview">
+    <div style="margin-bottom: 16px;">
+      <div style="margin-bottom: 8px; font-size: 13px; color: #495057;">Project 1 Progress: 65%</div>
+      <div style="background: #dee2e6; border-radius: 4px; overflow: hidden; height: 20px;">
+        <div style="background: #0066cc; height: 100%; width: 65%; border-radius: 4px;"></div>
+      </div>
+    </div>
+    <div>
+      <div style="display: flex; justify-content: space-between; font-size: 13px; color: #495057; margin-bottom: 4px;">
+        <span>Participation</span><span>25%</span>
+      </div>
+      <div style="background: #dee2e6; border-radius: 4px; overflow: hidden; height: 12px;">
+        <div style="background: #28a745; height: 100%; width: 25%; border-radius: 4px;"></div>
+      </div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="margin-bottom: 8px; font-size: 13px; color: #495057;"&gt;Progress: 65%&lt;/div&gt;
+&lt;div style="background: #dee2e6; border-radius: 4px; overflow: hidden; height: 20px;"&gt;
+  &lt;div style="background: #0066cc; height: 100%; width: 65%; border-radius: 4px;"&gt;&lt;/div&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- ==================== VISUAL INDICATORS ==================== -->
+<h2>Visual Indicators (V series)</h2>
+
+<!-- V01 -->
+<div class="el" id="V01">
+  <div class="el-head"><span class="el-id">V01</span><span class="el-name">Left-Border Accent Box</span></div>
+  <p class="el-desc">Content box with a colored left border for emphasis. Good for notes and callouts.</p>
+  <div class="el-preview">
+    <div style="border-left: 4px solid #0066cc; padding: 16px; margin: 8px 0; background: #f8f8f8; border-radius: 0 4px 4px 0;">
+      <strong style="color: #333333;">NOTE:</strong>
+      <span style="color: #495057;"> Office hours are cancelled this week. Email to schedule an appointment instead.</span>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="border-left: 4px solid #0066cc; padding: 16px; margin: 16px 0; background: #f8f8f8; border-radius: 0 4px 4px 0;"&gt;
+  &lt;strong style="color: #333333;"&gt;NOTE:&lt;/strong&gt;
+  &lt;span style="color: #495057;"&gt; Important information here.&lt;/span&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- V02 -->
+<div class="el" id="V02">
+  <div class="el-head"><span class="el-id">V02</span><span class="el-name">Color-Coded Header</span></div>
+  <p class="el-desc">Page header with distinctive background color. Use different colors for different page types (lecture, lab, workshop).</p>
+  <div class="el-preview">
+    <div style="background: #0066cc; color: #ffffff; padding: 16px 20px; margin-bottom: 12px; border-radius: 4px;">
+      <h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #ffffff;">Lecture: Introduction to Design</h3>
+      <p style="margin: 6px 0 0; font-size: 14px; color: #cce5ff;">September 3, 2025</p>
+    </div>
+    <div style="background: #28a745; color: #ffffff; padding: 16px 20px; margin-bottom: 12px; border-radius: 4px;">
+      <h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #ffffff;">Workshop: Prototyping</h3>
+      <p style="margin: 6px 0 0; font-size: 14px; color: #d4edda;">Session 3</p>
+    </div>
+    <div style="background: #e67e22; color: #ffffff; padding: 16px 20px; border-radius: 4px;">
+      <h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #ffffff;">Dev Day 4</h3>
+      <p style="margin: 6px 0 0; font-size: 14px; color: #fdebd0;">Open studio time</p>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Blue (lectures) --&gt;
+&lt;div style="background: #0066cc; color: #ffffff; padding: 16px 20px; margin-bottom: 24px; border-radius: 4px;"&gt;
+  &lt;h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;"&gt;PAGE TITLE&lt;/h1&gt;
+  &lt;p style="margin: 8px 0 0; font-size: 14px; color: #cce5ff;"&gt;Subtitle&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Green (workshops) --&gt;
+&lt;div style="background: #28a745; ..."&gt;...&lt;/div&gt;
+
+&lt;!-- Orange (labs) --&gt;
+&lt;div style="background: #e67e22; ..."&gt;...&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- V03 -->
+<div class="el" id="V03">
+  <div class="el-head"><span class="el-id">V03</span><span class="el-name">Alert / Callout Box</span></div>
+  <p class="el-desc">Colored boxes for warnings, tips, dangers, and informational notes.</p>
+  <div class="el-preview">
+    <div style="padding: 16px; margin: 8px 0; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+      <strong style="color: #856404;">&#9888; Warning:</strong>
+      <span style="color: #856404;"> Late submissions receive a 10% penalty per day.</span>
+    </div>
+    <div style="padding: 16px; margin: 8px 0; background: #d4edda; border: 1px solid #28a745; border-radius: 4px;">
+      <strong style="color: #155724;">&#10004; Tip:</strong>
+      <span style="color: #155724;"> Save your work frequently using Ctrl+S.</span>
+    </div>
+    <div style="padding: 16px; margin: 8px 0; background: #f8d7da; border: 1px solid #dc3545; border-radius: 4px;">
+      <strong style="color: #721c24;">&#10006; Important:</strong>
+      <span style="color: #721c24;"> Do not share your login credentials.</span>
+    </div>
+    <div style="padding: 16px; margin: 8px 0; background: #cce5ff; border: 1px solid #0066cc; border-radius: 4px;">
+      <strong style="color: #004085;">&#8505; Note:</strong>
+      <span style="color: #004085;"> The lab is open weekdays from 9am to 5pm.</span>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Warning (yellow) --&gt;
+&lt;div style="padding: 16px; margin: 16px 0; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;"&gt;
+  &lt;strong style="color: #856404;"&gt;&amp;#9888; Warning:&lt;/strong&gt;
+  &lt;span style="color: #856404;"&gt; Message.&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- Tip (green) --&gt;
+&lt;div style="padding: 16px; margin: 16px 0; background: #d4edda; border: 1px solid #28a745; border-radius: 4px;"&gt;
+  &lt;strong style="color: #155724;"&gt;&amp;#10004; Tip:&lt;/strong&gt;
+  &lt;span style="color: #155724;"&gt; Message.&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- Danger (red) --&gt;
+&lt;div style="padding: 16px; margin: 16px 0; background: #f8d7da; border: 1px solid #dc3545; border-radius: 4px;"&gt;
+  &lt;strong style="color: #721c24;"&gt;&amp;#10006; Important:&lt;/strong&gt;
+  &lt;span style="color: #721c24;"&gt; Message.&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- Info (blue) --&gt;
+&lt;div style="padding: 16px; margin: 16px 0; background: #cce5ff; border: 1px solid #0066cc; border-radius: 4px;"&gt;
+  &lt;strong style="color: #004085;"&gt;&amp;#8505; Note:&lt;/strong&gt;
+  &lt;span style="color: #004085;"&gt; Message.&lt;/span&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- V04 -->
+<div class="el" id="V04">
+  <div class="el-head"><span class="el-id">V04</span><span class="el-name">Status Badge</span></div>
+  <p class="el-desc">Small label badges for status indicators. Absolute positioning variant overlays a corner.</p>
+  <div class="el-preview">
+    <p style="color: #495057; margin-bottom: 12px;">
+      Inline badges:
+      <span style="display: inline-block; background: #dc3545; color: #ffffff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; vertical-align: middle;">NEW</span>
+      <span style="display: inline-block; background: #0066cc; color: #ffffff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; vertical-align: middle;">REQUIRED</span>
+      <span style="display: inline-block; background: #28a745; color: #ffffff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; vertical-align: middle;">COMPLETE</span>
+      <span style="display: inline-block; background: #6c757d; color: #ffffff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; vertical-align: middle;">OPTIONAL</span>
+    </p>
+    <div style="position: relative; display: inline-block;">
+      <span style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: #ffffff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;">NEW</span>
+      <div style="padding: 16px; border: 1px solid #dee2e6; border-radius: 4px; margin-top: 8px; color: #495057;">
+        Card with a positioned badge
+      </div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Inline badge --&gt;
+&lt;span style="display: inline-block; background: #0066cc; color: #ffffff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; vertical-align: middle;"&gt;
+  REQUIRED
+&lt;/span&gt;
+
+&lt;!-- Positioned badge on a card --&gt;
+&lt;div style="position: relative; display: inline-block;"&gt;
+  &lt;span style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: #ffffff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;"&gt;NEW&lt;/span&gt;
+  &lt;div style="padding: 16px; border: 1px solid #dee2e6; border-radius: 4px; margin-top: 8px;"&gt;
+    Content
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- V05 -->
+<div class="el" id="V05">
+  <div class="el-head"><span class="el-id">V05</span><span class="el-name">Gradient Header</span></div>
+  <p class="el-desc">Banner with gradient background. More visually distinct than solid color headers.</p>
+  <div class="el-preview">
+    <div style="background: linear-gradient(135deg, #0066cc, #004499); color: #ffffff; padding: 24px 20px; border-radius: 4px;">
+      <h3 style="margin: 0; font-size: 22px; font-weight: 700; color: #ffffff;">ART 205: Interactive Design</h3>
+      <p style="margin: 8px 0 0; font-size: 15px; color: #b3d9ff;">Class 12 -- November 5, 2025</p>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="background: linear-gradient(135deg, #0066cc, #004499); color: #ffffff; padding: 24px 20px; margin-bottom: 24px; border-radius: 4px;"&gt;
+  &lt;h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;"&gt;PAGE TITLE&lt;/h1&gt;
+  &lt;p style="margin: 8px 0 0; font-size: 15px; color: #b3d9ff;"&gt;Subtitle or date&lt;/p&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- V06 -->
+<div class="el" id="V06">
+  <div class="el-head"><span class="el-id">V06</span><span class="el-name">Dark Theme Section</span></div>
+  <p class="el-desc">Section with dark background for visual contrast. Links use light blue.</p>
+  <div class="el-preview">
+    <div style="background: #1a1a2e; color: #e0e0e0; padding: 24px; border-radius: 4px;">
+      <h3 style="color: #ffffff; margin: 0 0 8px;">Important Announcement</h3>
+      <p style="color: #e0e0e0; margin: 0;">The midterm has been moved to next week. See the <a href="#" style="color: #66ccff;">updated schedule</a> for details.</p>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="background: #1a1a2e; color: #e0e0e0; padding: 24px; margin: 24px 0; border-radius: 4px;"&gt;
+  &lt;h2 style="color: #ffffff; margin-top: 0;"&gt;SECTION TITLE&lt;/h2&gt;
+  &lt;p style="color: #e0e0e0;"&gt;Content. &lt;a href="#" style="color: #66ccff;"&gt;Links use light blue.&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- ==================== NAVIGATION ==================== -->
+<h2>Navigation (N series)</h2>
+
+<!-- N01 -->
+<div class="el" id="N01">
+  <div class="el-head"><span class="el-id">N01</span><span class="el-name">Anchor Link Table of Contents</span></div>
+  <p class="el-desc">Jump links to sections within the same page. Uses id attributes for targets.</p>
+  <div class="el-preview">
+    <div style="background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; padding: 16px; margin-bottom: 16px;">
+      <h4 style="margin: 0 0 8px; color: #333333; font-size: 15px;">Contents</h4>
+      <ol style="padding-left: 24px; color: #495057; margin: 0;">
+        <li><a href="#" style="color: #0066cc;">Course Overview</a></li>
+        <li><a href="#" style="color: #0066cc;">Schedule</a></li>
+        <li><a href="#" style="color: #0066cc;">Grading Policy</a></li>
+        <li><a href="#" style="color: #0066cc;">Resources</a></li>
+      </ol>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; padding: 16px; margin-bottom: 24px;"&gt;
+  &lt;h3 style="margin-top: 0; color: #333333;"&gt;Contents&lt;/h3&gt;
+  &lt;ol style="padding-left: 24px; color: #495057;"&gt;
+    &lt;li&gt;&lt;a href="#section-1" style="color: #0066cc;"&gt;Section One&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#section-2" style="color: #0066cc;"&gt;Section Two&lt;/a&gt;&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;
+
+&lt;!-- Target sections --&gt;
+&lt;h2 id="section-1"&gt;Section One&lt;/h2&gt;
+&lt;h2 id="section-2"&gt;Section Two&lt;/h2&gt;</pre>
+  </details>
+</div>
+
+<!-- N02 -->
+<div class="el" id="N02">
+  <div class="el-head"><span class="el-id">N02</span><span class="el-name">Button-Styled Links</span></div>
+  <p class="el-desc">Links styled as clickable buttons. Use for CTAs, resource links, or navigation.</p>
+  <div class="el-preview">
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 0;">
+      <a href="#" style="display: inline-block; padding: 10px 20px; background: #0066cc; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: 600; font-size: 15px;">Primary Button</a>
+      <a href="#" style="display: inline-block; padding: 10px 20px; background: #ffffff; color: #0066cc; text-decoration: none; border: 2px solid #0066cc; border-radius: 4px; font-weight: 600; font-size: 15px;">Secondary Button</a>
+      <a href="#" style="display: inline-block; padding: 10px 20px; background: #28a745; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: 600; font-size: 15px;">Submit</a>
+      <a href="#" style="display: inline-block; padding: 10px 20px; background: #6c757d; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: 600; font-size: 15px;">Go Back</a>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Primary --&gt;
+&lt;a href="URL" style="display: inline-block; padding: 10px 20px; background: #0066cc; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: 600; font-size: 15px;"&gt;BUTTON TEXT&lt;/a&gt;
+
+&lt;!-- Secondary (outline) --&gt;
+&lt;a href="URL" style="display: inline-block; padding: 10px 20px; background: #ffffff; color: #0066cc; text-decoration: none; border: 2px solid #0066cc; border-radius: 4px; font-weight: 600; font-size: 15px;"&gt;BUTTON TEXT&lt;/a&gt;
+
+&lt;!-- Button row --&gt;
+&lt;div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0;"&gt;
+  &lt;a href="URL" style="..."&gt;Button 1&lt;/a&gt;
+  &lt;a href="URL" style="..."&gt;Button 2&lt;/a&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- ==================== CANVAS INTEGRATION ==================== -->
+<h2>Canvas Integration (X series)</h2>
+
+<!-- X01 -->
+<div class="el" id="X01">
+  <div class="el-head"><span class="el-id">X01</span><span class="el-name">Canvas Assignment Link</span></div>
+  <p class="el-desc">Link to a Canvas assignment. Replace COURSE_ID and ASSIGNMENT_ID with your values.</p>
+  <div class="el-preview">
+    <p>
+      <a href="#" style="color: #0066cc; font-weight: 600;">Project 1: Interaction Design Brief</a>
+    </p>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;a href="/courses/COURSE_ID/assignments/ASSIGNMENT_ID" style="color: #0066cc; font-weight: 600;"&gt;
+  Assignment Name
+&lt;/a&gt;</pre>
+  </details>
+</div>
+
+<!-- X02 -->
+<div class="el" id="X02">
+  <div class="el-head"><span class="el-id">X02</span><span class="el-name">Canvas File Embed</span></div>
+  <p class="el-desc">Embed an image from Canvas Files with a caption. Replace COURSE_ID and FILE_ID.</p>
+  <div class="el-preview">
+    <figure style="margin: 16px 0; text-align: center;">
+      <div style="max-width: 100%; height: 120px; background: #f8f8f8; border: 2px dashed #dee2e6; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+        [Canvas-hosted image appears here]
+      </div>
+      <figcaption style="margin-top: 8px; font-size: 13px; color: #6c757d; font-style: italic;">Figure: Project example from Fall 2024</figcaption>
+    </figure>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;figure style="margin: 16px 0; text-align: center;"&gt;
+  &lt;img src="/courses/COURSE_ID/files/FILE_ID/preview" alt="DESCRIPTION" style="max-width: 100%; height: auto; border-radius: 4px;"&gt;
+  &lt;figcaption style="margin-top: 8px; font-size: 13px; color: #6c757d; font-style: italic;"&gt;Caption text&lt;/figcaption&gt;
+&lt;/figure&gt;</pre>
+  </details>
+</div>
+
+<!-- X03 -->
+<div class="el" id="X03">
+  <div class="el-head"><span class="el-id">X03</span><span class="el-name">Canvas Page Link</span></div>
+  <p class="el-desc">Link to another Canvas page (wiki page). Uses the page URL slug.</p>
+  <div class="el-preview">
+    <p>
+      See the <a href="#" style="color: #0066cc;">Course Policies</a> page and the
+      <a href="#" style="color: #0066cc;">Technical Requirements</a> page for details.
+    </p>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;a href="/courses/COURSE_ID/pages/page-url-slug" style="color: #0066cc;"&gt;Page Title&lt;/a&gt;</pre>
+  </details>
+</div>
+
+<!-- X04 -->
+<div class="el" id="X04">
+  <div class="el-head"><span class="el-id">X04</span><span class="el-name">Video Embed (iframe)</span></div>
+  <p class="el-desc">Responsive YouTube, Vimeo, or institutional video embed with 16:9 aspect ratio.</p>
+  <div class="el-preview">
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 4px; background: #000;">
+      <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #666;">
+        [Video iframe appears here -- replace VIDEO_ID]
+      </div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin: 16px 0; border-radius: 4px;"&gt;
+  &lt;iframe src="https://www.youtube.com/embed/VIDEO_ID" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- X05 -->
+<div class="el" id="X05">
+  <div class="el-head"><span class="el-id">X05</span><span class="el-name">Audio Player</span></div>
+  <p class="el-desc">Native HTML5 audio player. Upload audio to Canvas Files first.</p>
+  <div class="el-preview">
+    <div style="margin: 8px 0;">
+      <p style="font-weight: 600; color: #333333; margin-bottom: 8px;">Lecture Recording -- September 10</p>
+      <audio controls style="width: 100%;">
+        <source src="" type="audio/mpeg">
+      </audio>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="margin: 16px 0;"&gt;
+  &lt;p style="font-weight: 600; color: #333333; margin-bottom: 8px;"&gt;AUDIO TITLE&lt;/p&gt;
+  &lt;audio controls style="width: 100%;"&gt;
+    &lt;source src="/courses/COURSE_ID/files/FILE_ID/preview" type="audio/mpeg"&gt;
+  &lt;/audio&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- X06 -->
+<div class="el" id="X06">
+  <div class="el-head"><span class="el-id">X06</span><span class="el-name">Video Player</span></div>
+  <p class="el-desc">Native HTML5 video player. Upload video to Canvas Files first.</p>
+  <div class="el-preview">
+    <div style="margin: 8px 0;">
+      <video controls style="max-width: 100%; border-radius: 4px; background: #000; height: 120px; width: 100%;">
+        <source src="" type="video/mp4">
+      </video>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="margin: 16px 0;"&gt;
+  &lt;video controls style="max-width: 100%; border-radius: 4px;"&gt;
+    &lt;source src="/courses/COURSE_ID/files/FILE_ID/preview" type="video/mp4"&gt;
+  &lt;/video&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+</main>
+</div>
+
+<footer style="border-top: 1px solid #e0e0e0; padding: 24px; text-align: center; font-size: 13px; color: #999;">
+  Canvas Design Agent -- Element Catalog -- 44 elements across 7 categories
+</footer>
+
+</body>
+</html>

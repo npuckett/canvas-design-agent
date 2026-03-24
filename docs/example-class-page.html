@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Example: Class Page -- Canvas Design Agent</title>
+  <style>
+    :root {
+      --color-bg: #fff;
+      --color-text: #333;
+      --color-text-muted: #495057;
+      --color-heading: #000;
+      --color-border: #dee2e6;
+      --color-surface: #f8f8f8;
+      --color-nav-bg: #000;
+      --color-hero-bg: #111;
+      --color-accent: #555;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", "Fira Mono", Menlo, monospace;
+      --container-max: 860px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 48px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      line-height: 1.6;
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--color-heading); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--color-accent); }
+
+    /* NAV */
+    .site-nav {
+      background: var(--color-nav-bg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-nav__brand { font-weight: 700; font-size: 1.125rem; color: #fff; }
+    .site-nav__links { display: flex; gap: var(--space-lg); }
+    .site-nav__links a { color: #999; font-size: 0.9375rem; }
+    .site-nav__links a:hover { color: #fff; }
+    .site-nav__toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: var(--space-xs);
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--color-hero-bg);
+      color: #fff;
+      padding: clamp(2rem, 5vw, 3.5rem) var(--space-lg);
+      text-align: center;
+    }
+    .hero__title {
+      font-size: clamp(1.5rem, 3vw, 1.75rem);
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .hero__subtitle {
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      color: #999;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+    .page-section {
+      padding: var(--space-xl) 0;
+    }
+    .page-section + .page-section {
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* HEADINGS */
+    .section-heading {
+      font-size: clamp(1.25rem, 2.5vw, 1.375rem);
+      font-weight: 700;
+      color: var(--color-heading);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* TEXT */
+    p { margin-bottom: 0.75rem; color: var(--color-text-muted); }
+    code {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+    }
+
+    /* ELEMENTS USED — tag grid */
+    .elements-used {
+      margin: var(--space-lg) 0;
+    }
+    .elements-used__title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: var(--space-md);
+    }
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      list-style: none;
+      padding: 0;
+    }
+    .tag-grid li {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+    .tag-grid .tag-id {
+      font-weight: 700;
+      color: var(--color-heading);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    /* CALLOUT */
+    .callout {
+      border-left: 3px solid #ccc;
+      background: var(--color-surface);
+      padding: var(--space-md) 20px;
+      margin: 20px 0;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout strong { color: var(--color-text); }
+
+    /* CANVAS PREVIEW */
+    .canvas-preview {
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: var(--space-lg) 0;
+    }
+    .canvas-preview-label {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 10px var(--space-md);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .canvas-preview-label::before { content: "Canvas Preview"; }
+    .canvas-preview-body {
+      padding: var(--space-lg);
+      background: #fff;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      border-top: 1px solid #e0e0e0;
+      padding: var(--space-lg);
+      text-align: center;
+      font-size: 0.8125rem;
+      color: #999;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .site-nav__toggle { display: block; }
+      .site-nav__links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--color-nav-bg);
+        flex-direction: column;
+        padding: 0 var(--space-lg) var(--space-md);
+        gap: var(--space-md);
+      }
+      .site-nav__links.open { display: flex; }
+      .site-nav { flex-wrap: wrap; }
+      .container { padding: 0 var(--space-md); }
+      .page-section { padding: clamp(1.5rem, 5vw, 3rem) 0; }
+      .canvas-preview-body { padding: var(--space-md); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="site-nav__brand">Canvas Design Agent</span>
+  <button class="site-nav__toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">&#9776;</button>
+  <div class="site-nav__links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1 class="hero__title">Example: Class Page Template</h1>
+  <p class="hero__subtitle">A reusable single-class page layout with agenda, content sections, and resources.</p>
+</header>
+
+<main class="container">
+
+  <!-- ABOUT THIS EXAMPLE -->
+  <section class="page-section">
+    <h2 class="section-heading">About This Example</h2>
+    <p>This page demonstrates a <strong>standard class/lecture page</strong> that can be reused week after week. It includes a color-coded header, today's agenda, main content area, and collapsible resource sections.</p>
+
+    <div class="elements-used">
+      <h3 class="elements-used__title">Elements Used</h3>
+      <ul class="tag-grid">
+        <li><span class="tag-id">V02</span> Color-Coded Header</li>
+        <li><span class="tag-id">L03</span> Flexbox Row</li>
+        <li><span class="tag-id">C06</span> Ordered List</li>
+        <li><span class="tag-id">V01</span> Left-Border Accent Box</li>
+        <li><span class="tag-id">T06</span> Styled Blockquote</li>
+        <li><span class="tag-id">C01</span> Collapsible Section</li>
+        <li><span class="tag-id">C03</span> Info Card</li>
+        <li><span class="tag-id">T02</span> Highlighted Text</li>
+        <li><span class="tag-id">N02</span> Button-Styled Links</li>
+        <li><span class="tag-id">V03</span> Alert / Callout Box</li>
+        <li><span class="tag-id">T01</span> Styled Headings</li>
+        <li><span class="tag-id">C07</span> Checklist</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><strong>How to replicate:</strong> Provide your class notes as plain text and tell the agent: <em>"Transform this into a Canvas class page. Use a V02 blue header, C06 agenda, and C01 collapsibles for resources and next class."</em></p>
+    </div>
+  </section>
+
+  <!-- CANVAS PREVIEW -->
+  <section class="page-section">
+    <h2 class="section-heading">Canvas Preview</h2>
+    <p>This is exactly what appears in Canvas after pasting the generated HTML.</p>
+
+    <div class="canvas-preview">
+      <div class="canvas-preview-label"></div>
+      <div class="canvas-preview-body">
+
+        <!-- L05: Centered Container -->
+        <div style="max-width: 800px; margin: 0 auto;">
+
+          <!-- V02: Color-Coded Header (Lecture = Blue) -->
+          <div style="background: #0066cc; color: #ffffff; padding: 16px 20px; margin-bottom: 24px; border-radius: 4px;">
+            <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;">Class 06: Feedback Loops &amp; Responsiveness</h1>
+            <p style="margin: 8px 0 0; font-size: 14px; color: #cce5ff;">CART 310 &bull; Week 6 &bull; October 13, 2026</p>
+          </div>
+
+          <!-- L03: Flexbox Row - Quick Info -->
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;">
+            <div style="flex: 1; min-width: 140px; padding: 12px 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; text-align: center;">
+              <div style="font-size: 13px; color: #6c757d;">Type</div>
+              <div style="font-weight: 600; color: #333333;">Lecture</div>
+            </div>
+            <div style="flex: 1; min-width: 140px; padding: 12px 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; text-align: center;">
+              <div style="font-size: 13px; color: #6c757d;">Room</div>
+              <div style="font-weight: 600; color: #333333;">EV 5.615</div>
+            </div>
+            <div style="flex: 1; min-width: 140px; padding: 12px 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; text-align: center;">
+              <div style="font-size: 13px; color: #6c757d;">Duration</div>
+              <div style="font-weight: 600; color: #333333;">2h 45m</div>
+            </div>
+          </div>
+
+          <!-- V03: Reminder Alert -->
+          <div style="padding: 16px; margin: 0 0 24px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+            <strong style="color: #856404;">&#9888; Reminder:</strong>
+            <span style="color: #856404;"> Midterm project proposals are due next class (Oct 15). Bring a one-page concept sketch.</span>
+          </div>
+
+          <!-- T01: Agenda Heading -->
+          <h2 style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #0066cc; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+            Today's Agenda
+          </h2>
+
+          <!-- C06: Ordered List -->
+          <ol style="padding-left: 24px; color: #495057; margin-bottom: 24px;">
+            <li>Review: Sensor data mapping (15 min)</li>
+            <li>Lecture: Feedback loops in interactive systems (40 min)</li>
+            <li>Demo: Real-time responsiveness techniques (20 min)</li>
+            <li><strong>Break</strong> (10 min)</li>
+            <li>Activity: Designing a feedback loop (50 min)</li>
+            <li>Discussion &amp; wrap-up (20 min)</li>
+          </ol>
+
+          <!-- T01: Lecture Content Heading -->
+          <h2 style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #0066cc; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+            Lecture: Feedback Loops
+          </h2>
+
+          <p style="color: #495057; margin-bottom: 12px;">Interactive systems need to respond to user input in meaningful ways. A <mark style="background-color: #cce5ff; padding: 2px 6px; border-radius: 2px;">feedback loop</mark> is the cycle of input &rarr; processing &rarr; output &rarr; perception that drives every interactive experience.</p>
+
+          <!-- V01: Key Concept Box -->
+          <div style="border-left: 4px solid #0066cc; padding: 16px; margin: 16px 0; background: #f8f8f8; border-radius: 0 4px 4px 0;">
+            <strong style="color: #333333;">Key Concept:</strong>
+            <span style="color: #495057;"> The three types of feedback loops in interaction design are <mark style="background-color: #fff3cd; padding: 2px 6px; border-radius: 2px;">positive feedback</mark> (amplifies action), <mark style="background-color: #fff3cd; padding: 2px 6px; border-radius: 2px;">negative feedback</mark> (corrects/dampens), and <mark style="background-color: #fff3cd; padding: 2px 6px; border-radius: 2px;">informational feedback</mark> (confirms/acknowledges).</span>
+          </div>
+
+          <p style="color: #495057; margin-bottom: 12px;">Consider how the following everyday interactions use feedback:</p>
+          <ul style="padding-left: 24px; color: #495057; margin-bottom: 16px;">
+            <li>A thermostat adjusting temperature (negative feedback)</li>
+            <li>Social media likes encouraging more posts (positive feedback)</li>
+            <li>A loading spinner confirming a process is running (informational feedback)</li>
+          </ul>
+
+          <!-- T06: Discussion Prompt -->
+          <blockquote style="margin: 16px 0; padding: 16px 20px; border-left: 4px solid #0066cc; background: #f8f8f8; color: #495057; font-style: italic; border-radius: 0 4px 4px 0;">
+            <p style="margin: 0;"><strong style="font-style: normal;">Discussion Prompt:</strong> Think about a frustrating interactive experience you've had recently. What kind of feedback was missing? How would you redesign the feedback loop?</p>
+          </blockquote>
+
+          <!-- T01: Activity Heading -->
+          <h2 style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #0066cc; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+            Activity: Designing a Feedback Loop
+          </h2>
+
+          <!-- C03: Activity Card -->
+          <div style="border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 16px; overflow: hidden;">
+            <div style="background: #28a745; padding: 12px 16px; font-weight: 600; color: #ffffff; border-bottom: 1px solid #dee2e6;">
+              In-Class Activity (50 min)
+            </div>
+            <div style="padding: 16px;">
+              <p style="color: #495057; margin-bottom: 12px;">Work in pairs to design and prototype a feedback loop for one of the following scenarios:</p>
+              <ol type="A" style="padding-left: 24px; color: #495057; margin-bottom: 16px;">
+                <li>A plant watering system that communicates soil moisture</li>
+                <li>A study timer that adapts to focus patterns</li>
+                <li>A collaborative drawing tool with live presence indicators</li>
+              </ol>
+              <p style="color: #495057; margin-bottom: 12px;"><strong>Deliverable:</strong> A diagram showing input, processing, output, and perception stages. Identify which type of feedback loop you're using and why.</p>
+
+              <!-- C07: Activity Checklist -->
+              <ul style="list-style: none; padding-left: 8px; color: #495057; margin-bottom: 0;">
+                <li style="margin-bottom: 6px;">&#9744; Choose a scenario</li>
+                <li style="margin-bottom: 6px;">&#9744; Map the input &rarr; output cycle</li>
+                <li style="margin-bottom: 6px;">&#9744; Identify feedback type (positive / negative / informational)</li>
+                <li style="margin-bottom: 6px;">&#9744; Sketch the interaction flow</li>
+                <li style="margin-bottom: 6px;">&#9744; Present to class (2 min per pair)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- C01: Resources Collapsible -->
+          <details style="margin-bottom: 12px; border: 1px solid #dee2e6; border-radius: 4px;">
+            <summary style="padding: 12px 16px; background: #f8f8f8; cursor: pointer; font-weight: 600; color: #333333;">
+              Resources &amp; Readings
+            </summary>
+            <div style="padding: 16px;">
+              <p style="color: #495057; margin-bottom: 12px;"><strong>Required Reading:</strong></p>
+              <ul style="padding-left: 24px; color: #495057; margin-bottom: 16px;">
+                <li>Crawford, C. (2003). <em>The Art of Interactive Design</em>, Chapter 4: "Feedback"</li>
+                <li>Norman, D. (2013). <em>The Design of Everyday Things</em>, pp. 23&ndash;36</li>
+              </ul>
+              <p style="color: #495057; margin-bottom: 12px;"><strong>Supplementary:</strong></p>
+              <ul style="padding-left: 24px; color: #495057; margin-bottom: 16px;">
+                <li>Meadows, D. (2008). <em>Thinking in Systems</em>, Chapter 1</li>
+              </ul>
+              <!-- N02: Button-Styled Links -->
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0 0;">
+                <a href="#" style="display: inline-block; padding: 10px 20px; background: #0066cc; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: 600;">Lecture Slides</a>
+                <a href="#" style="display: inline-block; padding: 10px 20px; background: #ffffff; color: #0066cc; text-decoration: none; border: 2px solid #0066cc; border-radius: 4px; font-weight: 600;">Demo Code</a>
+                <a href="#" style="display: inline-block; padding: 10px 20px; background: #ffffff; color: #0066cc; text-decoration: none; border: 2px solid #0066cc; border-radius: 4px; font-weight: 600;">Activity Worksheet</a>
+              </div>
+            </div>
+          </details>
+
+          <!-- C01: Next Class Preview Collapsible -->
+          <details style="margin-bottom: 12px; border: 1px solid #dee2e6; border-radius: 4px;">
+            <summary style="padding: 12px 16px; background: #f8f8f8; cursor: pointer; font-weight: 600; color: #333333;">
+              Next Class Preview
+            </summary>
+            <div style="padding: 16px;">
+              <p style="color: #495057; margin-bottom: 12px;"><strong>Class 07 &mdash; Oct 15:</strong> Studio Work &amp; Midterm Proposals</p>
+              <div style="border-left: 4px solid #e67e22; padding: 12px 16px; background: #fffaf3; border-radius: 0 4px 4px 0;">
+                <strong style="color: #e67e22;">Bring:</strong>
+                <span style="color: #495057;"> One-page concept sketch for your midterm project. Be ready to present your idea in 2 minutes.</span>
+              </div>
+            </div>
+          </details>
+
+        </div><!-- end centered container -->
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  Canvas Design Agent &mdash; Example: Class Page Template
+</footer>
+
+</body>
+</html>

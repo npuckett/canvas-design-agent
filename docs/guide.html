@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide -- Canvas Design Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #222;
+      line-height: 1.6;
+      background: #fff;
+    }
+    a { color: #222; }
+    a:hover { color: #000; }
+
+    /* NAV */
+    nav {
+      background: #000;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav .brand { font-weight: 700; font-size: 18px; color: #fff; text-decoration: none; }
+    nav .links a { color: #999; margin-left: 24px; font-size: 15px; text-decoration: none; }
+    nav .links a:hover { color: #fff; }
+
+    /* LAYOUT */
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+    /* HEADER */
+    .header {
+      padding: 64px 24px 0;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #000;
+    }
+    .header p {
+      font-size: 15px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    /* TOC */
+    .toc {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px 24px 0;
+      font-size: 14px;
+    }
+    .toc a {
+      color: #666;
+      margin-right: 20px;
+    }
+    .toc a:hover { color: #000; }
+
+    /* CONTENT */
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+    section { padding: 48px 0 0; }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #222;
+      margin: 28px 0 8px;
+    }
+    h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #444;
+      margin: 20px 0 6px;
+    }
+    p { margin-bottom: 12px; color: #444; }
+    ul, ol { margin-bottom: 12px; padding-left: 24px; color: #444; }
+    li { margin-bottom: 6px; }
+    strong { color: #222; }
+    em { color: #666; }
+
+    /* CODE */
+    code {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: monospace;
+      font-size: 14px;
+      color: #333;
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid #e0e0e0;
+      text-align: left;
+    }
+    th { background: #fafafa; font-weight: 600; color: #222; }
+
+    /* STEPS */
+    .steps { counter-reset: step; list-style: none; padding-left: 0; }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 44px;
+      margin-bottom: 20px;
+      min-height: 32px;
+    }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      background: #000;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    /* CALLOUT */
+    .callout {
+      border-left: 3px solid #ccc;
+      background: #fafafa;
+      padding: 14px 18px;
+      margin: 16px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .callout p:last-child { margin-bottom: 0; }
+
+    /* TEMPLATE EXAMPLE */
+    .template-example {
+      background: #111;
+      color: #ccc;
+      padding: 20px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      margin: 16px 0;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Canvas Design Agent</span>
+  <span class="links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+  </span>
+</nav>
+
+<div class="header">
+  <h1>Guide</h1>
+  <p>Step-by-step workflows for using the Canvas Design Agent skill with any AI tool.</p>
+</div>
+
+<div class="toc">
+  <a href="#getting-started">Getting Started</a>
+  <a href="#local-workflow">Local Workflow</a>
+  <a href="#web-workflow">Web Workflow</a>
+  <a href="#comparison">Comparison</a>
+  <a href="#templates">Templates</a>
+  <a href="#constraints">Constraints</a>
+</div>
+
+<div class="content">
+
+  <!-- GETTING STARTED -->
+  <section id="getting-started">
+    <h2>Getting Started</h2>
+    <ol class="steps">
+      <li><strong>Get the skill file.</strong> Download or clone <code>SKILL.md</code> from the <a href="https://github.com/npuckett/canvas-design-agent">GitHub repository</a>. This single file contains all Canvas constraints and element templates.</li>
+      <li><strong>Browse the <a href="elements.html">Element Catalog</a>.</strong> Look through available elements and note any you want to use. Each element has an ID (e.g., V05, C01) you can reference.</li>
+      <li><strong>Write your content.</strong> Describe your page in plain text -- schedules, assignments, resources, anything. Optionally mention element IDs.</li>
+      <li><strong>Choose a workflow.</strong> Use a local agent (VS Code, Cursor) or a web-based agent (ChatGPT, Claude, Gemini). See below.</li>
+      <li><strong>Paste into Canvas.</strong> Open your Canvas page, switch to the HTML editor (<code>&lt;/&gt;</code> icon in RCE), paste the generated HTML, and save.</li>
+    </ol>
+
+    <div class="callout">
+      <p><strong>First time?</strong> Start simple: write a paragraph with a heading and ask the agent to format it with a V02 color header and a C01 collapsible section. Once you see how it works, build more complex pages.</p>
+    </div>
+  </section>
+
+  <!-- LOCAL WORKFLOW -->
+  <section id="local-workflow">
+    <h2>Workflow A: Local Agent</h2>
+    <p>Best for faculty using a code editor (VS Code with Copilot, Cursor, Windsurf) who want to manage multiple pages in a project.</p>
+
+    <ol class="steps">
+      <li><strong>Set up the skill.</strong> Copy <code>SKILL.md</code> into your project's <code>.github/</code> directory. Most AI-enabled editors automatically read instruction files from this location.</li>
+      <li><strong>Create a content file.</strong> Write your page content in a <code>.txt</code> or <code>.md</code> file. Use plain language -- describe what the page should contain, its structure, and any specific elements you want.</li>
+      <li><strong>Ask the agent to transform it.</strong> In your editor's AI chat, ask it to convert your content file into Canvas HTML. Example: <em>"Transform this into a Canvas page using the skill. Use a gradient header and collapsible sections."</em></li>
+      <li><strong>Copy to Canvas.</strong> Open your Canvas page, switch to the HTML editor view, paste the generated HTML, and save.</li>
+    </ol>
+
+    <div class="callout">
+      <p><strong>Tip:</strong> Keep your content files organized by course. Create a folder per course and place a course-specific template alongside the content files.</p>
+    </div>
+  </section>
+
+  <!-- WEB WORKFLOW -->
+  <section id="web-workflow">
+    <h2>Workflow B: Web-Based Agent</h2>
+    <p>Best for quick, one-off page generation without installing anything. Works with ChatGPT, Claude, Gemini, or any web AI tool.</p>
+
+    <ol class="steps">
+      <li><strong>Upload the skill.</strong> Start a new conversation. Upload or paste the contents of <code>SKILL.md</code>. This gives the agent all Canvas constraints and element templates it needs.</li>
+      <li><strong>Provide your content.</strong> Type or paste your page content in the same conversation. Describe what kind of page it is and what elements you want.</li>
+      <li><strong>Get the HTML.</strong> The agent generates Canvas-ready HTML. Copy the entire output.</li>
+      <li><strong>Paste into Canvas.</strong> Switch to HTML editor view, paste, and save.</li>
+    </ol>
+
+    <div class="callout">
+      <p><strong>Tip:</strong> If you have a course-specific template, upload it alongside SKILL.md so the agent applies your course's colors and layout consistently.</p>
+    </div>
+  </section>
+
+  <!-- COMPARISON -->
+  <section id="comparison">
+    <h2>Workflow Comparison</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Local Agent</th>
+          <th>Web Agent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Setup</strong></td>
+          <td>One-time: place SKILL.md in project</td>
+          <td>Per-session: upload SKILL.md each time</td>
+        </tr>
+        <tr>
+          <td><strong>Best for</strong></td>
+          <td>Multiple pages, ongoing course work</td>
+          <td>Quick single pages, occasional use</td>
+        </tr>
+        <tr>
+          <td><strong>Template reuse</strong></td>
+          <td>Automatic (reads skill on every prompt)</td>
+          <td>Manual (re-upload each session)</td>
+        </tr>
+        <tr>
+          <td><strong>File management</strong></td>
+          <td>Content files saved locally, version controlled</td>
+          <td>Content in chat history only</td>
+        </tr>
+        <tr>
+          <td><strong>Prerequisites</strong></td>
+          <td>Code editor with AI extension</td>
+          <td>Browser and AI account</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- TEMPLATES -->
+  <section id="templates">
+    <h2>Course-Specific Templates</h2>
+    <p>A course-specific template combines element library blocks into a consistent design you reuse across an entire course. Define your visual identity once and every page automatically follows it.</p>
+
+    <h3>What Goes in a Template</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>What to specify</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Colors</strong></td>
+          <td>Primary, accent, background, text</td>
+          <td>Primary: #2c3e50, Accent: #e74c3c</td>
+        </tr>
+        <tr>
+          <td><strong>Header</strong></td>
+          <td>V-series element, colors</td>
+          <td>V05 gradient, primary-to-dark</td>
+        </tr>
+        <tr>
+          <td><strong>Sections</strong></td>
+          <td>Standard sections per page</td>
+          <td>Agenda, Content, Resources, Next Class</td>
+        </tr>
+        <tr>
+          <td><strong>Layout</strong></td>
+          <td>Column layout, max-width</td>
+          <td>L05 centered at 800px</td>
+        </tr>
+        <tr>
+          <td><strong>Section style</strong></td>
+          <td>Element for recurring sections</td>
+          <td>Agenda as C06, Resources as C01</td>
+        </tr>
+        <tr>
+          <td><strong>Page types</strong></td>
+          <td>Different templates per page kind</td>
+          <td>Lectures = blue, Labs = orange</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Example Template File</h3>
+    <p>Save as <code>course-template.txt</code> alongside your content:</p>
+
+    <div class="template-example">Course: ART 205 Interactive Design
+Primary color: #2c3e50
+Accent color: #e74c3c
+Link color: #3498db
+
+Page types:
+  Lecture -- V05 gradient header (#2c3e50 to #1a252f), blue accent
+  Workshop -- V02 solid header, green (#27ae60)
+  Dev Day -- V02 solid header, orange (#e67e22)
+
+Standard class page sections:
+  1. Header with class number, title, and date
+  2. "Today's Agenda" -- C06 ordered list
+  3. Main content area (varies per class)
+  4. "Resources" -- C01 collapsible, contains link list
+  5. "Next Class Preview" -- C01 collapsible
+
+Layout: L05 centered container, 800px max-width
+Callouts: V01 left-border accent box using accent color
+Important dates: T02 highlighted in yellow</div>
+
+    <h3>Using a Template</h3>
+
+    <h4>With a Local Agent</h4>
+    <ol>
+      <li>Save your template file in the project alongside <code>SKILL.md</code>.</li>
+      <li>Reference both when prompting: <em>"Using the course template in course-template.txt, transform today's class notes into a Canvas page."</em></li>
+    </ol>
+
+    <h4>With a Web Agent</h4>
+    <ol>
+      <li>Upload both <code>SKILL.md</code> and your template file at the start of the conversation.</li>
+      <li>Provide your content and ask for a Canvas page. The agent applies both constraints and template preferences.</li>
+    </ol>
+
+    <h3>Building a Template Library</h3>
+    <ul>
+      <li><strong>Course template</strong> -- Per-course design (colors, headers, standard sections)</li>
+      <li><strong>Assignment template</strong> -- Objectives, requirements, rubric, submission instructions</li>
+      <li><strong>Syllabus template</strong> -- Course outline with collapsible policy sections</li>
+      <li><strong>Schedule template</strong> -- Course calendar as D05 grid with color-coded rows</li>
+      <li><strong>Project brief template</strong> -- Description, milestones, deliverables, grading</li>
+    </ul>
+
+    <h3>Iterating on Templates</h3>
+    <ol>
+      <li><strong>Start simple.</strong> Define colors and a header style. Generate a few pages.</li>
+      <li><strong>Review in Canvas.</strong> Paste the HTML and see how it looks.</li>
+      <li><strong>Refine.</strong> Adjust template preferences based on what works.</li>
+      <li><strong>Expand.</strong> Add page-type variations and section templates.</li>
+      <li><strong>Reuse.</strong> Next semester, update dates and topics -- template stays the same.</li>
+    </ol>
+  </section>
+
+  <!-- CONSTRAINTS -->
+  <section id="constraints">
+    <h2>Canvas Constraints Quick Reference</h2>
+    <p>The SKILL.md contains the full constraint list. The agent handles these automatically, but here's a summary.</p>
+
+    <h3>Works in Canvas</h3>
+    <ul>
+      <li>All inline <code>style=""</code> attributes</li>
+      <li>Flexbox and CSS Grid</li>
+      <li>Linear gradients</li>
+      <li>Relative and absolute positioning</li>
+      <li><code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> collapsible sections</li>
+      <li><code>&lt;mark&gt;</code>, <code>&lt;abbr&gt;</code>, <code>&lt;ins&gt;</code>, <code>&lt;del&gt;</code>, <code>&lt;kbd&gt;</code></li>
+      <li>All table features: colspan, rowspan, colgroup, caption, thead/tbody/tfoot</li>
+      <li>Audio and video players</li>
+      <li>Definition lists (<code>&lt;dl&gt;</code>)</li>
+    </ul>
+
+    <h3>Stripped by Canvas</h3>
+    <ul>
+      <li><code>&lt;style&gt;</code> blocks, <code>&lt;script&gt;</code> tags, external CSS/JS</li>
+      <li>All SVG elements</li>
+      <li><code>&lt;meter&gt;</code>, <code>&lt;progress&gt;</code>, <code>&lt;fieldset&gt;</code>, <code>&lt;legend&gt;</code></li>
+      <li><code>box-shadow</code>, <code>text-shadow</code>, <code>opacity</code>, <code>transform</code></li>
+      <li><code>letter-spacing</code>, <code>word-spacing</code></li>
+      <li><code>data:</code> URIs in image sources</li>
+      <li>The <code>open</code> attribute on <code>&lt;details&gt;</code></li>
+      <li>The <code>reversed</code> attribute on <code>&lt;ol&gt;</code></li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>
+  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.
+</footer>
+
+</body>
+</html>
