@@ -54,19 +54,22 @@ Canvas RCE sanitizes all HTML. These rules are non-negotiable.
 
 ### IMAGE RULE
 
-Images can come from three sources:
+Canvas pages have no file system -- every image URL must be absolute. Images can come from three sources:
 
-1. **Canvas-hosted** -- Use Canvas file URLs (`/courses/COURSE_ID/files/FILE_ID/preview`). Use placeholder `[CANVAS_IMAGE_URL]` when the URL is not available.
-2. **GitHub Pages-hosted** -- Host images in a GitHub repo and reference via GitHub Pages URL (e.g., `https://username.github.io/repo/images/photo.jpg`). This lets faculty manage images in a git repo and reference them across multiple Canvas pages without re-uploading.
-3. **External URLs** -- Any publicly accessible image URL.
+1. **Canvas-hosted** -- Use Canvas file URLs (`/courses/COURSE_ID/files/FILE_ID/preview`). Use placeholder `[CANVAS_IMAGE_URL]` when the actual URL is not available.
+2. **GitHub Pages-hosted** -- Faculty host images in their own GitHub repo with Pages enabled and provide the base URL. Build full absolute URLs from that base (e.g., if faculty says "base URL: `https://npuckett.github.io/my-course/images/`" and filename is `photo.jpg`, the src is `https://npuckett.github.io/my-course/images/photo.jpg`). Never use relative paths -- Canvas will not resolve them.
+3. **External URLs** -- Any publicly accessible absolute image URL.
 
-GitHub Pages-hosted images are recommended for projects using this skill because images are version-controlled, shareable across courses, and do not depend on Canvas file management.
+When faculty provide a GitHub Pages base URL, always construct complete `https://` URLs for every `<img>` src and `<a>` href. Never output relative paths like `images/photo.jpg` -- these will break in Canvas.
 
 ### EXTERNAL MEDIA RULE
 
 Canvas allows `<iframe>` embeds from approved domains. This enables embedding interactive websites (p5.js sketches, data visualizations, custom widgets) hosted on GitHub Pages or other approved origins.
 
+Faculty will provide the full URL of the page to embed (e.g., `https://npuckett.github.io/thesisBanner/`). Always use the exact URL they provide as the iframe `src` -- never convert it to a relative path.
+
 Key constraints for iframe embeds:
+- All iframe `src` URLs must be absolute (`https://...`). Canvas cannot resolve relative paths.
 - The embedded page must be hosted on a domain approved by the Canvas CSP (Content Security Policy). GitHub Pages (`*.github.io`) is commonly approved.
 - Use `scrolling="no"` and `frameborder="0"` for clean embedding.
 - Wrap in a container `<div>` with `overflow: hidden` to control visible area.
@@ -896,24 +899,26 @@ Native HTML5 video player. Upload video to Canvas Files first.
 
 #### E01: GitHub-Hosted Image
 
-Image hosted in a GitHub Pages repo. Use this when faculty manage media assets in a git repository instead of uploading to Canvas Files. The image URL must be a valid GitHub Pages path.
+Image hosted on faculty's own GitHub Pages site. Faculty provide their GitHub Pages base URL and image filenames. Always build complete absolute URLs -- never use relative paths. Replace `GITHUB_PAGES_BASE` with the base URL faculty provides.
 
 ```html
 <div style="text-align: center; margin: 16px 0;">
-  <img src="https://username.github.io/repo/images/photo.jpg"
+  <img src="GITHUB_PAGES_BASE/images/photo.jpg"
        alt="Descriptive alt text"
        style="max-width: 100%; height: auto; border-radius: 4px;">
   <p style="font-size: 0.85em; color: #666666; margin-top: 6px;">Caption text</p>
 </div>
 ```
 
+Example with a real URL: `<img src="https://npuckett.github.io/my-course/images/photo.jpg" ...>`
+
 #### E02: External Website Embed
 
-Embed an external website (p5.js sketch, data visualization, interactive widget) via iframe. The site must be hosted on a Canvas-approved domain (GitHub Pages is commonly approved). Wrap in a container div with `overflow: hidden` to crop the visible area.
+Embed an external website (p5.js sketch, data visualization, interactive widget) via iframe. Faculty provide the full URL of the page to embed. The URL must be absolute -- Canvas cannot resolve relative paths. Wrap in a container div with `overflow: hidden` to crop the visible area.
 
 ```html
 <div style="text-align: center; overflow: hidden; height: 200px; margin: 16px 0; border-radius: 4px;">
-  <iframe src="https://username.github.io/repo/"
+  <iframe src="https://username.github.io/my-sketch/"
           style="width: 100%; height: 300px; border: none; display: block; margin: 0 auto;"
           scrolling="no"
           frameborder="0"
@@ -929,17 +934,19 @@ Key details:
 
 #### E03: Linked Image
 
-GitHub-hosted image wrapped in a link, useful for thumbnails linking to full-size versions or external resources.
+GitHub-hosted image wrapped in a link, useful for thumbnails linking to full-size versions. Both `href` and `src` must be absolute URLs built from the faculty's GitHub Pages base URL.
 
 ```html
 <div style="text-align: center; margin: 16px 0;">
-  <a href="https://username.github.io/repo/images/full-size.jpg" target="_blank" rel="noopener">
-    <img src="https://username.github.io/repo/images/thumbnail.jpg"
+  <a href="GITHUB_PAGES_BASE/images/full-size.jpg" target="_blank" rel="noopener">
+    <img src="GITHUB_PAGES_BASE/images/thumbnail.jpg"
          alt="Click to view full size"
          style="max-width: 100%; height: auto; border-radius: 4px;">
   </a>
 </div>
 ```
+
+Example: `<a href="https://npuckett.github.io/my-course/images/photo.jpg">` with the same pattern for the `<img>` src.
 
 ---
 
