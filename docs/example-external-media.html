@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Example: External Media Gallery -- Canvas Design Agent</title>
+  <style>
+    :root {
+      --color-bg: #fff;
+      --color-text: #333;
+      --color-text-muted: #495057;
+      --color-heading: #000;
+      --color-border: #dee2e6;
+      --color-surface: #f8f8f8;
+      --color-nav-bg: #000;
+      --color-hero-bg: #111;
+      --color-accent: #555;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", "Fira Mono", Menlo, monospace;
+      --container-max: 860px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 48px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      line-height: 1.6;
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--color-heading); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--color-accent); }
+
+    /* NAV */
+    .site-nav {
+      background: var(--color-nav-bg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-nav__brand { font-weight: 700; font-size: 1.125rem; color: #fff; }
+    .site-nav__links { display: flex; gap: var(--space-lg); }
+    .site-nav__links a { color: #999; font-size: 0.9375rem; }
+    .site-nav__links a:hover { color: #fff; }
+    .site-nav__toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: var(--space-xs);
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--color-hero-bg);
+      color: #fff;
+      padding: clamp(2rem, 5vw, 3.5rem) var(--space-lg);
+      text-align: center;
+    }
+    .hero__title {
+      font-size: clamp(1.5rem, 3vw, 1.75rem);
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .hero__subtitle {
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      color: #999;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+    .page-section {
+      padding: var(--space-xl) 0;
+    }
+    .page-section + .page-section {
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* HEADINGS */
+    .section-heading {
+      font-size: clamp(1.25rem, 2.5vw, 1.375rem);
+      font-weight: 700;
+      color: var(--color-heading);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* TEXT */
+    p { margin-bottom: 0.75rem; color: var(--color-text-muted); }
+    code {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+    }
+
+    /* ELEMENTS USED */
+    .elements-used { margin: var(--space-lg) 0; }
+    .elements-used__title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: var(--space-md);
+    }
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      list-style: none;
+      padding: 0;
+    }
+    .tag-grid li {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+    .tag-grid .tag-id {
+      font-weight: 700;
+      color: var(--color-heading);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    /* CALLOUT */
+    .callout {
+      border-left: 3px solid #ccc;
+      background: var(--color-surface);
+      padding: var(--space-md) 20px;
+      margin: 20px 0;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout strong { color: var(--color-text); }
+
+    /* CANVAS PREVIEW */
+    .canvas-preview {
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: var(--space-lg) 0;
+    }
+    .canvas-preview-label {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 10px var(--space-md);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .canvas-preview-label::before { content: "Canvas Preview"; }
+    .canvas-preview-body {
+      padding: var(--space-lg);
+      background: #fff;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      border-top: 1px solid #e0e0e0;
+      padding: var(--space-lg);
+      text-align: center;
+      font-size: 0.8125rem;
+      color: #999;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .site-nav__toggle { display: block; }
+      .site-nav__links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--color-nav-bg);
+        flex-direction: column;
+        padding: 0 var(--space-lg) var(--space-md);
+        gap: var(--space-md);
+      }
+      .site-nav__links.open { display: flex; }
+      .site-nav { flex-wrap: wrap; }
+      .container { padding: 0 var(--space-md); }
+      .page-section { padding: clamp(1.5rem, 5vw, 3rem) 0; }
+      .canvas-preview-body { padding: var(--space-md); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="site-nav__brand">Canvas Design Agent</span>
+  <button class="site-nav__toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">&#9776;</button>
+  <div class="site-nav__links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1 class="hero__title">Example: External Media Gallery</h1>
+  <p class="hero__subtitle">GitHub Pages-hosted images, linked thumbnails, and an embedded p5.js sketch inside a Canvas page.</p>
+</header>
+
+<main class="container">
+
+  <!-- ABOUT THIS EXAMPLE -->
+  <section class="page-section">
+    <h2 class="section-heading">About This Example</h2>
+    <p>This page demonstrates <strong>external media</strong> in Canvas: images hosted in a GitHub repository and loaded by URL, clickable thumbnail images that link to full-size versions, and an interactive p5.js sketch embedded via iframe. All media is served from this project's own GitHub Pages site.</p>
+
+    <div class="elements-used">
+      <h3 class="elements-used__title">Elements Used</h3>
+      <ul class="tag-grid">
+        <li><span class="tag-id">E01</span> GitHub-Hosted Image</li>
+        <li><span class="tag-id">E02</span> External Website Embed</li>
+        <li><span class="tag-id">E03</span> Linked Image</li>
+        <li><span class="tag-id">V05</span> Gradient Header</li>
+        <li><span class="tag-id">L03</span> Flexbox Row</li>
+        <li><span class="tag-id">C01</span> Collapsible Section</li>
+        <li><span class="tag-id">T01</span> Styled Headings</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><strong>How to replicate:</strong> Host your images in a GitHub repo with Pages enabled. In your prompt, give the agent the base URL and image filenames. Tell it: <em>"Embed this p5.js sketch as a banner. Display these GitHub-hosted images in a grid. Make each thumbnail link to the full-size image."</em></p>
+    </div>
+  </section>
+
+  <!-- CANVAS PREVIEW -->
+  <section class="page-section">
+    <h2 class="section-heading">Canvas Preview</h2>
+    <p>This is exactly what appears in Canvas after pasting the generated HTML.</p>
+
+    <div class="canvas-preview">
+      <div class="canvas-preview-label"></div>
+      <div class="canvas-preview-body">
+
+        <!-- L05: Centered Container -->
+        <div style="max-width: 800px; margin: 0 auto;">
+
+          <!-- E02: Embedded p5.js sketch as banner -->
+          <div style="text-align: center; overflow: hidden; height: 200px; margin: 0 0 24px 0; border-radius: 4px;">
+            <iframe src="https://npuckett.github.io/canvas-design-agent/docs/externalMedia/websites/thesisBanner/index.html"
+                    style="width: 100%; height: 300px; border: none; display: block; margin: 0 auto;"
+                    scrolling="no"
+                    frameborder="0"
+                    allowtransparency="true">
+            </iframe>
+          </div>
+
+          <!-- V05: Gradient Header -->
+          <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #ffffff; padding: 24px; margin-bottom: 24px; border-radius: 4px; text-align: center;">
+            <h1 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #ffffff;">Interactive Objects &amp; Devices</h1>
+            <p style="margin: 0; font-size: 14px; color: #8eaadb;">DIGF 3000 &bull; Visual Reference Gallery &bull; Week 8</p>
+          </div>
+
+          <!-- Intro paragraph -->
+          <p style="color: #495057; margin-bottom: 24px;">This gallery collects visual references for our exploration of interactive objects and playful devices. Each image is hosted on GitHub Pages and loaded directly into Canvas. Click any image to view it full size in a new tab.</p>
+
+          <!-- T01: Section Heading -->
+          <h2 style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #0f3460; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+            Reference Images
+          </h2>
+
+          <!-- L03: Flexbox Row - Image Grid -->
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;">
+
+            <!-- E03: Linked Image - Konami Laserscope -->
+            <div style="flex: 1; min-width: 200px; text-align: center;">
+              <a href="https://npuckett.github.io/canvas-design-agent/docs/externalMedia/images/konamiLaserscope1990.jpg" target="_blank" rel="noopener">
+                <img src="https://npuckett.github.io/canvas-design-agent/docs/externalMedia/images/konamiLaserscope1990.jpg"
+                     alt="Konami Laserscope, 1990 - a head-mounted gaming peripheral"
+                     style="max-width: 100%; height: auto; border-radius: 4px;">
+              </a>
+              <p style="font-size: 0.85em; color: #666666; margin-top: 6px;">Konami Laserscope (1990)</p>
+            </div>
+
+            <!-- E03: Linked Image - Propellar Photo -->
+            <div style="flex: 1; min-width: 200px; text-align: center;">
+              <a href="https://npuckett.github.io/canvas-design-agent/docs/externalMedia/images/iphonePropellarPhoto.jpg" target="_blank" rel="noopener">
+                <img src="https://npuckett.github.io/canvas-design-agent/docs/externalMedia/images/iphonePropellarPhoto.jpg"
+                     alt="iPhone propellar photo - long exposure capture of rotating device"
+                     style="max-width: 100%; height: auto; border-radius: 4px;">
+              </a>
+              <p style="font-size: 0.85em; color: #666666; margin-top: 6px;">iPhone Propellar Photo</p>
+            </div>
+
+          </div>
+
+          <!-- T01: Section Heading -->
+          <h2 style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #0f3460; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+            Animated Reference
+          </h2>
+
+          <!-- E01: GitHub-Hosted Image (GIF) -->
+          <div style="text-align: center; margin: 16px 0 24px;">
+            <img src="https://npuckett.github.io/canvas-design-agent/docs/externalMedia/images/mimus_hello.gif"
+                 alt="Mimus robot arm waving hello - an interactive industrial robot installation"
+                 style="max-width: 100%; height: auto; border-radius: 4px;">
+            <p style="font-size: 0.85em; color: #666666; margin-top: 6px;">Mimus by Madeline Gannon -- an interactive industrial robot that responds to human presence</p>
+          </div>
+
+          <!-- T01: Section Heading -->
+          <h2 style="color: #333333; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #0f3460; margin-bottom: 16px; font-family: system-ui, -apple-system, sans-serif;">
+            Embedded Interactive Sketch
+          </h2>
+
+          <p style="color: #495057; margin-bottom: 12px;">The banner above and the sketch below are the same p5.js particle simulation, hosted on GitHub Pages and embedded via iframe. The container height controls how much of the sketch is visible.</p>
+
+          <!-- E02: External Website Embed - full view -->
+          <div style="text-align: center; overflow: hidden; height: 400px; margin: 16px 0 24px; border-radius: 4px; border: 1px solid #dee2e6;">
+            <iframe src="https://npuckett.github.io/canvas-design-agent/docs/externalMedia/websites/thesisBanner/index.html"
+                    style="width: 100%; height: 400px; border: none; display: block; margin: 0 auto;"
+                    scrolling="no"
+                    frameborder="0"
+                    allowtransparency="true">
+            </iframe>
+          </div>
+
+          <!-- C01: Collapsible - How External Media Works -->
+          <details style="border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 16px;">
+            <summary style="padding: 12px 16px; font-weight: 600; color: #333333; cursor: pointer; background: #f8f8f8; border-radius: 4px; font-size: 15px;">How External Media Works in Canvas</summary>
+            <div style="padding: 16px; color: #495057;">
+              <p style="margin-bottom: 8px;"><strong>Images:</strong> Instead of uploading files through Canvas, host them in a GitHub repository with GitHub Pages enabled. Reference them by URL in your HTML: <code style="background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 3px; padding: 2px 6px; font-size: 0.875em;">https://username.github.io/repo/images/photo.jpg</code></p>
+              <p style="margin-bottom: 8px;"><strong>Websites:</strong> Embed interactive content (p5.js sketches, data visualizations, custom widgets) via iframe. The hosted page can use JavaScript, CSS, SVG, and everything Canvas normally strips -- because it loads in its own document context.</p>
+              <p style="margin-bottom: 0;"><strong>Key advantage:</strong> Your media is version-controlled, shareable across multiple courses, and does not depend on Canvas file management. Update an image in git and it updates everywhere it is referenced.</p>
+            </div>
+          </details>
+
+          <!-- C01: Collapsible - Resources -->
+          <details style="border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 16px;">
+            <summary style="padding: 12px 16px; font-weight: 600; color: #333333; cursor: pointer; background: #f8f8f8; border-radius: 4px; font-size: 15px;">Resources</summary>
+            <div style="padding: 16px; color: #495057;">
+              <ul style="padding-left: 24px;">
+                <li style="margin-bottom: 6px;"><a href="https://pages.github.com/" style="color: #0f3460;">GitHub Pages documentation</a></li>
+                <li style="margin-bottom: 6px;"><a href="https://p5js.org/" style="color: #0f3460;">p5.js</a> -- JavaScript library for creative coding</li>
+                <li style="margin-bottom: 6px;"><a href="https://github.com/npuckett/canvas-design-agent" style="color: #0f3460;">Canvas Design Agent</a> -- this project's repository</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> &middot;
+  <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md" style="color:#999;">SKILL.md</a>
+</footer>
+
+</body>
+</html>

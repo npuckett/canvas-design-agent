@@ -54,7 +54,24 @@ Canvas RCE sanitizes all HTML. These rules are non-negotiable.
 
 ### IMAGE RULE
 
-All images must use Canvas-hosted URLs or valid external URLs. Use placeholder text like `[CANVAS_IMAGE_URL]` when the actual URL is not available. Faculty will replace these with their uploaded Canvas file URLs.
+Images can come from three sources:
+
+1. **Canvas-hosted** -- Use Canvas file URLs (`/courses/COURSE_ID/files/FILE_ID/preview`). Use placeholder `[CANVAS_IMAGE_URL]` when the URL is not available.
+2. **GitHub Pages-hosted** -- Host images in a GitHub repo and reference via GitHub Pages URL (e.g., `https://username.github.io/repo/images/photo.jpg`). This lets faculty manage images in a git repo and reference them across multiple Canvas pages without re-uploading.
+3. **External URLs** -- Any publicly accessible image URL.
+
+GitHub Pages-hosted images are recommended for projects using this skill because images are version-controlled, shareable across courses, and do not depend on Canvas file management.
+
+### EXTERNAL MEDIA RULE
+
+Canvas allows `<iframe>` embeds from approved domains. This enables embedding interactive websites (p5.js sketches, data visualizations, custom widgets) hosted on GitHub Pages or other approved origins.
+
+Key constraints for iframe embeds:
+- The embedded page must be hosted on a domain approved by the Canvas CSP (Content Security Policy). GitHub Pages (`*.github.io`) is commonly approved.
+- Use `scrolling="no"` and `frameborder="0"` for clean embedding.
+- Wrap in a container `<div>` with `overflow: hidden` to control visible area.
+- The `<iframe>` itself cannot use `<style>` blocks, but the *embedded page* can use any HTML/CSS/JS since it loads independently.
+- Set explicit `width` and `height` on the iframe to prevent layout shifts.
 
 ---
 
@@ -875,6 +892,57 @@ Native HTML5 video player. Upload video to Canvas Files first.
 
 ---
 
+### External Media (E series)
+
+#### E01: GitHub-Hosted Image
+
+Image hosted in a GitHub Pages repo. Use this when faculty manage media assets in a git repository instead of uploading to Canvas Files. The image URL must be a valid GitHub Pages path.
+
+```html
+<div style="text-align: center; margin: 16px 0;">
+  <img src="https://username.github.io/repo/images/photo.jpg"
+       alt="Descriptive alt text"
+       style="max-width: 100%; height: auto; border-radius: 4px;">
+  <p style="font-size: 0.85em; color: #666666; margin-top: 6px;">Caption text</p>
+</div>
+```
+
+#### E02: External Website Embed
+
+Embed an external website (p5.js sketch, data visualization, interactive widget) via iframe. The site must be hosted on a Canvas-approved domain (GitHub Pages is commonly approved). Wrap in a container div with `overflow: hidden` to crop the visible area.
+
+```html
+<div style="text-align: center; overflow: hidden; height: 200px; margin: 16px 0; border-radius: 4px;">
+  <iframe src="https://username.github.io/repo/"
+          style="width: 100%; height: 300px; border: none; display: block; margin: 0 auto;"
+          scrolling="no"
+          frameborder="0"
+          allowtransparency="true">
+  </iframe>
+</div>
+```
+
+Key details:
+- Container `height` controls visible area; iframe `height` can be larger to hide unwanted regions (e.g., scrollbars, footers).
+- The embedded page can use `<style>`, `<script>`, `<svg>`, and everything Canvas strips -- because it loads in its own document context inside the iframe.
+- Set explicit heights to prevent layout shift.
+
+#### E03: Linked Image
+
+GitHub-hosted image wrapped in a link, useful for thumbnails linking to full-size versions or external resources.
+
+```html
+<div style="text-align: center; margin: 16px 0;">
+  <a href="https://username.github.io/repo/images/full-size.jpg" target="_blank" rel="noopener">
+    <img src="https://username.github.io/repo/images/thumbnail.jpg"
+         alt="Click to view full size"
+         style="max-width: 100%; height: auto; border-radius: 4px;">
+  </a>
+</div>
+```
+
+---
+
 ## Transformation Workflow
 
 When a faculty member provides content, follow these steps:
@@ -983,5 +1051,5 @@ When this template is provided alongside content, generate HTML that follows the
 | `<ol reversed>` | The `reversed` attribute is stripped |
 | `src="data:image/..."` | Data URIs blocked entirely |
 | External font links | `<link>` tags stripped |
-| `<img>` with arbitrary external URLs | May be blocked by CSP; use Canvas-hosted files |
+| `<img>` with unknown external URLs | May be blocked by CSP; use Canvas-hosted, GitHub Pages, or other approved-domain URLs |
 | Full HTML documents | Do not include `<html>`, `<head>`, `<body>` -- only fragments |

@@ -213,6 +213,11 @@
   <a href="#X04"><span class="id">X04</span> Video Embed</a>
   <a href="#X05"><span class="id">X05</span> Audio Player</a>
   <a href="#X06"><span class="id">X06</span> Video Player</a>
+
+  <h4>External Media</h4>
+  <a href="#E01"><span class="id">E01</span> GitHub Image</a>
+  <a href="#E02"><span class="id">E02</span> Website Embed</a>
+  <a href="#E03"><span class="id">E03</span> Linked Image</a>
 </aside>
 
 <!-- MAIN CONTENT -->
@@ -1500,11 +1505,77 @@ x&lt;sup&gt;2&lt;/sup&gt;</pre>
   </details>
 </div>
 
+<!-- E01 -->
+<div class="el" id="E01">
+  <div class="el-head"><span class="el-id">E01</span><span class="el-name">GitHub-Hosted Image</span></div>
+  <p class="el-desc">Image hosted in a GitHub Pages repo. Use when faculty manage media in git instead of Canvas Files.</p>
+  <div class="el-preview">
+    <div style="text-align: center; margin: 8px 0;">
+      <div style="max-width: 100%; height: 80px; background: #f0f0f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px;">GitHub-hosted image loads here</div>
+      <p style="font-size: 0.85em; color: #666666; margin-top: 6px;">Caption text</p>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="text-align: center; margin: 16px 0;"&gt;
+  &lt;img src="https://username.github.io/repo/images/photo.jpg"
+       alt="Descriptive alt text"
+       style="max-width: 100%; height: auto; border-radius: 4px;"&gt;
+  &lt;p style="font-size: 0.85em; color: #666666; margin-top: 6px;"&gt;Caption text&lt;/p&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- E02 -->
+<div class="el" id="E02">
+  <div class="el-head"><span class="el-id">E02</span><span class="el-name">External Website Embed</span></div>
+  <p class="el-desc">Embed an external website via iframe. The site must be hosted on a Canvas-approved domain. Wrap in a container with overflow hidden to crop the visible area.</p>
+  <div class="el-preview">
+    <div style="text-align: center; overflow: hidden; height: 120px; margin: 8px 0; border-radius: 4px; background: #f0f0f0;">
+      <div style="width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px;">iframe content loads here (p5.js sketch, visualization, etc.)</div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="text-align: center; overflow: hidden; height: 200px; margin: 16px 0; border-radius: 4px;"&gt;
+  &lt;iframe src="https://username.github.io/repo/"
+          style="width: 100%; height: 300px; border: none; display: block; margin: 0 auto;"
+          scrolling="no"
+          frameborder="0"
+          allowtransparency="true"&gt;
+  &lt;/iframe&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- E03 -->
+<div class="el" id="E03">
+  <div class="el-head"><span class="el-id">E03</span><span class="el-name">Linked Image</span></div>
+  <p class="el-desc">GitHub-hosted image wrapped in a link. Useful for thumbnails linking to full-size versions or external resources.</p>
+  <div class="el-preview">
+    <div style="text-align: center; margin: 8px 0;">
+      <a href="#" style="display: inline-block;">
+        <div style="max-width: 100%; height: 80px; background: #f0f0f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px; padding: 0 16px;">Clickable image (links to full size)</div>
+      </a>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;div style="text-align: center; margin: 16px 0;"&gt;
+  &lt;a href="https://username.github.io/repo/images/full-size.jpg" target="_blank" rel="noopener"&gt;
+    &lt;img src="https://username.github.io/repo/images/thumbnail.jpg"
+         alt="Click to view full size"
+         style="max-width: 100%; height: auto; border-radius: 4px;"&gt;
+  &lt;/a&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
 </main>
 </div>
 
 <footer style="border-top: 1px solid #e0e0e0; padding: 24px; text-align: center; font-size: 13px; color: #999;">
-  Canvas Design Agent -- Element Catalog -- 44 elements across 7 categories<br>
+  Canvas Design Agent -- Element Catalog -- 47 elements across 8 categories<br>
   <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md" style="color:#999;">SKILL.md</a>
 </footer>
 

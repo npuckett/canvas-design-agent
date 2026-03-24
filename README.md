@@ -104,6 +104,7 @@ These example prompt files show the markdown input that generates each example p
 | [course-timeline.md](docs/prompts/course-timeline.md) | [Course Timeline](https://npuckett.github.io/canvas-design-agent/docs/example-course-timeline.html) | V05, D05, D07, C01 |
 | [class-page.md](docs/prompts/class-page.md) | [Class Page](https://npuckett.github.io/canvas-design-agent/docs/example-class-page.html) | V02, L03, C06, C01 |
 | [project-brief.md](docs/prompts/project-brief.md) | [Project Brief](https://npuckett.github.io/canvas-design-agent/docs/example-project-brief.html) | V05, L04, D01, D07 |
+| [gallery-page.md](docs/prompts/gallery-page.md) | [External Media Gallery](https://npuckett.github.io/canvas-design-agent/docs/example-external-media.html) | E01, E02, E03, L03, C01 |
 
 See the [Prompt Files section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#prompt-files) of the Guide for a full explanation of the format and tips for writing effective prompts.
 
@@ -124,10 +125,12 @@ canvas-design-agent/
     example-course-timeline.html  -- Example: 14-week course schedule
     example-class-page.html       -- Example: reusable class/lecture page
     example-project-brief.html    -- Example: project assignment brief
+    example-external-media.html   -- Example: external media gallery (images + iframe)
     prompts/                      -- Example prompt files (markdown inputs)
       course-timeline.md          -- Prompt that generates the course timeline example
       class-page.md               -- Prompt that generates the class page example
       project-brief.md            -- Prompt that generates the project brief example
+      gallery-page.md             -- Prompt showing external media (images + website embeds)
 ```
 
 ## Documentation Site
@@ -138,7 +141,7 @@ The full reference site is hosted on GitHub Pages:
 
 The site includes:
 - **[Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html)** -- Visual preview of every Canvas-safe HTML element with its ID number
-- **[Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html)** -- Three full page examples (course timeline, class page, project brief) showing realistic Canvas pages built from the element library
+- **[Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html)** -- Four full page examples (course timeline, class page, project brief, external media gallery) showing realistic Canvas pages built from the element library
 - **[Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html)** -- Step-by-step workflows for both local and web-based agents, course templates, prompt file format, and a constraints quick reference
 - **[About](https://npuckett.github.io/canvas-design-agent/docs/about.html)** -- About this project and its author
 
@@ -157,6 +160,7 @@ Elements are organized by category with a letter prefix:
 | V | Visual Indicators | 6 |
 | N | Navigation | 2 |
 | X | Canvas Integration | 6 |
+| E | External Media | 3 |
 
 Faculty reference elements by number (e.g., "use C01 for collapsible sections"). The agent knows the corresponding HTML.
 
