@@ -71,6 +71,20 @@ The general workflow:
 3. You keep both files in your project -- the prompt as the editable source, the HTML as the generated output.
 4. Copy the HTML into Canvas RCE whenever you need to publish or update the page.
 
+```mermaid
+flowchart LR
+    A["<b>Prompt File</b><br/><code>.md</code> with element tags<br/>V05, D01, C01 ..."] --> C["<b>AI Agent</b><br/>Copilot, ChatGPT,<br/>Claude, etc."]
+    B["<b>SKILL.md</b><br/>Element library,<br/>Canvas constraints,<br/>transformation rules"] --> C
+    C --> D["<b>Canvas HTML</b><br/><code>.html</code> with<br/>inline styles only"]
+    D --> E["<b>Canvas LMS</b><br/>Paste into RCE<br/>HTML editor"]
+
+    style A fill:#f8f8f8,stroke:#333,color:#000
+    style B fill:#f8f8f8,stroke:#333,color:#000
+    style C fill:#111,stroke:#333,color:#fff
+    style D fill:#f8f8f8,stroke:#333,color:#000
+    style E fill:#111,stroke:#333,color:#fff
+```
+
 Here's a minimal prompt file:
 
 ```markdown
