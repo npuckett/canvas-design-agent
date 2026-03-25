@@ -11,6 +11,7 @@ A portable skill and reference system that transforms plain text into Canvas LMS
 - [Quick Start](#quick-start)
 - [How It Works: Prompt Files](#how-it-works-prompt-files)
 - [Example Prompt Files](#example-prompt-files)
+- [Example Page Structure](#example-page-structure)
 - [File Structure](#file-structure)
 - [Documentation Site](#documentation-site)
 - [Element Numbering System](#element-numbering-system)
@@ -108,6 +109,12 @@ These example prompt files show the markdown input that generates each example p
 
 See the [Prompt Files section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#prompt-files) of the Guide for a full explanation of the format and tips for writing effective prompts.
 
+## Example Page Structure
+
+Every generated example HTML page follows the same two-part structure: a **documentation wrapper** (site navigation, hero, description) and a **Canvas preview** containing only inline-styled HTML that works in Canvas RCE.
+
+See [docs/example-structure.md](docs/example-structure.md) for a detailed breakdown of each section, the CSS conventions, how the four examples differ, and instructions for creating new example pages.
+
 ## File Structure
 
 ```
@@ -126,6 +133,7 @@ canvas-design-agent/
     example-class-page.html       -- Example: reusable class/lecture page
     example-project-brief.html    -- Example: project assignment brief
     example-external-media.html   -- Example: external media gallery (images + iframe)
+    example-structure.md          -- Anatomy of the generated example pages
     prompts/                      -- Example prompt files (markdown inputs)
       course-timeline.md          -- Prompt that generates the course timeline example
       class-page.md               -- Prompt that generates the class page example

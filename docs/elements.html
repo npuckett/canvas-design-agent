@@ -51,6 +51,66 @@
       margin: 16px 0 8px;
     }
     .sidebar h4:first-child { margin-top: 0; }
+
+    /* SEARCH */
+    .search-box {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px 8px 32px;
+      font-size: 13px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      background: #fff;
+      color: #333;
+      outline: none;
+    }
+    .search-box input:focus {
+      border-color: #999;
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+    }
+    .search-box input::placeholder { color: #adb5bd; }
+    .search-box .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      color: #adb5bd;
+      pointer-events: none;
+    }
+    .search-box .clear-btn {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #adb5bd;
+      font-size: 16px;
+      line-height: 1;
+      padding: 2px 4px;
+      display: none;
+    }
+    .search-box .clear-btn:hover { color: #333; }
+    .search-count {
+      font-size: 11px;
+      color: #adb5bd;
+      margin-top: 4px;
+      display: none;
+    }
+    .no-results {
+      padding: 40px 20px;
+      text-align: center;
+      color: #adb5bd;
+      font-size: 15px;
+      display: none;
+    }
+    .no-results strong { color: #6c757d; }
     .sidebar a {
       display: block;
       font-size: 13px;
@@ -156,6 +216,12 @@
 
 <!-- SIDEBAR TOC -->
 <aside class="sidebar">
+  <div class="search-box">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="element-search" placeholder="Search elements..." autocomplete="off">
+    <button class="clear-btn" id="search-clear" aria-label="Clear search">&times;</button>
+  </div>
+  <div class="search-count" id="search-count"></div>
   <h4>Layout</h4>
   <a href="#L01"><span class="id">L01</span> Two-Column Table</a>
   <a href="#L02"><span class="id">L02</span> Three-Column Table</a>
@@ -1505,6 +1571,9 @@ x&lt;sup&gt;2&lt;/sup&gt;</pre>
   </details>
 </div>
 
+<!-- ==================== EXTERNAL MEDIA ==================== -->
+<h2>External Media (E series)</h2>
+
 <!-- E01 -->
 <div class="el" id="E01">
   <div class="el-head"><span class="el-id">E01</span><span class="el-name">GitHub-Hosted Image</span></div>
@@ -1577,10 +1646,139 @@ x&lt;sup&gt;2&lt;/sup&gt;</pre>
 </main>
 </div>
 
+<div class="no-results" id="no-results">No elements match your search.</div>
+
+</main>
+</div>
+
 <footer style="border-top: 1px solid #e0e0e0; padding: 24px; text-align: center; font-size: 13px; color: #999;">
   Canvas Design Agent -- Element Catalog -- 47 elements across 8 categories<br>
   <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md" style="color:#999;">SKILL.md</a>
 </footer>
+
+<script>
+(function() {
+  const searchInput = document.getElementById('element-search');
+  const clearBtn = document.getElementById('search-clear');
+  const searchCount = document.getElementById('search-count');
+  const noResults = document.getElementById('no-results');
+  const mainArea = document.querySelector('.main');
+  const sidebar = document.querySelector('.sidebar');
+
+  // Gather all element cards
+  const cards = Array.from(mainArea.querySelectorAll('.el'));
+  // Gather all section h2s in main
+  const sectionHeadings = Array.from(mainArea.querySelectorAll('h2'));
+  // Gather sidebar category headings and their links
+  const sidebarGroups = [];
+  sidebar.querySelectorAll('h4').forEach(function(h4) {
+    const links = [];
+    let sibling = h4.nextElementSibling;
+    while (sibling && sibling.tagName !== 'H4') {
+      if (sibling.tagName === 'A') links.push(sibling);
+      sibling = sibling.nextElementSibling;
+    }
+    sidebarGroups.push({ heading: h4, links: links });
+  });
+
+  // Build searchable index
+  const cardIndex = cards.map(function(card) {
+    const id = card.id || '';
+    const name = card.querySelector('.el-name');
+    const desc = card.querySelector('.el-desc');
+    return {
+      el: card,
+      text: (id + ' ' + (name ? name.textContent : '') + ' ' + (desc ? desc.textContent : '')).toLowerCase()
+    };
+  });
+
+  function runSearch() {
+    const query = searchInput.value.trim().toLowerCase();
+    clearBtn.style.display = query ? 'block' : 'none';
+
+    if (!query) {
+      // Show everything
+      cards.forEach(function(c) { c.style.display = ''; });
+      sectionHeadings.forEach(function(h) { h.style.display = ''; });
+      sidebarGroups.forEach(function(g) {
+        g.heading.style.display = '';
+        g.links.forEach(function(a) { a.style.display = ''; });
+      });
+      searchCount.style.display = 'none';
+      noResults.style.display = 'none';
+      // Also show any comment-associated elements
+      mainArea.querySelectorAll('.el-preview, details').forEach(function(el) { el.style.display = ''; });
+      return;
+    }
+
+    const terms = query.split(/\s+/);
+    let matchCount = 0;
+    const visibleIds = new Set();
+
+    // Filter cards
+    cardIndex.forEach(function(item) {
+      const match = terms.every(function(t) { return item.text.indexOf(t) !== -1; });
+      item.el.style.display = match ? '' : 'none';
+      if (match) {
+        matchCount++;
+        visibleIds.add(item.el.id);
+      }
+    });
+
+    // Filter sidebar links and category headings
+    sidebarGroups.forEach(function(group) {
+      let groupVisible = false;
+      group.links.forEach(function(a) {
+        const href = a.getAttribute('href') || '';
+        const linkId = href.replace('#', '');
+        const visible = visibleIds.has(linkId);
+        a.style.display = visible ? '' : 'none';
+        if (visible) groupVisible = true;
+      });
+      group.heading.style.display = groupVisible ? '' : 'none';
+    });
+
+    // Filter section h2 headings -- hide if no following visible cards
+    sectionHeadings.forEach(function(h2) {
+      let hasVisible = false;
+      let sibling = h2.nextElementSibling;
+      while (sibling && sibling.tagName !== 'H2') {
+        if (sibling.classList && sibling.classList.contains('el') && sibling.style.display !== 'none') {
+          hasVisible = true;
+          break;
+        }
+        sibling = sibling.nextElementSibling;
+      }
+      h2.style.display = hasVisible ? '' : 'none';
+    });
+
+    // Update count and no-results message
+    searchCount.textContent = matchCount + ' of ' + cards.length + ' elements';
+    searchCount.style.display = 'block';
+    noResults.style.display = matchCount === 0 ? 'block' : 'none';
+  }
+
+  searchInput.addEventListener('input', runSearch);
+  clearBtn.addEventListener('click', function() {
+    searchInput.value = '';
+    runSearch();
+    searchInput.focus();
+  });
+
+  // Keyboard shortcut: / to focus search
+  document.addEventListener('keydown', function(e) {
+    if (e.key === '/' && document.activeElement !== searchInput && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
+      e.preventDefault();
+      searchInput.focus();
+    }
+    if (e.key === 'Escape' && document.activeElement === searchInput) {
+      searchInput.value = '';
+      runSearch();
+      searchInput.blur();
+    }
+  });
+})();
+</script>
 
 </body>
 </html>
