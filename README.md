@@ -129,32 +129,6 @@ Every generated example HTML page follows the same two-part structure: a **docum
 
 See [docs/example-structure.md](docs/example-structure.md) for a detailed breakdown of each section, the CSS conventions, how the four examples differ, and instructions for creating new example pages.
 
-## File Structure
-
-```
-canvas-design-agent/
-  README.md                       -- This file
-  LICENSE                         -- CC BY-NC-SA 4.0
-  .github/
-    SKILL.md                      -- Portable agent skill (the core instruction set)
-  docs/
-    index.html                    -- Landing page
-    elements.html                 -- Visual element catalog with numbered previews
-    examples.html                 -- Example page gallery
-    guide.html                    -- Workflows, templates, constraints reference
-    about.html                    -- About this project and its author
-    example-course-timeline.html  -- Example: 14-week course schedule
-    example-class-page.html       -- Example: reusable class/lecture page
-    example-project-brief.html    -- Example: project assignment brief
-    example-external-media.html   -- Example: external media gallery (images + iframe)
-    example-structure.md          -- Anatomy of the generated example pages
-    prompts/                      -- Example prompt files (markdown inputs)
-      course-timeline.md          -- Prompt that generates the course timeline example
-      class-page.md               -- Prompt that generates the class page example
-      project-brief.md            -- Prompt that generates the project brief example
-      gallery-page.md             -- Prompt showing external media (images + website embeds)
-```
-
 ## Documentation Site
 
 The full reference site is hosted on GitHub Pages:
