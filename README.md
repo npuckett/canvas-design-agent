@@ -6,10 +6,10 @@ A portable skill and reference system that transforms plain text into Canvas LMS
 
 ## Table of Contents
 
+- [How It Works: Prompt Files](#how-it-works-prompt-files)
 - [What This Is](#what-this-is)
 - [Getting the Skill](#getting-the-skill)
 - [Quick Start](#quick-start)
-- [How It Works: Prompt Files](#how-it-works-prompt-files)
 - [Example Prompt Files](#example-prompt-files)
 - [Example Page Structure](#example-page-structure)
 - [File Structure](#file-structure)
@@ -17,48 +17,6 @@ A portable skill and reference system that transforms plain text into Canvas LMS
 - [Element Numbering System](#element-numbering-system)
 - [Canvas Constraints (Summary)](#canvas-constraints-summary)
 - [License](#license)
-
-## What This Is
-
-Canvas LMS strips most CSS (no `<style>` blocks, no external stylesheets, no JavaScript) and many HTML elements. Only inline `style=""` attributes and specific HTML elements survive the Rich Content Editor (RCE). This project provides:
-
-1. **[SKILL.md](.github/SKILL.md)** -- An agent instruction file containing Canvas constraints, a numbered element library, and transformation rules. Works with any LLM.
-2. **[Reference Website](https://npuckett.github.io/canvas-design-agent/)** -- A visual catalog of every available element, step-by-step workflow instructions, and a methods guide for creating course-specific templates.
-
-## Getting the Skill
-
-**Option A: Clone / download the whole repo** (recommended if you want the reference site and examples too):
-
-```
-git clone https://github.com/npuckett/canvas-design-agent.git
-```
-
-Open the folder in VS Code (or your editor). The skill file lives at `.github/SKILL.md` and is automatically picked up by editors that read instruction files from that location (VS Code with Copilot, Cursor, Windsurf, etc.). You can start writing content files immediately.
-
-**Option B: Download only the skill file:**
-
-If you already have a project and just need the skill, download [SKILL.md](.github/SKILL.md) and place it in your project's `.github/` directory. That's the only file the agent needs.
-
-## Quick Start
-
-### Workflow A: Local Agent (VS Code with Copilot, Cursor, etc.)
-
-1. Clone this repo (or copy [`.github/SKILL.md`](.github/SKILL.md) into your own project's `.github/` folder).
-2. Open the project folder in your editor. The agent will automatically read the skill file.
-3. Create a `.md` prompt file with your course content and element references (see [How It Works: Prompt Files](#how-it-works-prompt-files) below).
-4. Ask the agent to generate a Canvas HTML file: *"Transform this into a Canvas HTML file using the skill."*
-5. The agent writes an `.html` file in your project. Preview it in a browser and keep it under version control.
-6. Open the generated HTML file, copy its contents into Canvas RCE (switch to HTML editor view), and save.
-
-### Workflow B: Web-Based Agent (ChatGPT, Claude, Gemini, etc.)
-
-1. Upload [`.github/SKILL.md`](.github/SKILL.md) to the conversation (or paste its contents).
-2. Upload or paste your plain text content with element references.
-3. Ask the agent to generate Canvas HTML using the skill instructions.
-4. Save the generated HTML as an `.html` file in your project for reference and reuse.
-5. Open the HTML file, copy its contents into Canvas RCE (switch to HTML editor view), and save.
-
-> **See also:** The [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html) on the docs site walks through both workflows in detail, with template examples and a comparison table.
 
 ## How It Works: Prompt Files
 
@@ -109,6 +67,48 @@ CART 310 · Week 3 · September 22, 2026
 ```
 
 The agent reads this file plus SKILL.md, and outputs a complete `.html` file with inline styles that works in Canvas. When your content changes, edit the prompt file and regenerate.
+
+## What This Is
+
+Canvas LMS strips most CSS (no `<style>` blocks, no external stylesheets, no JavaScript) and many HTML elements. Only inline `style=""` attributes and specific HTML elements survive the Rich Content Editor (RCE). This project provides:
+
+1. **[SKILL.md](.github/SKILL.md)** -- An agent instruction file containing Canvas constraints, a numbered element library, and transformation rules. Works with any LLM.
+2. **[Reference Website](https://npuckett.github.io/canvas-design-agent/)** -- A visual catalog of every available element, step-by-step workflow instructions, and a methods guide for creating course-specific templates.
+
+## Getting the Skill
+
+**Option A: Clone / download the whole repo** (recommended if you want the reference site and examples too):
+
+```
+git clone https://github.com/npuckett/canvas-design-agent.git
+```
+
+Open the folder in VS Code (or your editor). The skill file lives at `.github/SKILL.md` and is automatically picked up by editors that read instruction files from that location (VS Code with Copilot, Cursor, Windsurf, etc.). You can start writing content files immediately.
+
+**Option B: Download only the skill file:**
+
+If you already have a project and just need the skill, download [SKILL.md](.github/SKILL.md) and place it in your project's `.github/` directory. That's the only file the agent needs.
+
+## Quick Start
+
+### Workflow A: Local Agent (VS Code with Copilot, Cursor, etc.)
+
+1. Clone this repo (or copy [`.github/SKILL.md`](.github/SKILL.md) into your own project's `.github/` folder).
+2. Open the project folder in your editor. The agent will automatically read the skill file.
+3. Create a `.md` prompt file with your course content and element references (see [How It Works: Prompt Files](#how-it-works-prompt-files) below).
+4. Ask the agent to generate a Canvas HTML file: *"Transform this into a Canvas HTML file using the skill."*
+5. The agent writes an `.html` file in your project. Preview it in a browser and keep it under version control.
+6. Open the generated HTML file, copy its contents into Canvas RCE (switch to HTML editor view), and save.
+
+### Workflow B: Web-Based Agent (ChatGPT, Claude, Gemini, etc.)
+
+1. Upload [`.github/SKILL.md`](.github/SKILL.md) to the conversation (or paste its contents).
+2. Upload or paste your plain text content with element references.
+3. Ask the agent to generate Canvas HTML using the skill instructions.
+4. Save the generated HTML as an `.html` file in your project for reference and reuse.
+5. Open the HTML file, copy its contents into Canvas RCE (switch to HTML editor view), and save.
+
+> **See also:** The [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html) on the docs site walks through both workflows in detail, with template examples and a comparison table.
 
 ## Example Prompt Files
 
