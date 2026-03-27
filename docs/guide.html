@@ -203,12 +203,14 @@
 
 <div class="toc">
   <a href="#getting-started">Getting Started</a>
+  <a href="#first-page">Your First Page</a>
   <a href="#local-workflow">Local Workflow</a>
   <a href="#web-workflow">Web Workflow</a>
   <a href="#comparison">Comparison</a>
   <a href="#prompt-files">Prompt Files</a>
   <a href="#templates">Templates</a>
   <a href="#constraints">Constraints</a>
+  <a href="#troubleshooting">Troubleshooting</a>
 </div>
 
 <div class="content">
@@ -225,8 +227,80 @@
     </ol>
 
     <div class="callout">
-      <p><strong>First time?</strong> Start simple: write a paragraph with a heading and ask the agent to format it with a V02 color header and a C01 collapsible section. Once you see how it works, build more complex pages.</p>
+      <p><strong>First time?</strong> Try the walkthrough below -- it takes about 5 minutes and requires zero HTML knowledge.</p>
     </div>
+  </section>
+
+  <!-- YOUR FIRST PAGE -->
+  <section id="first-page">
+    <h2>Your First Page (5-Minute Walkthrough)</h2>
+    <p>This walkthrough creates a real Canvas page from plain text. No HTML knowledge needed -- you just describe what you want and the AI does the rest.</p>
+
+    <ol class="steps">
+      <li>
+        <strong>Write your content in plain text.</strong> Open any text editor (even Notepad) and type something like this:
+        <div class="template-example"># Simple Syllabus Page
+
+Transform this into a Canvas page using the skill.
+Pick whatever layout and design elements look best.
+
+## Course Info
+
+ART 101 — Introduction to Drawing
+Fall 2026
+Tuesdays 1:00–4:00 PM, Room 302
+
+## About This Course
+
+This studio course introduces fundamental drawing concepts
+including line, form, value, and composition.
+
+## Weekly Schedule
+
+Week 1 — Intro & Materials Overview
+Week 2 — Line and Contour Drawing
+Week 3 — Value Studies
+Week 4 — Form and Volume
+
+## Grading
+
+Sketchbook: 30%
+Studio Projects: 40%
+Midterm Critique: 10%
+Final Critique: 10%
+Participation: 10%</div>
+        <p>Notice there are no element IDs or HTML -- just plain text with headings. This is all you need to get started. (See <a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/simple-syllabus.md">simple-syllabus.md</a> for a more complete version.)</p>
+      </li>
+      <li>
+        <strong>Give it to an AI agent along with SKILL.md.</strong>
+        <ul style="margin-top: 8px;">
+          <li><strong>Web workflow (easiest):</strong> Open <a href="https://chatgpt.com">ChatGPT</a>, <a href="https://claude.ai">Claude</a>, or <a href="https://gemini.google.com">Gemini</a>. Upload or paste the contents of <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md">SKILL.md</a>, then paste your content and say <em>"Transform this into a Canvas page using the skill."</em></li>
+          <li><strong>Local workflow:</strong> If you use VS Code with Copilot, place SKILL.md in your project's <code>.github/</code> folder, save your text as a <code>.md</code> file, and ask Copilot to transform it.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Paste the HTML into Canvas.</strong> The agent returns HTML code. To put it in Canvas:
+        <ol type="a" style="margin-top: 8px;">
+          <li>Open your Canvas course and navigate to the page you want to edit (or create a new one).</li>
+          <li>Click <strong>Edit</strong>.</li>
+          <li>In the Rich Content Editor toolbar, click the <strong>HTML editor</strong> icon -- it looks like <code>&lt;/&gt;</code> and is usually in the toolbar's overflow menu (click <strong>⋮</strong> or <strong>more options</strong> if you don't see it).</li>
+          <li>Select all existing content in the HTML view and delete it.</li>
+          <li>Paste the generated HTML.</li>
+          <li>Click <strong>Save</strong> (or <strong>Save &amp; Publish</strong>).</li>
+        </ol>
+      </li>
+    </ol>
+
+    <div class="callout">
+      <p><strong>What you'll get:</strong> A professionally formatted page with a colored header, organized schedule table, grading breakdown, and consistent styling -- all from plain text input. Every style is inline, so Canvas won't strip anything.</p>
+    </div>
+
+    <h3>Next Steps</h3>
+    <ul>
+      <li>Browse the <a href="elements.html">Element Catalog</a> and reference specific element IDs in your next prompt (e.g., "use a V05 gradient header").</li>
+      <li>Look at the <a href="examples.html">example pages</a> for inspiration on more complex layouts.</li>
+      <li>Create a <a href="#templates">course-specific template</a> to keep all your pages visually consistent.</li>
+    </ul>
   </section>
 
   <!-- LOCAL WORKFLOW -->
@@ -350,6 +424,36 @@ CART 310 · Week 3 · September 22, 2026
       <li><strong>Keep it natural</strong> -- You don't need to know HTML. Write like you're describing the page to a colleague.</li>
       <li><strong>One file per page</strong> -- Each prompt file produces one Canvas page. Keep them organized by course or week.</li>
     </ul>
+
+    <h3>Prompt File Conventions</h3>
+    <p>For best results across different AI tools, follow these formatting patterns:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Pattern</th>
+          <th>When to Use</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>## Section Name (Element ID)</code></td>
+          <td>When you want a specific element</td>
+          <td><code>## Quick Info (L03)</code></td>
+        </tr>
+        <tr>
+          <td><code>## Section Name</code></td>
+          <td>When you want the agent to choose</td>
+          <td><code>## About This Course</code></td>
+        </tr>
+        <tr>
+          <td><code>## Section Name (hint)</code></td>
+          <td>When you want a behavior but don't know the ID</td>
+          <td><code>## Resources (collapsible)</code></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>All three patterns work. Element IDs are optional but give you more precise control. As you get familiar with the <a href="elements.html">catalog</a>, you'll naturally start using IDs for the elements you like.</p>
 
     <h3>Example Prompt Files</h3>
     <p>These are the prompt files that generated the <a href="examples.html">example pages</a> on this site. View them on GitHub to see exactly what input produces each output:</p>
@@ -519,6 +623,44 @@ Important dates: T02 highlighted in yellow</div>
       <li>The <code>open</code> attribute on <code>&lt;details&gt;</code></li>
       <li>The <code>reversed</code> attribute on <code>&lt;ol&gt;</code></li>
     </ul>
+  </section>
+
+  <!-- TROUBLESHOOTING -->
+  <section id="troubleshooting">
+    <h2>Troubleshooting</h2>
+    <p>Common issues when working with Canvas HTML and how to fix them.</p>
+
+    <h3>My formatting disappeared after saving</h3>
+    <p>Canvas strips <code>&lt;style&gt;</code> blocks, <code>&lt;script&gt;</code> tags, and certain CSS properties when you save. If your formatting vanished, the HTML likely used one of these stripped features. Regenerate the page and tell the agent: <em>"Make sure all styles are inline -- no &lt;style&gt; blocks."</em> The SKILL.md file prevents this, but if you're editing HTML manually, keep all styles in <code>style=""</code> attributes.</p>
+
+    <h3>Images aren't showing</h3>
+    <p>Canvas cannot resolve relative image paths like <code>images/photo.jpg</code>. Every image URL must be absolute:</p>
+    <ul>
+      <li><strong>Canvas-hosted:</strong> Upload to Files in your Canvas course, then use the full Canvas file URL.</li>
+      <li><strong>GitHub Pages:</strong> Use the complete <code>https://username.github.io/repo/images/photo.jpg</code> URL.</li>
+      <li><strong>External:</strong> Use any publicly accessible <code>https://</code> URL from a domain Canvas allows.</li>
+    </ul>
+    <p>If you see a broken image icon, right-click it and check the URL -- it's almost always a relative path or a blocked domain.</p>
+
+    <h3>Collapsible sections won't stay open</h3>
+    <p>Canvas strips the <code>open</code> attribute from <code>&lt;details&gt;</code> elements. All collapsible sections start closed -- this is a Canvas limitation and cannot be overridden. Design your page so that critical information is visible by default (outside collapsibles) and supplementary content is collapsed.</p>
+
+    <h3>Layout looks wrong on mobile</h3>
+    <p>Multi-column layouts (flexbox, grid, tables) may not wrap well on small screens. To improve mobile layout:</p>
+    <ul>
+      <li>Use <code>flex-wrap: wrap</code> and <code>min-width: 200px</code> on flex children (the L03 template includes this).</li>
+      <li>Avoid fixed-width columns -- use percentages or <code>fr</code> units.</li>
+      <li>Test by resizing your browser window before pasting into Canvas.</li>
+    </ul>
+
+    <h3>Shadows, animations, or effects aren't working</h3>
+    <p>Canvas strips <code>box-shadow</code>, <code>text-shadow</code>, <code>opacity</code>, <code>transform</code>, and all JavaScript. These cannot be used. For visual depth, use borders, background colors, and gradients instead. The element catalog is designed around what Canvas actually supports.</p>
+
+    <h3>The agent generated a full HTML document</h3>
+    <p>If the output includes <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, or <code>&lt;body&gt;</code> tags, only copy the content <em>inside</em> the <code>&lt;body&gt;</code> tag. Canvas expects an HTML fragment, not a full document. Tell the agent: <em>"Output only the HTML fragment -- no html, head, or body tags."</em></p>
+
+    <h3>Colors or fonts look different in Canvas</h3>
+    <p>Canvas may apply its own base styles on top of your inline styles. If colors seem off, make sure every text element has an explicit <code>color</code> in its inline style. The design system defaults in SKILL.md are chosen to work well with Canvas's base styles.</p>
   </section>
 
 </div>

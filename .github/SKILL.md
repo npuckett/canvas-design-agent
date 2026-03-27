@@ -35,7 +35,8 @@ Canvas RCE sanitizes all HTML. These rules are non-negotiable.
 | CSS properties | `box-shadow`, `text-shadow`, `opacity`, `transform`, `letter-spacing`, `word-spacing` |
 | Attributes | `<details open>` (the `open` attr is stripped), `<ol reversed>` |
 | Data URIs | `data:` in `src` attributes -- blocked entirely |
-| External resources | Fonts, images from arbitrary URLs (use Canvas-hosted files) |
+| External fonts | `<link>` font imports, `@font-face` declarations |
+| Unapproved external images | Images from domains not on the Canvas CSP allow-list (use Canvas-hosted, GitHub Pages, or other approved-domain URLs -- see IMAGE RULE below) |
 
 ### ALWAYS USE (confirmed working)
 
@@ -120,6 +121,38 @@ Font: `system-ui, -apple-system, sans-serif`
 | Inner element gap | 12px |
 | Border radius | 4px |
 | Table cell padding | 10px 12px |
+
+---
+
+## Accessibility Requirements
+
+Canvas pages must meet basic accessibility standards (WCAG 2.1 AA). Apply these rules to every page you generate:
+
+### Images
+- Every `<img>` must have a descriptive `alt` attribute. Use `alt=""` only for purely decorative images.
+- Alt text should describe the content or function, not just say "image" or "photo."
+
+### Headings
+- Use headings in order: `<h1>` then `<h2>` then `<h3>`. Never skip levels (e.g., `<h1>` directly to `<h3>`).
+- Each page should have exactly one `<h1>` (typically inside the page header element).
+
+### Color Contrast
+- Body text (#495057) on white (#ffffff) meets AA. Do not use lighter text colors for primary content.
+- On dark backgrounds (#1a1a2e), use light text (#e0e0e0 or #ffffff). Never use dark text on dark backgrounds.
+- Do not rely on color alone to convey information -- pair color with text labels, icons (Unicode), or patterns.
+
+### Links
+- Use descriptive link text: "View the assignment rubric" not "Click here" or "Link."
+- Links must be visually distinguishable from surrounding text (underline or color difference).
+
+### Tables
+- Always include `scope="col"` on `<th>` elements in table headers (already present in D01 template).
+- Use `<caption>` for tables that need context (see D04).
+
+### Semantic HTML
+- Use `<h2>`, `<h3>` for headings, not bold `<div>` elements.
+- Use `<ul>`, `<ol>` for lists, not manual bullet characters in paragraphs.
+- Use `<blockquote>` for quotations, not styled `<div>` elements.
 
 ---
 
@@ -356,6 +389,32 @@ Code with a descriptive caption below. Uses `<figure>` and `<figcaption>`.
     Figure 1: Example code caption
   </figcaption>
 </figure>
+```
+
+#### C09: Basic Unordered List
+
+Styled bullet list for general content. The most common content element.
+
+```html
+<ul style="padding-left: 24px; color: #495057; margin-bottom: 12px;">
+  <li style="margin-bottom: 6px;">First item</li>
+  <li style="margin-bottom: 6px;">Second item</li>
+  <li style="margin-bottom: 6px;">Third item</li>
+</ul>
+```
+
+Nested variant:
+
+```html
+<ul style="padding-left: 24px; color: #495057; margin-bottom: 12px;">
+  <li style="margin-bottom: 6px;">Main item
+    <ul style="padding-left: 20px; margin-top: 6px;">
+      <li style="margin-bottom: 4px;">Sub-item A</li>
+      <li style="margin-bottom: 4px;">Sub-item B</li>
+    </ul>
+  </li>
+  <li style="margin-bottom: 6px;">Another main item</li>
+</ul>
 ```
 
 ---
@@ -1003,6 +1062,45 @@ Before outputting, verify:
 - [ ] No `data:` URIs in image sources
 - [ ] All styles are inline
 - [ ] Images use Canvas URLs or `[CANVAS_IMAGE_URL]` placeholders
+
+---
+
+## Output Guidance
+
+When generating HTML for faculty, follow these presentation rules:
+
+### Before the HTML
+
+Always include a brief plain-language summary before the HTML code that tells the faculty member:
+1. What layout and elements you chose and why
+2. How to use the output: "Copy all the HTML below, open your Canvas page, click the HTML editor icon (`</>` in the toolbar), paste it in, and click Save."
+3. Any placeholders they need to fill in (e.g., `[CANVAS_IMAGE_URL]`, assignment links)
+
+### Inside the HTML
+
+Add HTML comments labeling major sections so faculty can find and edit content later:
+```html
+<!-- HEADER -->
+<!-- SCHEDULE TABLE -->
+<!-- RESOURCES (collapsible) -->
+```
+
+### When Requests Cannot Be Fulfilled
+
+If a faculty member requests something Canvas strips (animations, shadows, dropdown menus, interactive forms, embedded scripts), do NOT silently substitute. Instead:
+1. Briefly explain what Canvas does not support and why
+2. Describe the Canvas-safe alternative you used instead
+3. Generate the page using the best available substitute
+
+Examples:
+- "Animated headers" → Explain that Canvas strips JavaScript; use a V05 gradient header for visual impact instead
+- "Drop shadows" → Explain that `box-shadow` is stripped; use borders and background colors for depth
+- "Dropdown navigation" → Explain that JS is stripped; use C01 collapsible sections or N01 anchor links
+- "Interactive progress bar" → Explain that `<progress>` is stripped; use D07 static div-based bar
+
+### When No Element IDs Are Referenced
+
+Many faculty will describe their page in plain language without referencing element IDs. This is expected and supported. Analyze their content and select appropriate elements from the library. Briefly note which elements you chose in your summary so they can reference those IDs in future requests.
 
 ---
 

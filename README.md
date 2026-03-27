@@ -91,6 +91,17 @@ If you already have a project and just need the skill, download [SKILL.md](.gith
 
 ## Quick Start
 
+### New to This? Start Here (No HTML Knowledge Required)
+
+1. Download [SKILL.md](.github/SKILL.md) from this repository.
+2. Open [ChatGPT](https://chatgpt.com), [Claude](https://claude.ai), or [Gemini](https://gemini.google.com).
+3. Upload or paste the contents of SKILL.md into the conversation.
+4. Type or paste your course content in plain text — just describe your page naturally. (See [simple-syllabus.md](docs/prompts/simple-syllabus.md) for an example that uses zero element IDs.)
+5. Tell the agent: *"Transform this into a Canvas page using the skill."*
+6. Copy the generated HTML, open your Canvas page, click the HTML editor icon (`</>` in the toolbar), paste, and save.
+
+That's it. The agent handles all the formatting. See the [Your First Page walkthrough](https://npuckett.github.io/canvas-design-agent/docs/guide.html#first-page) on the docs site for a detailed step-by-step with screenshots.
+
 ### Workflow A: Local Agent (VS Code with Copilot, Cursor, etc.)
 
 1. Clone this repo (or copy [`.github/SKILL.md`](.github/SKILL.md) into your own project's `.github/` folder).
@@ -116,6 +127,7 @@ These example prompt files show the markdown input that generates each example p
 
 | Prompt File | Generated Example | Key Elements |
 |---|---|---|
+| [simple-syllabus.md](docs/prompts/simple-syllabus.md) | *(beginner — no element IDs)* | Agent's choice |
 | [course-timeline.md](docs/prompts/course-timeline.md) | [Course Timeline](https://npuckett.github.io/canvas-design-agent/docs/example-course-timeline.html) | V05, D05, D07, C01 |
 | [class-page.md](docs/prompts/class-page.md) | [Class Page](https://npuckett.github.io/canvas-design-agent/docs/example-class-page.html) | V02, L03, C06, C01 |
 | [project-brief.md](docs/prompts/project-brief.md) | [Project Brief](https://npuckett.github.io/canvas-design-agent/docs/example-project-brief.html) | V05, L04, D01, D07 |
@@ -125,9 +137,9 @@ See the [Prompt Files section](https://npuckett.github.io/canvas-design-agent/do
 
 ## Example Page Structure
 
-Every generated example HTML page follows the same two-part structure: a **documentation wrapper** (site navigation, hero, description) and a **Canvas preview** containing only inline-styled HTML that works in Canvas RCE.
+The example HTML pages on the documentation site use a two-part structure: a **documentation wrapper** (site navigation, hero, description) and a **Canvas preview** containing only inline-styled HTML. The [docs/example-structure.md](docs/example-structure.md) file documents this structure for contributors who want to add new examples to the reference site.
 
-See [docs/example-structure.md](docs/example-structure.md) for a detailed breakdown of each section, the CSS conventions, how the four examples differ, and instructions for creating new example pages.
+> **Note:** This is developer documentation about the reference site's HTML structure — you don't need to read it to use the skill.
 
 ## Documentation Site
 
@@ -150,7 +162,7 @@ Elements are organized by category with a letter prefix:
 | Prefix | Category | Count |
 |--------|----------|-------|
 | L | Layout | 6 |
-| C | Content Organization | 8 |
+| C | Content Organization | 9 |
 | T | Typography | 9 |
 | D | Data Display | 7 |
 | V | Visual Indicators | 6 |
