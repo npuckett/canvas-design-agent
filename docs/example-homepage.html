@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Example: Course Homepage -- Canvas Design Agent</title>
+  <style>
+    :root {
+      --color-bg: #fff;
+      --color-text: #333;
+      --color-text-muted: #495057;
+      --color-heading: #000;
+      --color-border: #dee2e6;
+      --color-surface: #f8f8f8;
+      --color-nav-bg: #000;
+      --color-hero-bg: #111;
+      --color-accent: #555;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", "Fira Mono", Menlo, monospace;
+      --container-max: 860px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 48px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      line-height: 1.6;
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--color-heading); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--color-accent); }
+
+    /* NAV */
+    .site-nav {
+      background: var(--color-nav-bg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-nav__brand { font-weight: 700; font-size: 1.125rem; color: #fff; }
+    .site-nav__links { display: flex; gap: var(--space-lg); }
+    .site-nav__links a { color: #999; font-size: 0.9375rem; }
+    .site-nav__links a:hover { color: #fff; }
+    .site-nav__toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: var(--space-xs);
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--color-hero-bg);
+      color: #fff;
+      padding: clamp(2rem, 5vw, 3.5rem) var(--space-lg);
+      text-align: center;
+    }
+    .hero__title {
+      font-size: clamp(1.5rem, 3vw, 1.75rem);
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .hero__subtitle {
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      color: #999;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+    .page-section {
+      padding: var(--space-xl) 0;
+    }
+    .page-section + .page-section {
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* HEADINGS */
+    .section-heading {
+      font-size: clamp(1.25rem, 2.5vw, 1.375rem);
+      font-weight: 700;
+      color: var(--color-heading);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* TEXT */
+    p { margin-bottom: 0.75rem; color: var(--color-text-muted); }
+    code {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+    }
+
+    /* ELEMENTS USED — tag grid */
+    .elements-used {
+      margin: var(--space-lg) 0;
+    }
+    .elements-used__title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: var(--space-md);
+    }
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      list-style: none;
+      padding: 0;
+    }
+    .tag-grid li {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+    .tag-grid .tag-id {
+      font-weight: 700;
+      color: var(--color-heading);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    /* CALLOUT */
+    .callout {
+      border-left: 3px solid #ccc;
+      background: var(--color-surface);
+      padding: var(--space-md) 20px;
+      margin: 20px 0;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout strong { color: var(--color-text); }
+
+    /* CANVAS PREVIEW */
+    .canvas-preview {
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: var(--space-lg) 0;
+    }
+    .canvas-preview-label {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 10px var(--space-md);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .canvas-preview-label::before { content: "Canvas Preview"; }
+    .canvas-preview-body {
+      padding: var(--space-lg);
+      background: #fff;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      border-top: 1px solid #e0e0e0;
+      padding: var(--space-lg);
+      text-align: center;
+      font-size: 0.8125rem;
+      color: #999;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .site-nav__toggle { display: block; }
+      .site-nav__links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--color-nav-bg);
+        flex-direction: column;
+        padding: 0 var(--space-lg) var(--space-md);
+        gap: var(--space-md);
+      }
+      .site-nav__links.open { display: flex; }
+      .site-nav { flex-wrap: wrap; }
+      .container { padding: 0 var(--space-md); }
+      .page-section { padding: clamp(1.5rem, 5vw, 3rem) 0; }
+      .canvas-preview-body { padding: var(--space-md); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="site-nav__brand">Canvas Design Agent</span>
+  <button class="site-nav__toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">&#9776;</button>
+  <div class="site-nav__links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1 class="hero__title">Example: Course Homepage</h1>
+  <p class="hero__subtitle">A welcoming landing page for a course, using the Warm Minimal (S03) theme with module navigation and key dates.</p>
+</header>
+
+<main class="container">
+
+  <!-- ABOUT THIS EXAMPLE -->
+  <section class="page-section">
+    <h2 class="section-heading">About This Example</h2>
+    <p>This page demonstrates a <strong>course homepage</strong> built with the <strong>Warm Minimal (S03)</strong> theme. It uses earth-tone colors and the Palatino serif font to create an inviting, approachable feel suited to arts and humanities courses.</p>
+    <p>The homepage includes a welcome hero header, quick-link navigation, a module overview grid, key dates, and instructor contact information.</p>
+
+    <div class="elements-used">
+      <h3 class="elements-used__title">Elements Used</h3>
+      <ul class="tag-grid">
+        <li><a href="elements.html#S03" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">S03</span> Warm Minimal Theme</a></li>
+        <li><a href="elements.html#V05" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">V05</span> Gradient Header</a></li>
+        <li><a href="elements.html#N02" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">N02</span> Button-Styled Links</a></li>
+        <li><a href="elements.html#L03" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">L03</span> Flexbox Row</a></li>
+        <li><a href="elements.html#C03" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">C03</span> Info Card</a></li>
+        <li><a href="elements.html#V01" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">V01</span> Left-Border Accent Box</a></li>
+        <li><a href="elements.html#T01" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">T01</span> Styled Headings</a></li>
+        <li><a href="elements.html#D05" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">D05</span> Schedule Grid</a></li>
+        <li><a href="elements.html#V03" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">V03</span> Alert / Callout Box</a></li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><strong>How to replicate:</strong> Provide your course information as plain text and tell the agent: <em>&ldquo;Transform this into a Canvas course homepage. Use the Warm Minimal theme. Include a welcome message, module overview, quick links, and key dates.&rdquo;</em></p>
+    </div>
+  </section>
+
+  <!-- CANVAS PREVIEW -->
+  <section class="page-section">
+    <h2 class="section-heading">Canvas Preview</h2>
+    <p>This is exactly what appears in Canvas after pasting the generated HTML.</p>
+
+    <div class="canvas-preview">
+      <div class="canvas-preview-label"></div>
+      <div class="canvas-preview-body">
+
+        <!-- L05: Centered Container -->
+        <div style="max-width: 800px; margin: 0 auto; font-family: Palatino, 'Book Antiqua', Georgia, serif;">
+
+          <!-- V05: Gradient Header — Warm Minimal theme -->
+          <div style="background: linear-gradient(135deg, #5d4037, #795548); color: #fdf6ee; padding: 32px 24px; margin-bottom: 24px; border-radius: 8px;">
+            <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #fdf6ee; font-family: Palatino, 'Book Antiqua', Georgia, serif;">ENGL 204 &mdash; Creative Writing: Short Fiction</h1>
+            <p style="margin: 8px 0 0; font-size: 15px; color: #d7ccc8; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Fall 2026 &bull; MW 10:00&ndash;11:15 AM &bull; Room 412, Hall Building</p>
+          </div>
+
+          <!-- Welcome Message -->
+          <div style="border-left: 4px solid #e67e22; padding: 16px 20px; background: #fdf6ee; border-radius: 0 8px 8px 0; margin-bottom: 24px;">
+            <p style="color: #4e3629; margin: 0 0 8px; font-size: 15px; font-family: Palatino, 'Book Antiqua', Georgia, serif;"><strong style="color: #5d4037;">Welcome!</strong> This course is a workshop-based exploration of the short story form. You&rsquo;ll read widely, write regularly, and develop your voice as a fiction writer through peer feedback and revision.</p>
+            <p style="color: #4e3629; margin: 0; font-size: 15px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Whether you&rsquo;re a seasoned writer or trying fiction for the first time, this space is built for experimentation. Take risks with your work &mdash; that&rsquo;s where the best stories come from.</p>
+          </div>
+
+          <!-- V03: This Week Alert -->
+          <div style="padding: 16px; margin: 0 0 24px; background: #fff3cd; border: 1px solid #e67e22; border-radius: 8px;">
+            <strong style="color: #5d4037;">&#128214; This Week &mdash; Week 8: Dialogue &amp; Voice</strong>
+            <p style="color: #4e3629; margin: 8px 0 0; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Reading due: &ldquo;Cathedral&rdquo; by Raymond Carver &bull; Workshop group B submissions due Monday by 9 AM</p>
+          </div>
+
+          <!-- T01: Quick Links Heading -->
+          <h2 style="color: #5d4037; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #e67e22; margin-bottom: 16px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Quick Links</h2>
+
+          <!-- N02: Button-Styled Links -->
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+            <a href="#" style="display: inline-block; padding: 10px 20px; background: #5d4037; color: #fdf6ee; text-decoration: none; border-radius: 8px; font-weight: 600; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Course Syllabus</a>
+            <a href="#" style="display: inline-block; padding: 10px 20px; background: #fdf6ee; color: #5d4037; text-decoration: none; border: 2px solid #5d4037; border-radius: 8px; font-weight: 600; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Workshop Schedule</a>
+            <a href="#" style="display: inline-block; padding: 10px 20px; background: #fdf6ee; color: #5d4037; text-decoration: none; border: 2px solid #5d4037; border-radius: 8px; font-weight: 600; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Submission Portal</a>
+            <a href="#" style="display: inline-block; padding: 10px 20px; background: #fdf6ee; color: #5d4037; text-decoration: none; border: 2px solid #5d4037; border-radius: 8px; font-weight: 600; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Writing Center</a>
+          </div>
+
+          <!-- T01: Course Modules Heading -->
+          <h2 style="color: #5d4037; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #e67e22; margin-bottom: 16px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Course Modules</h2>
+
+          <!-- L03: Flexbox Card Grid — Modules -->
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;">
+            <div style="flex: 1; min-width: 200px; padding: 16px; background: #fdf6ee; border: 1px solid #d7ccc8; border-radius: 8px; border-top: 3px solid #e67e22;">
+              <h3 style="margin: 0 0 8px; font-size: 16px; font-weight: 600; color: #5d4037; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Module 1</h3>
+              <p style="margin: 0 0 4px; font-size: 13px; color: #8d6e63; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Weeks 1&ndash;3</p>
+              <p style="margin: 0; font-size: 14px; color: #4e3629; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Elements of Story &mdash; Character, setting, conflict.</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; padding: 16px; background: #fdf6ee; border: 1px solid #d7ccc8; border-radius: 8px; border-top: 3px solid #e67e22;">
+              <h3 style="margin: 0 0 8px; font-size: 16px; font-weight: 600; color: #5d4037; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Module 2</h3>
+              <p style="margin: 0 0 4px; font-size: 13px; color: #8d6e63; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Weeks 4&ndash;6</p>
+              <p style="margin: 0; font-size: 14px; color: #4e3629; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Point of View &amp; Voice &mdash; Who tells the story and how.</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; padding: 16px; background: #fdf6ee; border: 1px solid #d7ccc8; border-radius: 8px; border-top: 3px solid #e67e22;">
+              <h3 style="margin: 0 0 8px; font-size: 16px; font-weight: 600; color: #5d4037; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Module 3</h3>
+              <p style="margin: 0 0 4px; font-size: 13px; color: #8d6e63; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Weeks 7&ndash;9</p>
+              <p style="margin: 0; font-size: 14px; color: #4e3629; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Structure &amp; Revision &mdash; Scene, summary, the art of cutting.</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; padding: 16px; background: #fdf6ee; border: 1px solid #d7ccc8; border-radius: 8px; border-top: 3px solid #e67e22;">
+              <h3 style="margin: 0 0 8px; font-size: 16px; font-weight: 600; color: #5d4037; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Module 4</h3>
+              <p style="margin: 0 0 4px; font-size: 13px; color: #8d6e63; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Weeks 10&ndash;14</p>
+              <p style="margin: 0; font-size: 14px; color: #4e3629; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Workshop &amp; Portfolio &mdash; Full cycles and final assembly.</p>
+            </div>
+          </div>
+
+          <!-- T01: Key Dates Heading -->
+          <h2 style="color: #5d4037; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #e67e22; margin-bottom: 16px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Key Dates</h2>
+
+          <!-- D05: Schedule Grid (simplified) -->
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+            <thead>
+              <tr style="background: #5d4037; color: #fdf6ee;">
+                <th scope="col" style="padding: 10px 12px; text-align: left; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Date</th>
+                <th scope="col" style="padding: 10px 12px; text-align: left; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Event</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #d7ccc8;">
+                <td style="padding: 10px 12px; color: #4e3629; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Sep 28</td>
+                <td style="padding: 10px 12px; color: #4e3629; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Workshop Draft 1 Due</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #d7ccc8; background: #fdf6ee;">
+                <td style="padding: 10px 12px; color: #4e3629; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Oct 26</td>
+                <td style="padding: 10px 12px; color: #4e3629; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Workshop Draft 2 Due</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #d7ccc8;">
+                <td style="padding: 10px 12px; color: #4e3629; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Nov 23</td>
+                <td style="padding: 10px 12px; color: #4e3629; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Workshop Draft 3 Due</td>
+              </tr>
+              <tr style="background: #fdf6ee;">
+                <td style="padding: 10px 12px; color: #4e3629; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Dec 12</td>
+                <td style="padding: 10px 12px; color: #4e3629; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Final Portfolio Due</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- T01: Contact Heading -->
+          <h2 style="color: #5d4037; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #e67e22; margin-bottom: 16px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Contact &amp; Office Hours</h2>
+
+          <!-- C03: Instructor Info Card -->
+          <div style="padding: 16px; background: #fdf6ee; border: 1px solid #d7ccc8; border-radius: 8px; margin-bottom: 24px;">
+            <p style="margin: 0 0 8px; font-size: 15px; color: #4e3629; font-family: Palatino, 'Book Antiqua', Georgia, serif;"><strong style="color: #5d4037;">Prof. Jamie Okafor</strong></p>
+            <p style="margin: 0 0 4px; font-size: 14px; color: #4e3629; font-family: Palatino, 'Book Antiqua', Georgia, serif;">&#9993; <a href="mailto:jokafor@university.edu" style="color: #e67e22; text-decoration: underline;">jokafor@university.edu</a></p>
+            <p style="margin: 0 0 4px; font-size: 14px; color: #4e3629; font-family: Palatino, 'Book Antiqua', Georgia, serif;">&#128205; Hall Building, Room 508</p>
+            <p style="margin: 0 0 4px; font-size: 14px; color: #4e3629; font-family: Palatino, 'Book Antiqua', Georgia, serif;">&#128336; Wednesdays 2&ndash;4 PM, or email for an appointment</p>
+            <p style="margin: 0; font-size: 13px; color: #8d6e63; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Response time: within 24 hours on weekdays</p>
+          </div>
+
+          <!-- V01: Instructor Note -->
+          <div style="border-left: 4px solid #e67e22; padding: 16px 20px; background: #fdf6ee; border-radius: 0 8px 8px 0; margin-bottom: 24px;">
+            <p style="color: #4e3629; margin: 0; font-size: 15px; font-family: Palatino, 'Book Antiqua', Georgia, serif;"><strong style="color: #5d4037;">A note from me:</strong> I read every draft before workshop. If you want to meet about your story before submitting, come to office hours &mdash; I&rsquo;m happy to talk through ideas at any stage.</p>
+          </div>
+
+        </div><!-- end centered container -->
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  Canvas Design Agent &mdash; Example: Course Homepage
+</footer>
+
+</body>
+</html>

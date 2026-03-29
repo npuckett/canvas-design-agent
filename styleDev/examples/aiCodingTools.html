@@ -1,0 +1,220 @@
+<!-- AI Coding Tools Workshop -->
+
+<div style="max-width: 800px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+
+    <!-- Overview Section -->
+    <div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+        <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;">
+            <span style="font-size: 18pt; color: #333333;">From Vibe Coding to Agentic Engineering</span>
+        </div>
+        <div style="padding: 16px;">
+            <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">
+                Since GPT launched, asking LLMs coding questions has been common. Early on they were unreliable, and everything involved copy/pasting between a chat window and your editor. That changed when tools like Cursor and VS Code integrated AI directly into the development environment, giving them more power to handle real tasks. This brought on a label that is objectively inaccurate, but stuck: <strong>Vibe Coding</strong>.
+            </p>
+            <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">
+                It coincided with the launch of <a href="https://claude.com/product/claude-code" target="_blank" rel="noopener" style="color: #0066cc;">Claude Code</a>, which started as a small research project at Anthropic built in the command line, but has now completely reshaped software development. As its creator explains, it "now writes 100% of its own code." These have gone from toys to tools that software engineers actually use daily.
+            </p>
+            <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">
+                That does not mean you have to use them, but you do need to know they exist and understand their basics. It also matters <em>how</em> you use them, as shown by <a href="https://www.anthropic.com/research/AI-assistance-coding-skills" target="_blank" rel="noopener" style="color: #0066cc;">Anthropic's own research on AI-assisted coding</a>.
+            </p>
+            <p style="margin: 0; font-size: 11pt; line-height: 1.6; color: #333333;">
+                The biggest shift is that instead of writing prompts, the focus is now on creating clearly structured files that describe your project, its components, and testing methods. This practice is built around industry standards used by development teams. The core skill is the same whether you use AI tools or not: <strong>clearly documenting what you want to build</strong>. That is what this workshop is about.
+            </p>
+        </div>
+    </div>
+
+    <!-- Resources Section -->
+    <div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+        <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;">
+            <span style="font-size: 18pt; color: #333333;">Resources</span>
+        </div>
+        <div style="padding: 16px;">
+            <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">
+                <strong>Before the workshop:</strong>
+            </p>
+            <ul style="margin: 0 0 16px 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+                <li>Review the <a href="https://canvascloud.ocadu.ca/courses/12811/pages/coding-reference" target="_blank" style="color: #0066cc;"><strong>AI Coding Resources</strong></a> page for PRD templates, examples, and agent instruction file documentation</li>
+                <li>Review <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener" style="color: #0066cc;">Markdown Basic Syntax</a> as a reference for formatting your PRD</li>
+                <li>Think about one aspect of your thesis project that involves code or could benefit from a custom tool</li>
+            </ul>
+
+            <!-- Markdown format callout -->
+            <div style="padding: 12px; background: #f0f7ff; border: 1px solid #cce0ff; margin-bottom: 12px;">
+                <p style="margin: 0 0 6px 0; font-weight: 600; font-size: 11pt; color: #333333;">Your PRD should be a Markdown file (.md)</p>
+                <p style="margin: 0; font-size: 10pt; line-height: 1.6; color: #555;">
+                    Markdown is an open plain-text format that allows for hierarchically structured text. You probably know it from GitHub README files. PRDs written in Markdown are readable by both humans and AI coding agents. Create a plain text file with the <code>.md</code> extension (e.g. <code>PRD.md</code>) and use headings, lists, and sections to organize your requirements.
+                </p>
+            </div>
+
+            <p style="margin: 0; font-size: 10pt; line-height: 1.6; color: #666; font-style: italic;">
+                If you plan to use AI coding tools: set up VS Code and GitHub Copilot using this guide: <a href="https://digitalfuturesocadu.github.io/vsCodeSetup/guide/" target="_blank" rel="noopener" style="color: #0066cc;">VS Code Setup Guide</a>. You get Copilot Pro free with your OCAD email. Other tools (Claude Code, Cursor) work similarly but may require separate accounts.
+            </p>
+        </div>
+    </div>
+
+    <!-- Finding Your Focus Section -->
+    <div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+        <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;">
+            <span style="font-size: 18pt; color: #333333;">Finding Your Focus</span>
+        </div>
+        <div style="padding: 16px;">
+            <div style="font-size: 11pt; line-height: 1.8; color: #333333;">
+                <p style="margin: 0 0 12px 0;">
+                    You are already mid-project. The goal is to identify a specific piece of your thesis that would benefit from clear technical documentation. Here are some strategies for finding that focus:
+                </p>
+
+                <p style="margin: 0 0 12px 0; font-weight: 600;">Format: Individual or groups of 2-3</p>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #999;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">The Thing You Keep Avoiding</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">There is probably a technical piece of your project that you know needs to happen but have been putting off. That avoidance usually means the scope is unclear. Documenting it as a PRD forces you to define the problem clearly.</p>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #999;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">The Next Feature</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">What is the next thing you need to add or build? Write the PRD for that specific feature or system, not the entire project.</p>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #999;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">A Tool That Helps You Work</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">A utility, generator, converter, or helper that would speed up your thesis development. Think: asset generators, data processors, testing tools, calibration utilities, or batch processors.</p>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; border-left: 3px solid #999;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Something Beyond What You Can Currently Build</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">A clear PRD lets you attempt things that are currently outside your skill set. If you can describe it precisely enough, you can build it with an AI coding agent -- or use the documentation to learn how to build it yourself.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workshop Steps Section -->
+    <div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+        <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;">
+            <span style="font-size: 18pt; color: #333333;">Workshop Steps</span>
+        </div>
+        <div style="padding: 16px;">
+            <div style="font-size: 11pt; line-height: 1.8; color: #333333;">
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #4a9;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Step 1: Identify Your Focus (5 min)</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">Pick one specific piece of your thesis project to document. See "Finding Your Focus" above for strategies. Scope it down to something concrete -- a single feature, system, or tool rather than the whole project.</p>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #4a9;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Step 2: Brain Dump (10 min)</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">Write down everything you know about what you want to build in plain language. Do not worry about structure -- capture features, constraints, uncertainties, and preferences. Get it all out.</p>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #4a9;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Step 3: Structure into a PRD (15 min)</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">Use the Project Brief template from the <a href="https://canvascloud.ocadu.ca/courses/12811/pages/coding-reference" target="_blank" style="color: #0066cc;">AI Coding Resources</a> page to organize your brain dump into a Markdown (.md) file. You can also ask an AI agent to help structure it, but review what it produces -- you know your project better than it does.</p>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #4a9;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Step 4: Peer Review (10 min)</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">Exchange documents with a partner. Can they understand what you are building from the document alone? What questions do they have? What is unclear or missing?</p>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #4a9;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Step 5: Refine Your PRD (15 min)</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">Based on feedback, fill gaps and clarify ambiguities. Add explicit constraints, examples, and edge cases. The PRD should be detailed enough that someone unfamiliar with your project could understand what needs to be built.</p>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; border-left: 3px solid #4a9;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Step 6 (Optional): Test with a Coding Agent (remaining time)</p>
+                    <p style="margin: 0; font-size: 10pt; color: #666;">If you want to try building with your PRD, use it to guide development with Copilot, Claude Code, or another coding agent. This step is not required -- the PRD itself is the primary deliverable. But if you do try it, notice where your documentation helps and where you need to clarify further.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deliverable Section -->
+    <div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+        <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;">
+            <span style="font-size: 18pt; color: #333333;">Deliverable</span>
+        </div>
+        <div style="padding: 16px;">
+            <p style="margin: 0 0 16px 0; font-size: 11pt; line-height: 1.6; color: #333333;">
+                Submit a post containing:
+            </p>
+            <ol style="margin: 0 0 16px 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+                <li><strong>Your PRD (.md file)</strong> — The structured project documentation you created, as a Markdown file (can be linked or pasted as text)</li>
+                <li><strong>Brief reflection</strong> — 2-3 sentences on how the documentation process affected how you think about your project</li>
+                <li><strong>(Optional) Link to your project/tool</strong> — If you used your PRD with a coding agent, include a link to the working prototype, GitHub repo, or hosted version</li>
+            </ol>
+
+            <!-- Credit Requirements -->
+            <div style="margin-top: 20px;">
+                <div style="padding: 12px; background: #fafafa; border-left: 3px solid #666; margin-bottom: 12px;">
+                    <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #666; margin-bottom: 8px;">Students taking 0.5 credit Thesis:</div>
+                    <div style="font-size: 11pt; line-height: 1.6; color: #333333;">
+                        Complete the PRD. If you attempted to build with it, include a link to your output, but the documentation itself is the primary deliverable.
+                    </div>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; border-left: 3px solid #666;">
+                    <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #666; margin-bottom: 8px;">Students taking 1.0 credit Thesis:</div>
+                    <div style="font-size: 11pt; line-height: 1.6; color: #333333;">
+                        Complete the PRD and attempt to build with it using a coding agent. Additionally, create a <code>.github/copilot-instructions.md</code> file (or equivalent) that captures your project's coding conventions. Include both in your submission.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Ideas by Medium -->
+    <div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+        <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;">
+            <span style="font-size: 18pt; color: #333333;">Project Ideas by Medium</span>
+        </div>
+        <div style="padding: 16px;">
+            <div style="font-size: 11pt; line-height: 1.8; color: #333333;">
+                <p style="margin: 0 0 12px 0; font-size: 10pt; color: #666; font-style: italic;">
+                    Not sure what to build? Here are starting points based on your thesis type:
+                </p>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #999;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Games / Interactive Experiences</p>
+                    <ul style="margin: 0; padding-left: 16px; font-size: 10pt; color: #666;">
+                        <li>A core mechanic prototype (one interaction loop, polished)</li>
+                        <li>Level generator or asset randomizer</li>
+                        <li>Save/load system or state manager</li>
+                        <li>Dialogue or quest system tool</li>
+                    </ul>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #999;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Installations / Physical Computing</p>
+                    <ul style="margin: 0; padding-left: 16px; font-size: 10pt; color: #666;">
+                        <li>Sensor data visualizer or debugger</li>
+                        <li>Calibration tool for projections or sensors</li>
+                        <li>State machine for installation modes</li>
+                        <li>Data logger for user interaction patterns</li>
+                    </ul>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; margin-bottom: 12px; border-left: 3px solid #999;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">Visual / Motion Media</p>
+                    <ul style="margin: 0; padding-left: 16px; font-size: 10pt; color: #666;">
+                        <li>Batch image processor or resizer</li>
+                        <li>Color palette generator from reference images</li>
+                        <li>SVG or graphics generator</li>
+                        <li>Animation timing calculator</li>
+                    </ul>
+                </div>
+
+                <div style="padding: 12px; background: #fafafa; border-left: 3px solid #999;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">UX / App Projects</p>
+                    <ul style="margin: 0; padding-left: 16px; font-size: 10pt; color: #666;">
+                        <li>Interactive prototype (beyond Figma)</li>
+                        <li>Data visualization dashboard</li>
+                        <li>Form or survey with custom logic</li>
+                        <li>API integration proof of concept</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

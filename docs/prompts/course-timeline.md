@@ -1,14 +1,15 @@
 # Course Timeline / Week Plan
 
 Transform this into a Canvas page using the skill.
+Use S01 Clean Modern but swap the accent palette for Forest Greens (#2d6a4f primary, #40916c secondary).
 
 ## Style
 
 - Layout: single column, centered (L05)
-- Header: gradient from dark navy to slate (V05)
-- Section headings: styled unit dividers (T01)
+- Header: V05 gradient header
+- Section headings: T01 unit dividers
 - Due dates: highlighted text (T02)
-- Navigation: anchor links as TOC at the top (N01)
+- Navigation: anchor links as TOC (N01)
 
 ## Header (V05)
 

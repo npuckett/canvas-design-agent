@@ -124,6 +124,209 @@ Font: `system-ui, -apple-system, sans-serif`
 
 ---
 
+## Style Themes
+
+Seven named themes are available. Each overrides the Design System Defaults above. When faculty reference a theme by name (or describe a mood like "warm and approachable"), apply the matching theme's colors, fonts, and spacing to every element on the page.
+
+### S01 — Clean Modern *(default)*
+
+Minimal black-and-white palette with a single accent color. This is the standard look when no theme is specified.
+
+| Role | Value |
+|------|-------|
+| Text | `#495057` |
+| Headings | `#333333` |
+| Muted | `#6c757d` |
+| Link | `#0066cc` |
+| Light background | `#f8f8f8` |
+| Border | `#dee2e6` |
+| Dark background | `#1a1a2e` |
+| Dark text | `#e0e0e0` |
+| Accent | `#0066cc` |
+
+- Font: `system-ui, -apple-system, sans-serif`
+- Border radius: `4px`
+- Header: V02 or V05 with `linear-gradient(135deg, #0066cc, #004499)`
+
+### S02 — Bold Academic
+
+High-contrast, serif typography with deep navy and crimson accents. Strong visual hierarchy for text-heavy courses (humanities, writing, history).
+
+| Role | Value |
+|------|-------|
+| Text | `#2d2d2d` |
+| Headings | `#1a1a2e` |
+| Muted | `#555555` |
+| Link | `#b71c1c` |
+| Light background | `#f5f0eb` |
+| Border | `#c9c0b6` |
+| Dark background | `#1a1a2e` |
+| Dark text | `#f5f0eb` |
+| Accent | `#e74c3c` |
+
+- Font: `Georgia, 'Times New Roman', serif`
+- Border radius: `0px`
+- Header: V05 with `linear-gradient(135deg, #1a1a2e, #2c3e50)` and accent `#e74c3c` for border-bottom or highlight
+
+### S03 — Warm Minimal
+
+Soft earth tones, rounded corners, approachable serif font. Good for studio arts, design, education courses where the tone should feel inviting.
+
+| Role | Value |
+|------|-------|
+| Text | `#4e3629` |
+| Headings | `#5d4037` |
+| Muted | `#8d6e63` |
+| Link | `#e67e22` |
+| Light background | `#fdf6ee` |
+| Border | `#d7ccc8` |
+| Dark background | `#5d4037` |
+| Dark text | `#fdf6ee` |
+| Accent | `#e67e22` |
+
+- Font: `Palatino, 'Book Antiqua', Georgia, serif`
+- Border radius: `8px`
+- Header: V02 with background `#5d4037` and text `#fdf6ee`, or V05 with `linear-gradient(135deg, #5d4037, #795548)`
+
+### S04 — High Contrast
+
+Accessibility-first theme with maximum readability. Pure black on white, large default sizing cues, wide sans-serif font. Use when accessibility is the top priority.
+
+| Role | Value |
+|------|-------|
+| Text | `#000000` |
+| Headings | `#000000` |
+| Muted | `#333333` |
+| Link | `#0055aa` |
+| Light background | `#ffffff` |
+| Border | `#000000` |
+| Dark background | `#000000` |
+| Dark text | `#ffffff` |
+| Accent | `#0055aa` |
+
+- Font: `Verdana, Geneva, sans-serif`
+- Border radius: `0px`
+- Header: V02 with background `#000000` and text `#ffffff`
+- Additional: Use `font-size: 16px` for body text (1px larger than default 15px). Use `border-width: 2px` instead of `1px` for stronger visual separation.
+
+### S05 — Studio Dark
+
+Creative and expressive — dark backgrounds with vibrant accent colors. Designed for art, design, media, and creative technology courses.
+
+| Role | Value |
+|------|-------|
+| Text | `#e0e0e0` |
+| Headings | `#ffffff` |
+| Muted | `#aaaaaa` |
+| Link | `#ff6b6b` |
+| Light background | `#2a2a3d` |
+| Dark background | `#1a1a2e` |
+| Dark text | `#e0e0e0` |
+| Border | `#3d3d56` |
+| Accent | `#ff6b6b` |
+
+- Font: `system-ui, -apple-system, sans-serif`
+- Border radius: `4px`
+- Header: V05 with `linear-gradient(135deg, #1a1a2e, #2a2a3d)` and accent `#ff6b6b`
+- Note: This theme inverts the typical light-background page. Use `#1a1a2e` or `#2a2a3d` as the page wrapper background; all card/box backgrounds use `#2a2a3d` or `#3d3d56`.
+
+### S06 — Editorial
+
+Typography-driven, restrained design. White background, almost entirely grayscale with bold typographic structure. Content hierarchy is created through weight, size, and spatial relationships rather than color. Inspired by editorial/gallery design.
+
+| Role | Value |
+|------|-------|
+| Text | `#1a1a1a` |
+| Headings | `#000000` |
+| Muted | `#666666` |
+| Link | `#333333` |
+| Light background | `#f5f5f5` |
+| Border | `#cccccc` |
+| Dark background | `#555555` |
+| Dark text | `#ffffff` |
+| Accent | `#000000` |
+
+- Font: `system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif`
+- Border radius: `0px`
+- Header: V02 with no gradient — flat `#f5f5f5` background with bold black text, or no header at all. Avoid colored banners; let typography carry the hierarchy.
+- Additional: Use bold weight numbers (24px+) as section anchors. Date/label badges use black background with white text (`background: #000; color: #fff`). Content blocks use subtle `border: 1px solid #ccc` with `#f5f5f5` header rows. Gray left-border accents (`border-left: 3px solid #666` or `4px solid #888`) replace colored accents. Submission/deadline callouts use slightly darker gray backgrounds (`#e8e8e8`) with `border-left: 4px solid #333`.
+
+### S07 — Studio Light
+
+Light-background companion to Studio Dark. Same creative energy and vibrant coral accents on a clean white canvas. For creative courses where dark backgrounds aren't preferred or where Canvas theme constraints make light backgrounds easier.
+
+| Role | Value |
+|------|-------|
+| Text | `#2d2d3d` |
+| Headings | `#1a1a2e` |
+| Muted | `#6c6c8a` |
+| Link | `#ff6b6b` |
+| Light background | `#f4f4f8` |
+| Border | `#d5d5e0` |
+| Accent | `#ff6b6b` |
+
+- Font: `system-ui, -apple-system, sans-serif`
+- Border radius: `4px`
+- Header: No banner. Course title and subtitle rendered directly on white background in dark text.
+- Note: Clean white page background with vibrant coral accents — no dark header or banner. Card/box backgrounds use `#f4f4f8` or `#ffffff`. Accent color `#ff6b6b` is used for buttons, callout borders, and highlights. Pairs well with the same project gallery and creative layout patterns as Studio Dark.
+
+### Using Themes
+
+- **By name**: Faculty says "use the Warm Minimal theme" → apply S03 in full.
+- **By mood**: Faculty says "something clean and professional" → apply S01. "Dark and creative" → S05. "Light and creative" → S07. "Traditional academic" → S02. "Minimal, like a gallery" → S06.
+- **With overrides**: Faculty says "Bold Academic but with green accents" → start with S02, replace accent/link colors with their specified green.
+- **Custom template**: If a faculty member provides a full course-specific template (see Course-Specific Templates below), those values take precedence over any named theme.
+
+---
+
+## Typography Options
+
+Canvas strips external font imports (`<link>`, `@font-face`), but inline `font-family` declarations with web-safe/system font stacks work because these fonts are already installed on users' devices.
+
+| ID | Font Stack | Character | Best For |
+|----|-----------|-----------|----------|
+| F01 | `system-ui, -apple-system, sans-serif` | Clean, neutral, modern | Default, tech, design, science courses |
+| F02 | `Georgia, 'Times New Roman', serif` | Traditional, authoritative | Humanities, writing, history, law |
+| F03 | `Palatino, 'Book Antiqua', Georgia, serif` | Elegant, refined, editorial | Literature, philosophy, fine arts |
+| F04 | `Verdana, Geneva, sans-serif` | Wide, highly readable | Accessibility priority, any course |
+| F05 | `'Courier New', Courier, monospace` | Technical, code-like | CS, programming, technical writing |
+
+Apply the font stack to the outermost wrapper `<div>` so it cascades to all child elements. Override specific elements only when deliberately mixing fonts (e.g., monospace for code snippets inside a serif page).
+
+---
+
+## Color Customization
+
+Faculty can override any theme color by specifying values in their prompt. When they describe colors in plain language, map to the closest hex value.
+
+### Curated Spot Color Palettes
+
+These named palettes provide coordinated color sets. Faculty can say "use ocean blues" to request one.
+
+| Palette | Primary | Accent | Link | Good With |
+|---------|---------|--------|------|-----------|
+| **Ocean Blues** | `#1a5276` | `#2e86c1` | `#2e86c1` | S01, S04 themes |
+| **Earth Tones** | `#6d4c41` | `#a1887f` | `#8d6e63` | S03, S02 themes |
+| **Sunset Warm** | `#c0392b` | `#e67e22` | `#d35400` | S03, S05 themes |
+| **Forest Greens** | `#1b5e20` | `#4caf50` | `#2e7d32` | S01, S02 themes |
+| **Plum & Gold** | `#4a148c` | `#ffc107` | `#7b1fa2` | S05, S02 themes |
+
+When a palette is chosen, replace the theme's accent, link, and primary heading colors with the palette values. Keep the theme's background, text, and border colors intact.
+
+---
+
+## Using a Website as Style Reference
+
+Faculty may say "I want my course to look like [website name]" or paste a URL. Since you cannot visit external URLs, ask faculty to describe what they see:
+
+1. **Ask**: "I can't visit that website directly. Could you describe: (a) the dominant colors — is the background light or dark, and what accent color stands out? (b) Does the text look like a serif font (like in a book) or sans-serif (clean, modern)? (c) What's the overall feel — minimal and clean, bold and colorful, dark and moody?"
+2. **Map**: Match their description to the closest named theme (S01–S05) and font stack (F01–F05). Adjust colors to match what they described.
+3. **Confirm**: "Based on your description, I'll use the [theme name] theme with [adjustments]. Here's a preview of the color palette I'll apply: [list key colors]. Want me to proceed or adjust anything?"
+
+If faculty paste HTML from an existing Canvas page as a reference, extract the inline style values directly and build a custom palette from them.
+
+---
+
 ## Accessibility Requirements
 
 Canvas pages must meet basic accessibility standards (WCAG 2.1 AA). Apply these rules to every page you generate:
@@ -1009,6 +1212,86 @@ Example: `<a href="https://npuckett.github.io/my-course/images/photo.jpg">` with
 
 ---
 
+### Style Themes (S series)
+
+These are not structural HTML elements — they are full-page style overrides. When a theme is applied, use its colors, fonts, border-radius, and header style for every element on the page. See the **Style Themes** section above for complete color tables.
+
+#### S01: Clean Modern *(default)*
+
+Grayscale with blue accent. `system-ui` sans-serif. 4px radius. Use when no theme is specified. See theme spec above.
+
+#### S02: Bold Academic
+
+Navy/crimson with Georgia serif. 0px radius. High contrast, strong hierarchy. See theme spec above.
+
+#### S03: Warm Minimal
+
+Earth tones with Palatino serif. 8px radius. Soft and approachable. See theme spec above.
+
+#### S04: High Contrast
+
+Pure black/white with Verdana sans-serif. 0px radius. Maximum readability. See theme spec above.
+
+#### S05: Studio Dark
+
+Dark background with coral accents. `system-ui` sans-serif. 4px radius. Creative and expressive. See theme spec above.
+
+#### S06: Editorial
+
+White/grayscale, typography-driven. `system-ui` sans-serif extended stack. 0px radius. No colored banners — hierarchy through bold numbers, weight, and spacing. See theme spec above.
+
+#### S07: Studio Light
+
+White background with coral accents. Light companion to S05. `system-ui` sans-serif. 4px radius. Same creative energy, lighter canvas. See theme spec above.
+
+---
+
+### Font Stacks (F series)
+
+Canvas-safe font families that work via inline `font-family` declarations. Apply to the outermost wrapper `<div>` so it cascades to all children.
+
+#### F01: System Sans-Serif
+
+```
+font-family: system-ui, -apple-system, sans-serif;
+```
+
+Clean, neutral, modern. Works for any course. The default.
+
+#### F02: Traditional Serif
+
+```
+font-family: Georgia, 'Times New Roman', serif;
+```
+
+Authoritative and traditional. Best for humanities, writing, history, and law.
+
+#### F03: Elegant Serif
+
+```
+font-family: Palatino, 'Book Antiqua', Georgia, serif;
+```
+
+Refined and literary. Best for literature, philosophy, fine arts, and studio courses.
+
+#### F04: Wide Sans-Serif
+
+```
+font-family: Verdana, Geneva, sans-serif;
+```
+
+Wide, highly readable. Best when accessibility is the top priority. Large built-in x-height.
+
+#### F05: Monospace
+
+```
+font-family: 'Courier New', Courier, monospace;
+```
+
+Technical, code-like. Best for CS, programming, and technical writing courses.
+
+---
+
 ## Transformation Workflow
 
 When a faculty member provides content, follow these steps:
@@ -1023,6 +1306,15 @@ Identify what the content is:
 - **Procedures or steps** --> C06 Ordered Lists
 - **Term definitions or FAQs** --> C04/C05 Definition Lists
 - **Mixed content page** --> Combine elements as needed
+
+### Step 1b: Determine Style
+
+Before choosing elements, determine the visual style:
+- If faculty specified a **theme name** (e.g., "Bold Academic," "Studio"), apply that theme's full color/font/spacing set.
+- If faculty described a **mood or feel** (e.g., "warm and inviting," "dark and creative"), map to the closest theme.
+- If faculty referenced a **website** as inspiration, follow the "Using a Website as Style Reference" workflow above.
+- If faculty provided a **course-specific template**, use those values (they override any named theme).
+- If nothing is specified, use S01 (Clean Modern) defaults.
 
 ### Step 2: Choose Layout
 
@@ -1107,6 +1399,8 @@ Many faculty will describe their page in plain language without referencing elem
 ## Course-Specific Templates
 
 Faculty can define a course-specific template that overrides the defaults. When a template is provided, apply it consistently across all generated pages.
+
+**Tip**: Start from a named theme (S01–S05) and customize from there. For example, "use the Bold Academic theme but with my department's green (#2e7d32) as the accent color" is much faster than specifying every value from scratch.
 
 A course template typically specifies:
 - **Primary color** and **accent color** for headers and accents

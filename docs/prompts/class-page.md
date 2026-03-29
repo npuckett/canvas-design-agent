@@ -1,13 +1,14 @@
 # Class Page — Class 06
 
 Transform this into a Canvas class page using the skill.
+Use the Clean Modern theme (S01).
 
 ## Style
 
 - Layout: single column, centered (L05)
-- Header: blue color-coded header #0066cc (V02)
-- Section headings: styled with blue underline (T01)
-- Accent color: #0066cc
+- Header: V02 color-coded header
+- Section headings: T01
+- Quick info: 3-card row (L03)
 
 ## Header (V02)
 

@@ -1,14 +1,15 @@
 # Project Brief — Final Project
 
 Transform this into a Canvas project brief using the skill.
+Use S02 Bold Academic but with orange accents (#e67e22) instead of crimson.
 
 ## Style
 
-- Layout: CSS grid with sidebar for quick facts + main content (L04)
-- Header: gradient orange #e67e22 to #d35400 (V05)
-- Section headings: styled with orange underline (T01)
-- Submission area: dark background section (V06)
-- Buttons: styled button links for all submissions (N02)
+- Layout: CSS grid with sidebar + main content (L04)
+- Header: V05 gradient header
+- Section headings: T01
+- Submission area: V06 dark background section
+- Buttons: N02 button-styled links
 
 ## Header (V05)
 

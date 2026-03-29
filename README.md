@@ -132,6 +132,8 @@ These example prompt files show the markdown input that generates each example p
 | [class-page.md](docs/prompts/class-page.md) | [Class Page](https://npuckett.github.io/canvas-design-agent/docs/example-class-page.html) | V02, L03, C06, C01 |
 | [project-brief.md](docs/prompts/project-brief.md) | [Project Brief](https://npuckett.github.io/canvas-design-agent/docs/example-project-brief.html) | V05, L04, D01, D07 |
 | [gallery-page.md](docs/prompts/gallery-page.md) | [External Media Gallery](https://npuckett.github.io/canvas-design-agent/docs/example-external-media.html) | E01, E02, E03, L03, C01 |
+| [homepage.md](docs/prompts/homepage.md) | [Course Homepage](https://npuckett.github.io/canvas-design-agent/docs/example-homepage.html) | S03, V05, N02, L03, D05 |
+| [assignment-page.md](docs/prompts/assignment-page.md) | [Assignment Page](https://npuckett.github.io/canvas-design-agent/docs/example-assignment.html) | S02, V05, C01, D01, C05 |
 
 See the [Prompt Files section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#prompt-files) of the Guide for a full explanation of the format and tips for writing effective prompts.
 
@@ -149,7 +151,7 @@ The full reference site is hosted on GitHub Pages:
 
 The site includes:
 - **[Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html)** -- Visual preview of every Canvas-safe HTML element with its ID number
-- **[Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html)** -- Four full page examples (course timeline, class page, project brief, external media gallery) showing realistic Canvas pages built from the element library
+- **[Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html)** -- Six full page examples (course timeline, class page, project brief, external media gallery, course homepage, assignment page) showing realistic Canvas pages built from the element library
 - **[Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html)** -- Step-by-step workflows for both local and web-based agents, course templates, prompt file format, and a constraints quick reference
 - **[About](https://npuckett.github.io/canvas-design-agent/docs/about.html)** -- About this project and its author
 
@@ -169,6 +171,8 @@ Elements are organized by category with a letter prefix:
 | N | Navigation | 2 |
 | X | Canvas Integration | 6 |
 | E | External Media | 3 |
+| S | Style Themes | 7 |
+| F | Font Stacks | 5 |
 
 Faculty reference elements by number (e.g., "use C01 for collapsible sections"). The agent knows the corresponding HTML.
 

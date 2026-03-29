@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Example: Assignment Page -- Canvas Design Agent</title>
+  <style>
+    :root {
+      --color-bg: #fff;
+      --color-text: #333;
+      --color-text-muted: #495057;
+      --color-heading: #000;
+      --color-border: #dee2e6;
+      --color-surface: #f8f8f8;
+      --color-nav-bg: #000;
+      --color-hero-bg: #111;
+      --color-accent: #555;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", "Fira Mono", Menlo, monospace;
+      --container-max: 860px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 48px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      line-height: 1.6;
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--color-heading); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--color-accent); }
+
+    /* NAV */
+    .site-nav {
+      background: var(--color-nav-bg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-nav__brand { font-weight: 700; font-size: 1.125rem; color: #fff; }
+    .site-nav__links { display: flex; gap: var(--space-lg); }
+    .site-nav__links a { color: #999; font-size: 0.9375rem; }
+    .site-nav__links a:hover { color: #fff; }
+    .site-nav__toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: var(--space-xs);
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--color-hero-bg);
+      color: #fff;
+      padding: clamp(2rem, 5vw, 3.5rem) var(--space-lg);
+      text-align: center;
+    }
+    .hero__title {
+      font-size: clamp(1.5rem, 3vw, 1.75rem);
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .hero__subtitle {
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      color: #999;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+    .page-section {
+      padding: var(--space-xl) 0;
+    }
+    .page-section + .page-section {
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* HEADINGS */
+    .section-heading {
+      font-size: clamp(1.25rem, 2.5vw, 1.375rem);
+      font-weight: 700;
+      color: var(--color-heading);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* TEXT */
+    p { margin-bottom: 0.75rem; color: var(--color-text-muted); }
+    code {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+    }
+
+    /* ELEMENTS USED — tag grid */
+    .elements-used {
+      margin: var(--space-lg) 0;
+    }
+    .elements-used__title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: var(--space-md);
+    }
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      list-style: none;
+      padding: 0;
+    }
+    .tag-grid li {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+    .tag-grid .tag-id {
+      font-weight: 700;
+      color: var(--color-heading);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    /* CALLOUT */
+    .callout {
+      border-left: 3px solid #ccc;
+      background: var(--color-surface);
+      padding: var(--space-md) 20px;
+      margin: 20px 0;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout strong { color: var(--color-text); }
+
+    /* CANVAS PREVIEW */
+    .canvas-preview {
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: var(--space-lg) 0;
+    }
+    .canvas-preview-label {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 10px var(--space-md);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .canvas-preview-label::before { content: "Canvas Preview"; }
+    .canvas-preview-body {
+      padding: var(--space-lg);
+      background: #fff;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      border-top: 1px solid #e0e0e0;
+      padding: var(--space-lg);
+      text-align: center;
+      font-size: 0.8125rem;
+      color: #999;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .site-nav__toggle { display: block; }
+      .site-nav__links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--color-nav-bg);
+        flex-direction: column;
+        padding: 0 var(--space-lg) var(--space-md);
+        gap: var(--space-md);
+      }
+      .site-nav__links.open { display: flex; }
+      .site-nav { flex-wrap: wrap; }
+      .container { padding: 0 var(--space-md); }
+      .page-section { padding: clamp(1.5rem, 5vw, 3rem) 0; }
+      .canvas-preview-body { padding: var(--space-md); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="site-nav__brand">Canvas Design Agent</span>
+  <button class="site-nav__toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">&#9776;</button>
+  <div class="site-nav__links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1 class="hero__title">Example: Assignment Page</h1>
+  <p class="hero__subtitle">A structured assignment page using the Editorial (S06) theme with Elegant Serif (F03) font stack for a typography-driven, grayscale look.</p>
+</header>
+
+<main class="container">
+
+  <!-- ABOUT THIS EXAMPLE -->
+  <section class="page-section">
+    <h2 class="section-heading">About This Example</h2>
+    <p>This page demonstrates an <strong>assignment page</strong> built with the <strong>Editorial (S06)</strong> theme and the <strong>Elegant Serif (F03)</strong> font stack. This shows how to combine a named theme with a specific typeface. S06 is typography-driven and relies on grayscale contrast rather than color, while F03&rsquo;s Palatino serif adds a refined, literary feel suited to writing-intensive courses.</p>
+    <p>The page includes assignment details, requirements, a collapsible rubric, submission instructions, and a late policy notice.</p>
+
+    <div class="elements-used">
+      <h3 class="elements-used__title">Elements Used</h3>
+      <ul class="tag-grid">
+        <li><a href="elements.html#S06" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">S06</span> Editorial Theme</a></li>
+        <li><a href="elements.html#F03" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">F03</span> Elegant Serif Font</a></li>
+        <li><a href="elements.html#T01" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">T01</span> Styled Headings</a></li>
+        <li><a href="elements.html#C09" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">C09</span> Unordered List</a></li>
+        <li><a href="elements.html#C05" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">C05</span> Definition List</a></li>
+        <li><a href="elements.html#C01" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">C01</span> Collapsible Section</a></li>
+        <li><a href="elements.html#D01" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">D01</span> Data Table</a></li>
+        <li><a href="elements.html#V03" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">V03</span> Alert / Callout Box</a></li>
+        <li><a href="elements.html#V01" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">V01</span> Left-Border Accent Box</a></li>
+        <li><a href="elements.html#N02" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">N02</span> Button-Styled Link</a></li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><strong>How to replicate:</strong> Provide your assignment details as plain text and tell the agent: <em>&ldquo;Transform this into a Canvas assignment page. Use the Editorial theme (S06) with the Elegant Serif font stack (F03). Include requirements, rubric (collapsible), and submission details.&rdquo;</em></p>
+    </div>
+  </section>
+
+  <!-- CANVAS PREVIEW -->
+  <section class="page-section">
+    <h2 class="section-heading">Canvas Preview</h2>
+    <p>This is exactly what appears in Canvas after pasting the generated HTML.</p>
+
+    <div class="canvas-preview">
+      <div class="canvas-preview-label"></div>
+      <div class="canvas-preview-body">
+
+        <!-- L05: Centered Container -->
+        <div style="max-width: 800px; margin: 0 auto; font-family: Palatino, 'Book Antiqua', Georgia, serif;">
+
+          <!-- S06 Editorial: Typography-driven header, no gradient -->
+          <div style="padding: 32px 0 24px; margin-bottom: 24px; border-bottom: 3px solid #1a1a2e;">
+            <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #1a1a2e; font-family: Palatino, 'Book Antiqua', Georgia, serif; line-height: 1.2;">Workshop Draft 2: Point of View Experiment</h1>
+            <p style="margin: 8px 0 0; font-size: 15px; color: #6c757d; font-family: Palatino, 'Book Antiqua', Georgia, serif;">ENGL 204 &bull; Module 2 &bull; Due October 26, 2026</p>
+          </div>
+
+          <!-- Assignment Overview -->
+          <p style="color: #333333; font-size: 15px; line-height: 1.7; margin-bottom: 16px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Write a short story (2,000&ndash;3,500 words) that experiments with an unconventional point of view. This draft builds on the voice exercises from Weeks 4&ndash;6 and pushes you to try a narrative perspective you haven&rsquo;t used before.</p>
+          <div style="border-left: 4px solid #333333; padding: 12px 16px; background: #f5f5f5; margin-bottom: 24px;">
+            <p style="color: #333333; margin: 0; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;"><strong style="color: #1a1a2e;">Note:</strong> This is a workshop draft &mdash; it does not need to be polished. Focus on taking a genuine risk with point of view rather than producing a &ldquo;finished&rdquo; story.</p>
+          </div>
+
+          <!-- T01: Requirements Heading -->
+          <h2 style="color: #1a1a2e; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #1a1a2e; margin-bottom: 16px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Requirements</h2>
+
+          <!-- C09: Unordered List -->
+          <ul style="padding-left: 24px; color: #333333; margin-bottom: 24px; font-family: Palatino, 'Book Antiqua', Georgia, serif; font-size: 15px; line-height: 1.8;">
+            <li>Length: 2,000&ndash;3,500 words</li>
+            <li>Must use a point of view other than simple past-tense third-person limited</li>
+            <li>Include a brief author&rsquo;s note (100&ndash;200 words) explaining your POV choice</li>
+            <li>Double-spaced, 12pt font, standard manuscript format</li>
+            <li>File format: .docx or .pdf</li>
+          </ul>
+
+          <!-- T01: POV Options Heading -->
+          <h2 style="color: #1a1a2e; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #1a1a2e; margin-bottom: 16px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Point of View Options to Consider</h2>
+
+          <!-- C05: Definition List — POV Options -->
+          <dl style="margin-bottom: 24px;">
+            <dt style="font-weight: 600; color: #1a1a2e; padding: 8px 0 4px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Second person (&ldquo;you&rdquo;)</dt>
+            <dd style="color: #6c757d; padding: 0 0 12px 16px; border-bottom: 1px solid #d0d0d0; margin-bottom: 8px; font-family: Palatino, 'Book Antiqua', Georgia, serif; font-size: 14px;">See Lorrie Moore, &ldquo;How to Become a Writer&rdquo;</dd>
+
+            <dt style="font-weight: 600; color: #1a1a2e; padding: 8px 0 4px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">First person plural (&ldquo;we&rdquo;)</dt>
+            <dd style="color: #6c757d; padding: 0 0 12px 16px; border-bottom: 1px solid #d0d0d0; margin-bottom: 8px; font-family: Palatino, 'Book Antiqua', Georgia, serif; font-size: 14px;">See Julie Otsuka, <em>The Buddha in the Attic</em></dd>
+
+            <dt style="font-weight: 600; color: #1a1a2e; padding: 8px 0 4px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Unreliable narrator</dt>
+            <dd style="color: #6c757d; padding: 0 0 12px 16px; border-bottom: 1px solid #d0d0d0; margin-bottom: 8px; font-family: Palatino, 'Book Antiqua', Georgia, serif; font-size: 14px;">See Kazuo Ishiguro, <em>The Remains of the Day</em></dd>
+
+            <dt style="font-weight: 600; color: #1a1a2e; padding: 8px 0 4px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Shifting / multiple POV</dt>
+            <dd style="color: #6c757d; padding: 0 0 12px 16px; border-bottom: 1px solid #d0d0d0; margin-bottom: 8px; font-family: Palatino, 'Book Antiqua', Georgia, serif; font-size: 14px;">See Jennifer Egan, <em>A Visit from the Goon Squad</em></dd>
+
+            <dt style="font-weight: 600; color: #1a1a2e; padding: 8px 0 4px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Unusual narrator (object, animal, collective)</dt>
+            <dd style="color: #6c757d; padding: 0 0 12px 16px; margin-bottom: 8px; font-family: Palatino, 'Book Antiqua', Georgia, serif; font-size: 14px;">See George Saunders, &ldquo;Fox 8&rdquo;</dd>
+          </dl>
+
+          <!-- T01: Submission Details Heading -->
+          <h2 style="color: #1a1a2e; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid #1a1a2e; margin-bottom: 16px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Submission Details</h2>
+
+          <p style="color: #333333; font-size: 15px; margin-bottom: 8px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Submit via Canvas by <strong>9:00 AM on October 26</strong> (Monday).</p>
+          <p style="color: #333333; font-size: 15px; margin-bottom: 16px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Your workshop group will read your draft before Wednesday&rsquo;s class.</p>
+
+          <!-- N02: Submit Button -->
+          <div style="margin-bottom: 24px;">
+            <a href="#" style="display: inline-block; padding: 12px 24px; background: #1a1a2e; color: #ffffff; text-decoration: none; font-weight: 600; font-family: Palatino, 'Book Antiqua', Georgia, serif; font-size: 15px;">Submit Draft &rarr;</a>
+          </div>
+
+          <!-- C01: Collapsible Rubric -->
+          <details style="margin-bottom: 12px; border: 1px solid #d0d0d0;">
+            <summary style="padding: 12px 16px; background: #f5f5f5; cursor: pointer; font-weight: 600; color: #1a1a2e; font-family: Palatino, 'Book Antiqua', Georgia, serif;">
+              Rubric
+            </summary>
+            <div style="padding: 16px;">
+              <!-- D01: Rubric Table -->
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: #1a1a2e; color: #ffffff;">
+                    <th scope="col" style="padding: 10px 12px; text-align: left; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Criterion</th>
+                    <th scope="col" style="padding: 10px 12px; text-align: left; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Weight</th>
+                    <th scope="col" style="padding: 10px 12px; text-align: left; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">4 (Excellent)</th>
+                    <th scope="col" style="padding: 10px 12px; text-align: left; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">3 (Good)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid #d0d0d0;">
+                    <td style="padding: 10px 12px; color: #333333; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Risk &amp; Ambition</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">30%</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 13px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Bold POV choice, fully committed</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 13px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Clear choice with ambitious moments</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #d0d0d0; background: #f5f5f5;">
+                    <td style="padding: 10px 12px; color: #333333; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Craft &amp; Technique</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">30%</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 13px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Strong control of language and pacing</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 13px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Solid craft with some rough spots</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #d0d0d0;">
+                    <td style="padding: 10px 12px; color: #333333; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Author&rsquo;s Note</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">20%</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 13px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Thoughtful reflection on POV effects</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 13px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Adequate reflection with some insight</td>
+                  </tr>
+                  <tr style="background: #f5f5f5;">
+                    <td style="padding: 10px 12px; color: #333333; font-weight: 600; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Workshop Readiness</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 14px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">20%</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 13px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Complete, formatted, on time</td>
+                    <td style="padding: 10px 12px; color: #6c757d; font-size: 13px; font-family: Palatino, 'Book Antiqua', Georgia, serif;">Complete but minor formatting issues</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <!-- V03: Late Policy Alert -->
+          <div style="padding: 16px; margin: 0 0 24px; background: #f5f5f5; border: 1px solid #333333; margin-top: 24px;">
+            <strong style="color: #1a1a2e;">&#9888; Late Policy:</strong>
+            <span style="color: #333333; font-family: Palatino, 'Book Antiqua', Georgia, serif; font-size: 14px;"> Drafts submitted after the deadline cannot be included in workshop. If you have an emergency, email me before the deadline to arrange an alternative. Unexcused late drafts: &minus;10% per day up to 3 days, then zero.</span>
+          </div>
+
+        </div><!-- end centered container -->
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  Canvas Design Agent &mdash; Example: Assignment Page
+</footer>
+
+</body>
+</html>

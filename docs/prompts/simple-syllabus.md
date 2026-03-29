@@ -1,7 +1,8 @@
 # Simple Syllabus Page
 
 Transform this into a Canvas page using the skill.
-Pick whatever layout and design elements look best — I don't have specific preferences.
+Use the Traditional Serif font stack (F02) with the Plum & Gold color palette.
+Pick whatever layout and design elements look best — I don't have specific preferences about structure.
 
 ## Course Info
 

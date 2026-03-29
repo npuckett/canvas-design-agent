@@ -1,12 +1,12 @@
 # Gallery Page with External Media
 
 Transform this into a Canvas page using the Canvas Design Agent skill.
+Base the visual style on the embedded p5.js sketch at https://npuckett.github.io/thesisBanner/ — it has a dark background with organic, particle-based animations. I want that same dark, creative energy on the page.
 
 ## Style
 
 - Layout: single column, centered (L05)
-- Header: gradient dark navy (V05)
-- Section headings: styled with navy underline (T01)
+- Section headings: T01
 - Images: hosted on GitHub Pages, loaded by absolute URL (E01, E03)
 - Website embed: iframe from GitHub Pages (E02)
 
