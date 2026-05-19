@@ -1,6 +1,6 @@
 # Canvas Design Agent
 
-A portable skill and reference system that transforms plain text into Canvas LMS-compatible HTML. 
+A portable skill and reference system that transforms plain text into Canvas LMS-compatible HTML. The easiest workshop workflow is web-based: upload `SKILL.md` to Microsoft Copilot, ChatGPT, or Claude, paste course content, and ask for Canvas-ready HTML.
 
 [Documentation Site](https://npuckett.github.io/canvas-design-agent/docs/) · [Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html) · [Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html) · [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html) · [About](https://npuckett.github.io/canvas-design-agent/docs/about.html)
 
@@ -10,6 +10,7 @@ A portable skill and reference system that transforms plain text into Canvas LMS
 - [What This Is](#what-this-is)
 - [Getting the Skill](#getting-the-skill)
 - [Quick Start](#quick-start)
+- [Portable Workshop Kit](#portable-workshop-kit)
 - [Example Prompt Files](#example-prompt-files)
 - [Example Page Structure](#example-page-structure)
 - [File Structure](#file-structure)
@@ -20,18 +21,24 @@ A portable skill and reference system that transforms plain text into Canvas LMS
 
 ## How It Works: Prompt Files
 
-The core workflow is writing a **prompt file** -- a plain markdown file that describes what you want on a Canvas page. You reference elements by their ID (e.g., V05, D01, C01) and the agent generates a Canvas-safe HTML file.
+The core workflow is writing plain-text course content and giving it to an AI chat along with `SKILL.md`. Faculty can use a formal `.md` prompt file, but they can also paste rough notes directly into Microsoft Copilot, ChatGPT, or Claude.
 
-The general workflow:
+The beginner workflow:
 
-1. Write a `.md` prompt file describing your page content and referencing element IDs.
-2. The agent reads your prompt file plus SKILL.md and generates an `.html` file with inline styles.
-3. You keep both files in your project -- the prompt as the editable source, the HTML as the generated output.
-4. Copy the HTML into Canvas RCE whenever you need to publish or update the page.
+1. Upload or paste `SKILL.md` into a web-based AI chat.
+2. Paste course content in plain language.
+3. Ask the AI to generate a Canvas HTML fragment with inline styles.
+4. Copy the HTML into the Canvas Rich Content Editor HTML view.
+
+The reusable workflow:
+
+1. Save the content as a `.md` prompt file.
+2. Regenerate the Canvas HTML whenever the source content changes.
+3. Keep the prompt as the editable source and the generated HTML as the paste-ready output.
 
 ```mermaid
 flowchart LR
-    A["<b>Prompt File</b><br/><code>.md</code> with element tags<br/>V05, D01, C01 ..."] --> C["<b>AI Agent</b><br/>Copilot, ChatGPT,<br/>Claude, etc."]
+    A["<b>Course Content</b><br/>plain text or <code>.md</code><br/>element IDs optional"] --> C["<b>AI Chat</b><br/>Microsoft Copilot,<br/>ChatGPT, Claude"]
     B["<b>SKILL.md</b><br/>Element library,<br/>Canvas constraints,<br/>transformation rules"] --> C
     C --> D["<b>Canvas HTML</b><br/><code>.html</code> with<br/>inline styles only"]
     D --> E["<b>Canvas LMS</b><br/>Paste into RCE<br/>HTML editor"]
@@ -48,7 +55,8 @@ Here's a minimal prompt file:
 ```markdown
 # Week 3 Class Page
 
-Use V02 blue header, C06 agenda list, C01 collapsible for resources.
+Transform this into a Canvas page using the Canvas Design Agent skill.
+Use the default Clean Modern style and a readable single-column layout.
 
 ## Header
 Class 03: Sensor Fundamentals
@@ -66,60 +74,85 @@ CART 310 · Week 3 · September 22, 2026
 - Recommended: Igoe, "Making Things Talk" Ch. 4
 ```
 
-The agent reads this file plus SKILL.md, and outputs a complete `.html` file with inline styles that works in Canvas. When your content changes, edit the prompt file and regenerate.
+The agent reads this content plus `SKILL.md`, then outputs Canvas-ready HTML with inline styles. When your content changes, edit the prompt and regenerate.
 
 ## What This Is
 
 Canvas LMS strips most CSS (no `<style>` blocks, no external stylesheets, no JavaScript) and many HTML elements. Only inline `style=""` attributes and specific HTML elements survive the Rich Content Editor (RCE). This project provides:
 
-1. **[SKILL.md](.github/SKILL.md)** -- An agent instruction file containing Canvas constraints, a numbered element library, and transformation rules. Works with any LLM.
+1. **[SKILL.md](.github/SKILL.md)** -- A portable instruction file containing Canvas constraints, a numbered element library, and transformation rules. It can be uploaded or pasted into web-based AI chats.
 2. **[Reference Website](https://npuckett.github.io/canvas-design-agent/)** -- A visual catalog of every available element, step-by-step workflow instructions, and a methods guide for creating course-specific templates.
+3. **[Workshop Kit](workshop-kit/)** -- Self-contained handouts and starter prompts for web-first faculty workshops.
 
 ## Getting the Skill
 
-**Option A: Clone / download the whole repo** (recommended if you want the reference site and examples too):
+**Option A: Use the web workshop path** (recommended for most faculty):
+
+1. Download [SKILL.md](.github/SKILL.md), or use the copy in [workshop-kit/SKILL.md](workshop-kit/SKILL.md).
+2. Open Microsoft Copilot, ChatGPT, or Claude.
+3. Upload `SKILL.md`. If upload is not available, paste the file contents into the chat.
+4. Paste your course content and ask for Canvas-ready HTML.
+
+**Option B: Clone / download the whole repo** (recommended if you want the reference site and examples too):
 
 ```
 git clone https://github.com/npuckett/canvas-design-agent.git
 ```
 
-Open the folder in VS Code (or your editor). The skill file lives at `.github/SKILL.md` and is automatically picked up by editors that read instruction files from that location (VS Code with Copilot, Cursor, Windsurf, etc.). You can start writing content files immediately.
+Open the folder in your editor if you want to manage prompt files and generated HTML locally. Local agent behavior varies by editor, so the web upload path above is the most reliable beginner workflow.
 
-**Option B: Download only the skill file:**
+**Option C: Download only the skill file for a local project:**
 
-If you already have a project and just need the skill, download [SKILL.md](.github/SKILL.md) and place it in your project's `.github/` directory. That's the only file the agent needs.
+If you already have a project and just need the skill, download [SKILL.md](.github/SKILL.md). You can upload it to a web chat, paste it into a conversation, or place it wherever your local AI editor expects reusable instructions.
 
 ## Quick Start
 
 ### New to This? Start Here (No HTML Knowledge Required)
 
-1. Download [SKILL.md](.github/SKILL.md) from this repository.
-2. Open [ChatGPT](https://chatgpt.com), [Claude](https://claude.ai), or [Gemini](https://gemini.google.com).
+1. Download [SKILL.md](.github/SKILL.md) from this repository, or use [workshop-kit/SKILL.md](workshop-kit/SKILL.md).
+2. Open Microsoft Copilot in your browser. ChatGPT or Claude can also work.
 3. Upload or paste the contents of SKILL.md into the conversation.
 4. Type or paste your course content in plain text — just describe your page naturally. (See [simple-syllabus.md](docs/prompts/simple-syllabus.md) for an example that uses zero element IDs.)
-5. Tell the agent: *"Transform this into a Canvas page using the skill."*
+5. Tell the agent: *"Use the uploaded Canvas Design Agent skill. Transform this into a Canvas-ready HTML fragment using inline styles only. Do not include html, head, body, style, or script tags."*
 6. Copy the generated HTML, open your Canvas page, click the HTML editor icon (`</>` in the toolbar), paste, and save.
 
-That's it. The agent handles all the formatting. See the [Your First Page walkthrough](https://npuckett.github.io/canvas-design-agent/docs/guide.html#first-page) on the docs site for a detailed step-by-step with screenshots.
+That's it. The agent handles the formatting. See the [Your First Page walkthrough](https://npuckett.github.io/canvas-design-agent/docs/guide.html#first-page) on the docs site for a detailed step-by-step.
 
-### Workflow A: Local Agent (VS Code with Copilot, Cursor, etc.)
+### Workflow A: Web-Based Agent (Recommended For Workshops)
+
+1. Upload [`.github/SKILL.md`](.github/SKILL.md) to Microsoft Copilot, ChatGPT, or Claude, or paste its contents into a new chat.
+2. Paste your plain text course content.
+3. Ask the agent to generate Canvas HTML using the skill instructions.
+4. Copy the HTML fragment.
+5. Paste it into Canvas RCE's HTML editor view and save.
+
+### Workflow B: Local Agent (Advanced)
 
 1. Clone this repo (or copy [`.github/SKILL.md`](.github/SKILL.md) into your own project's `.github/` folder).
-2. Open the project folder in your editor. The agent will automatically read the skill file.
+2. Open the project folder in your editor. Confirm your editor can read the skill or instruction file from that location.
 3. Create a `.md` prompt file with your course content and element references (see [How It Works: Prompt Files](#how-it-works-prompt-files) below).
 4. Ask the agent to generate a Canvas HTML file: *"Transform this into a Canvas HTML file using the skill."*
 5. The agent writes an `.html` file in your project. Preview it in a browser and keep it under version control.
 6. Open the generated HTML file, copy its contents into Canvas RCE (switch to HTML editor view), and save.
 
-### Workflow B: Web-Based Agent (ChatGPT, Claude, Gemini, etc.)
-
-1. Upload [`.github/SKILL.md`](.github/SKILL.md) to the conversation (or paste its contents).
-2. Upload or paste your plain text content with element references.
-3. Ask the agent to generate Canvas HTML using the skill instructions.
-4. Save the generated HTML as an `.html` file in your project for reference and reuse.
-5. Open the HTML file, copy its contents into Canvas RCE (switch to HTML editor view), and save.
-
 > **See also:** The [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html) on the docs site walks through both workflows in detail, with template examples and a comparison table.
+
+## Portable Workshop Kit
+
+The [workshop-kit](workshop-kit/) folder contains self-contained materials that can be copied into a separate workshop repository:
+
+- participant start-here handout
+- Microsoft Copilot upload guide
+- ChatGPT/Claude alternate guide
+- copy/paste starter prompts
+- sample course notes
+- Canvas paste checklist
+- troubleshooting guide
+- media URL guide
+- facilitator run of show
+- portable copy of `SKILL.md`
+
+Refresh [workshop-kit/SKILL.md](workshop-kit/SKILL.md) from [.github/SKILL.md](.github/SKILL.md) before each workshop if the canonical skill changes.
 
 ## Example Prompt Files
 
@@ -133,7 +166,7 @@ These example prompt files show the markdown input that generates each example p
 | [project-brief.md](docs/prompts/project-brief.md) | [Project Brief](https://npuckett.github.io/canvas-design-agent/docs/example-project-brief.html) | V05, L04, D01, D07 |
 | [gallery-page.md](docs/prompts/gallery-page.md) | [External Media Gallery](https://npuckett.github.io/canvas-design-agent/docs/example-external-media.html) | E01, E02, E03, L03, C01 |
 | [homepage.md](docs/prompts/homepage.md) | [Course Homepage](https://npuckett.github.io/canvas-design-agent/docs/example-homepage.html) | S03, V05, N02, L03, D05 |
-| [assignment-page.md](docs/prompts/assignment-page.md) | [Assignment Page](https://npuckett.github.io/canvas-design-agent/docs/example-assignment.html) | S02, V05, C01, D01, C05 |
+| [assignment-page.md](docs/prompts/assignment-page.md) | [Assignment Page](https://npuckett.github.io/canvas-design-agent/docs/example-assignment.html) | S06, F03, C01, D01, C05 |
 
 See the [Prompt Files section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#prompt-files) of the Guide for a full explanation of the format and tips for writing effective prompts.
 
@@ -163,9 +196,9 @@ Elements are organized by category with a letter prefix:
 
 | Prefix | Category | Count |
 |--------|----------|-------|
-| L | Layout | 6 |
+| L | Layout | 8 |
 | C | Content Organization | 9 |
-| T | Typography | 9 |
+| T | Typography | 10 |
 | D | Data Display | 7 |
 | V | Visual Indicators | 6 |
 | N | Navigation | 2 |

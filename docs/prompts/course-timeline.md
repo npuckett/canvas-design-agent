@@ -1,7 +1,7 @@
 # Course Timeline / Week Plan
 
 Transform this into a Canvas page using the skill.
-Use S01 Clean Modern but swap the accent palette for Forest Greens (#2d6a4f primary, #40916c secondary).
+Use S01 Clean Modern with a custom Forest Green accent override (#2d6a4f primary, #40916c secondary). These custom greens intentionally override the standard Forest Greens palette in the skill.
 
 ## Style
 
@@ -10,6 +10,19 @@ Use S01 Clean Modern but swap the accent palette for Forest Greens (#2d6a4f prim
 - Section headings: T01 unit dividers
 - Due dates: highlighted text (T02)
 - Navigation: anchor links as TOC (N01)
+
+## Accessibility
+
+- Use one clear h1 and ordered section headings
+- Use table headers with scope attributes
+- Do not rely on color alone for due dates; include text labels
+- Keep the schedule readable on narrow screens
+
+## Output Expectations
+
+- Output a Canvas HTML fragment only
+- Use inline styles only
+- Do not include html, head, body, style, script, SVG, or markdown code fences
 
 ## Header (V05)
 

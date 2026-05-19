@@ -1,7 +1,26 @@
 # Assignment Page — Workshop Draft 2
 
 Transform this into a Canvas assignment page using the skill.
-Use the Editorial theme (S06) with the Elegant Serif font stack (F03).
+
+## Style
+
+- Theme: Editorial (S06)
+- Font: Elegant Serif (F03)
+- Layout: structured single-column assignment page
+- Use tables or definition lists for rubric details when helpful
+
+## Accessibility
+
+- Use one clear h1 and ordered section headings
+- Make deadlines and submission instructions visible, not hidden in collapsibles
+- Use table headers with scope attributes if a rubric table is generated
+- Use readable contrast throughout
+
+## Output Expectations
+
+- Output a Canvas HTML fragment only
+- Use inline styles only
+- Do not include html, head, body, style, script, SVG, or markdown code fences
 
 ## Header
 

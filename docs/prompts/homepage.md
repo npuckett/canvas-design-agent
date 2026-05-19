@@ -1,7 +1,26 @@
 # Course Homepage
 
 Transform this into a Canvas course homepage using the skill.
-Use the Warm Minimal theme (S03).
+
+## Style
+
+- Theme: Warm Minimal (S03)
+- Layout: welcoming course homepage with clear sections and quick links
+- Use N02 button-styled links for the Quick Links section
+- Use a table or schedule-style element for Key Dates
+
+## Accessibility
+
+- Use one clear h1 and ordered section headings
+- Use descriptive link text
+- Keep this week's key information visible near the top
+- Use readable contrast throughout
+
+## Output Expectations
+
+- Output a Canvas HTML fragment only
+- Use inline styles only
+- Do not include html, head, body, style, script, SVG, or markdown code fences
 
 ## Course Info
 

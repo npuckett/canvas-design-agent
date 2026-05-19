@@ -220,10 +220,10 @@
   <section id="getting-started">
     <h2>Getting Started</h2>
     <ol class="steps">
-      <li><strong>Get the skill file.</strong> Download or clone <code>SKILL.md</code> from the <a href="https://github.com/npuckett/canvas-design-agent">GitHub repository</a>. This single file contains all Canvas constraints and element templates.</li>
-      <li><strong>Browse the <a href="elements.html">Element Catalog</a>.</strong> Look through available elements and note any you want to use. Each element has an ID (e.g., V05, C01) you can reference.</li>
-      <li><strong>Write your content.</strong> Describe your page in plain text -- schedules, assignments, resources, anything. Optionally mention element IDs.</li>
-      <li><strong>Choose a workflow.</strong> Use a local agent (VS Code, Cursor) or a web-based agent (ChatGPT, Claude, Gemini). See below.</li>
+      <li><strong>Get the skill file.</strong> Download <code>SKILL.md</code> from the <a href="https://github.com/npuckett/canvas-design-agent">GitHub repository</a>. This single file contains the Canvas constraints and element templates.</li>
+      <li><strong>Open a web AI chat.</strong> Microsoft Copilot is the recommended workshop path when your organization supports it. ChatGPT or Claude can also work.</li>
+      <li><strong>Upload or paste <code>SKILL.md</code>.</strong> If file upload is unavailable, open the file, copy all text, and paste it into the chat.</li>
+      <li><strong>Write your content.</strong> Describe your page in plain text -- schedules, assignments, resources, anything. Element IDs are optional.</li>
       <li><strong>Paste into Canvas.</strong> Open your Canvas page, switch to the HTML editor (<code>&lt;/&gt;</code> icon in RCE), paste the generated HTML, and save.</li>
     </ol>
 
@@ -243,7 +243,7 @@
         <div class="template-example"># Simple Syllabus Page
 
 Transform this into a Canvas page using the skill.
-Pick whatever layout and design elements look best.
+Use the default Clean Modern style and a readable single-column layout.
 
 ## Course Info
 
@@ -275,8 +275,9 @@ Participation: 10%</div>
       <li>
         <strong>Give it to an AI agent along with SKILL.md.</strong>
         <ul style="margin-top: 8px;">
-          <li><strong>Web workflow (easiest):</strong> Open <a href="https://chatgpt.com">ChatGPT</a>, <a href="https://claude.ai">Claude</a>, or <a href="https://gemini.google.com">Gemini</a>. Upload or paste the contents of <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md">SKILL.md</a>, then paste your content and say <em>"Transform this into a Canvas page using the skill."</em></li>
-          <li><strong>Local workflow:</strong> If you use VS Code with Copilot, place SKILL.md in your project's <code>.github/</code> folder, save your text as a <code>.md</code> file, and ask Copilot to transform it.</li>
+          <li><strong>Recommended workshop workflow:</strong> Open Microsoft Copilot in your browser. Upload or paste the contents of <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md">SKILL.md</a>, then paste your content and say <em>"Use the uploaded Canvas Design Agent skill. Transform this into a Canvas-ready HTML fragment using inline styles only."</em></li>
+          <li><strong>Other web tools:</strong> ChatGPT and Claude can follow the same attach-or-paste workflow.</li>
+          <li><strong>Advanced local workflow:</strong> If you use VS Code or another AI editor, you can keep prompt files and generated HTML locally, but this is not required for the workshop.</li>
         </ul>
       </li>
       <li>
@@ -304,39 +305,39 @@ Participation: 10%</div>
     </ul>
   </section>
 
-  <!-- LOCAL WORKFLOW -->
-  <section id="local-workflow">
-    <h2>Workflow A: Local Agent</h2>
-    <p>Best for faculty using a code editor (VS Code with Copilot, Cursor, Windsurf) who want to manage multiple pages in a project.</p>
+  <!-- WEB WORKFLOW -->
+  <section id="web-workflow">
+    <h2>Workflow A: Web-Based Agent (Recommended)</h2>
+    <p>Best for workshops and first-time users. Microsoft Copilot is the recommended organizational path; ChatGPT and Claude can follow the same upload-or-paste pattern.</p>
 
     <ol class="steps">
-      <li><strong>Set up the skill.</strong> Copy <code>SKILL.md</code> into your project's <code>.github/</code> directory. Most AI-enabled editors automatically read instruction files from this location.</li>
-      <li><strong>Create a prompt file.</strong> Write your page content in a <code>.md</code> file. Use plain language -- describe what the page should contain, its structure, and reference any element IDs you want (see <a href="#prompt-files">Prompt Files</a>).</li>
-      <li><strong>Ask the agent to generate HTML.</strong> In your editor's AI chat, ask it to convert your prompt file into a Canvas HTML file. Example: <em>"Transform this into a Canvas HTML file using the skill. Use a gradient header and collapsible sections."</em></li>
-      <li><strong>Review the HTML file.</strong> The agent writes an <code>.html</code> file in your project. You can preview it in a browser, keep it under version control, and regenerate it any time your content changes.</li>
-      <li><strong>Paste into Canvas.</strong> Open the generated HTML file, copy its contents, switch to the HTML editor view in Canvas RCE, paste, and save.</li>
+      <li><strong>Upload the skill.</strong> Start a new conversation. Upload or paste the contents of <code>SKILL.md</code>. This gives the AI all Canvas constraints and element templates it needs.</li>
+      <li><strong>Provide your content.</strong> Type or paste your page content in the same conversation. Describe what kind of page it is and what elements you want.</li>
+      <li><strong>Ask for a fragment.</strong> Say: <em>"Output only a Canvas HTML fragment. No html, head, body, style, script, SVG, or markdown code fence."</em></li>
+      <li><strong>Copy the HTML.</strong> Copy the generated fragment. If it includes explanations, copy only the HTML part.</li>
+      <li><strong>Paste into Canvas.</strong> Open Canvas RCE's HTML editor view, paste, save, and review.</li>
     </ol>
 
     <div class="callout">
-      <p><strong>Tip:</strong> Keep your prompt files and generated HTML organized by course. A typical structure is one folder per course with <code>.md</code> prompt files alongside their generated <code>.html</code> output files.</p>
+      <p><strong>Upload not available?</strong> Open <code>SKILL.md</code>, copy all of its text, paste it into the chat, and tell the AI: <em>"Treat this as the instruction set for this conversation."</em></p>
     </div>
   </section>
 
-  <!-- WEB WORKFLOW -->
-  <section id="web-workflow">
-    <h2>Workflow B: Web-Based Agent</h2>
-    <p>Best for quick, one-off page generation without installing anything. Works with ChatGPT, Claude, Gemini, or any web AI tool.</p>
+  <!-- LOCAL WORKFLOW -->
+  <section id="local-workflow">
+    <h2>Workflow B: Local Agent (Advanced)</h2>
+    <p>Best for faculty who already use a code editor and want to manage many prompt files and generated HTML files over time.</p>
 
     <ol class="steps">
-      <li><strong>Upload the skill.</strong> Start a new conversation. Upload or paste the contents of <code>SKILL.md</code>. This gives the agent all Canvas constraints and element templates it needs.</li>
-      <li><strong>Provide your content.</strong> Type or paste your page content in the same conversation. Describe what kind of page it is and what elements you want.</li>
-      <li><strong>Get the HTML.</strong> The agent generates Canvas-ready HTML. Copy the entire output (or download it as an <code>.html</code> file if the tool supports it).</li>
-      <li><strong>Save the HTML file.</strong> Save the generated HTML to your project so you can reference, revise, and reuse it later.</li>
-      <li><strong>Paste into Canvas.</strong> Open the HTML file, copy its contents into Canvas RCE's HTML editor view, and save.</li>
+      <li><strong>Set up the skill.</strong> Put <code>SKILL.md</code> where your local AI editor expects reusable instructions. This location varies by tool.</li>
+      <li><strong>Create a prompt file.</strong> Write your page content in a <code>.md</code> file. Use plain language and optional element IDs.</li>
+      <li><strong>Ask the agent to generate HTML.</strong> Example: <em>"Transform this into a Canvas HTML fragment using the skill."</em></li>
+      <li><strong>Review the HTML file.</strong> Preview it in a browser, keep it with your course files, and regenerate when your content changes.</li>
+      <li><strong>Paste into Canvas.</strong> Copy the generated HTML into Canvas RCE's HTML editor view and save.</li>
     </ol>
 
     <div class="callout">
-      <p><strong>Tip:</strong> If you have a course-specific template, upload it alongside SKILL.md so the agent applies your course's colors and layout consistently.</p>
+      <p><strong>Workshop note:</strong> You do not need this workflow to participate. The web-based workflow above is the supported beginner path.</p>
     </div>
   </section>
 
@@ -347,35 +348,35 @@ Participation: 10%</div>
       <thead>
         <tr>
           <th></th>
-          <th>Local Agent</th>
           <th>Web Agent</th>
+          <th>Local Agent</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>Setup</strong></td>
-          <td>One-time: place SKILL.md in project</td>
           <td>Per-session: upload SKILL.md each time</td>
+          <td>One-time setup, depending on editor</td>
         </tr>
         <tr>
           <td><strong>Best for</strong></td>
-          <td>Multiple pages, ongoing course work</td>
           <td>Quick single pages, occasional use</td>
+          <td>Multiple pages, ongoing course work</td>
         </tr>
         <tr>
           <td><strong>Template reuse</strong></td>
-          <td>Automatic (reads skill on every prompt)</td>
           <td>Manual (re-upload each session)</td>
+          <td>Can be automatic if editor supports the setup</td>
         </tr>
         <tr>
           <td><strong>File management</strong></td>
-          <td>Prompt files and generated HTML saved locally, version controlled</td>
           <td>Save generated HTML manually to your project</td>
+          <td>Prompt files and generated HTML saved locally</td>
         </tr>
         <tr>
           <td><strong>Prerequisites</strong></td>
-          <td>Code editor with AI extension</td>
           <td>Browser and AI account</td>
+          <td>Code editor with AI extension</td>
         </tr>
       </tbody>
     </table>
@@ -387,18 +388,28 @@ Participation: 10%</div>
     <p>A <strong>prompt file</strong> is a plain markdown file that describes your Canvas page. You write your content naturally, reference element IDs where you want specific formatting, and let the agent generate an HTML file. The generated HTML file is your reusable output -- keep it in your project, preview it in a browser, revise it by editing the prompt and regenerating, and paste it into Canvas when ready.</p>
 
     <h3>Anatomy of a Prompt File</h3>
-    <p>A prompt file has three parts:</p>
+    <p>A prompt file usually has four parts:</p>
     <ol>
-      <li><strong>Instruction block</strong> -- A blockquote at the top telling the agent what to do and which elements to use.</li>
+      <li><strong>Task</strong> -- A sentence telling the agent what kind of Canvas page to create.</li>
+      <li><strong>Style and layout</strong> -- Optional theme, mood, layout, or element preferences.</li>
+      <li><strong>Accessibility and output expectations</strong> -- A short reminder to use accessible structure and output only a Canvas HTML fragment.</li>
       <li><strong>Content sections</strong> -- Your actual page content organized with markdown headings.</li>
-      <li><strong>Element hints</strong> -- Parenthetical notes like "(collapsible)" or "(use D07 progress bars)" guiding the agent's choices.</li>
     </ol>
 
     <h3>Minimal Example</h3>
     <div class="template-example"># Week 3 Class Page
 
-> Transform this into a Canvas page using the skill.
-> Use V02 blue header, C06 agenda list, C01 collapsible for resources.
+  Transform this into a Canvas page using the skill.
+
+  ## Style
+
+  - Use V02 blue header, C06 agenda list, C01 collapsible for resources
+
+  ## Output Expectations
+
+  - Output a Canvas HTML fragment only
+  - Use inline styles only
+  - Do not include html, head, body, style, script, SVG, or markdown code fences
 
 ## Header
 Class 03: Sensor Fundamentals
@@ -468,6 +479,11 @@ CART 310 · Week 3 · September 22, 2026
       </thead>
       <tbody>
         <tr>
+          <td><a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/simple-syllabus.md">simple-syllabus.md</a></td>
+          <td>Beginner syllabus prompt</td>
+          <td>No element IDs required</td>
+        </tr>
+        <tr>
           <td><a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/course-timeline.md">course-timeline.md</a></td>
           <td><a href="example-course-timeline.html">Course Timeline</a></td>
           <td><code>V05</code> <code>D05</code> <code>D07</code> <code>C01</code></td>
@@ -481,6 +497,21 @@ CART 310 · Week 3 · September 22, 2026
           <td><a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/project-brief.md">project-brief.md</a></td>
           <td><a href="example-project-brief.html">Project Brief</a></td>
           <td><code>V05</code> <code>L04</code> <code>D01</code> <code>D07</code></td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/gallery-page.md">gallery-page.md</a></td>
+          <td><a href="example-external-media.html">External Media Gallery</a></td>
+          <td><code>S05</code> <code>E01</code> <code>E02</code> <code>E03</code></td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/homepage.md">homepage.md</a></td>
+          <td><a href="example-homepage.html">Course Homepage</a></td>
+          <td><code>S03</code> <code>N02</code> <code>L03</code> <code>D05</code></td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/npuckett/canvas-design-agent/blob/main/docs/prompts/assignment-page.md">assignment-page.md</a></td>
+          <td><a href="example-assignment.html">Assignment Page</a></td>
+          <td><code>S06</code> <code>F03</code> <code>C01</code> <code>D01</code></td>
         </tr>
       </tbody>
     </table>
@@ -629,7 +660,7 @@ Important dates: T02 highlighted in yellow</div>
   <!-- STYLING & THEMES -->
   <section id="themes">
     <h2>Styling &amp; Themes</h2>
-    <p>The skill includes five named themes that change the entire look of your Canvas pages.</p>
+    <p>The skill includes seven named themes that change the entire look of your Canvas pages.</p>
 
     <h3>Using a Named Theme</h3>
     <p>Add a theme name to your prompt to change colors, fonts, and spacing across the whole page:</p>
@@ -638,7 +669,9 @@ Important dates: T02 highlighted in yellow</div>
       <li><strong>S02 — Bold Academic</strong>: Deep navy and crimson, Georgia serif font, sharp corners</li>
       <li><strong>S03 — Warm Minimal</strong>: Earth tones with orange accent, Palatino serif, rounded corners</li>
       <li><strong>S04 — High Contrast</strong>: Pure black-on-white, Verdana sans-serif, maximum readability</li>
-      <li><strong>S05 — Studio</strong>: Dark background with coral accents, modern sans-serif, creative feel</li>
+      <li><strong>S05 — Studio Dark</strong>: Dark background with coral accents, modern sans-serif, creative feel</li>
+      <li><strong>S06 — Editorial</strong>: Grayscale, typography-driven, restrained, gallery-like</li>
+      <li><strong>S07 — Studio Light</strong>: Light creative theme with coral accents, companion to Studio Dark</li>
     </ul>
     <p>Example prompt: <em>"Transform this into a Canvas course homepage. Use the Warm Minimal theme."</em></p>
 
@@ -658,12 +691,51 @@ Important dates: T02 highlighted in yellow</div>
       <li><em>"Use the Bold Academic theme but with green (#2e7d32) as the accent color."</em></li>
       <li><em>"Use Earth Tones colors"</em> — the agent knows curated palettes like Ocean Blues, Earth Tones, Sunset Warm, Forest Greens, and Plum &amp; Gold.</li>
     </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Palette</th>
+          <th>Primary</th>
+          <th>Accent</th>
+          <th>Link</th>
+          <th>Good With</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Ocean Blues</td><td><code>#1a5276</code></td><td><code>#2e86c1</code></td><td><code>#2e86c1</code></td><td>S01, S04</td></tr>
+        <tr><td>Earth Tones</td><td><code>#6d4c41</code></td><td><code>#a1887f</code></td><td><code>#8d6e63</code></td><td>S03, S02</td></tr>
+        <tr><td>Sunset Warm</td><td><code>#c0392b</code></td><td><code>#e67e22</code></td><td><code>#d35400</code></td><td>S03, S05</td></tr>
+        <tr><td>Forest Greens</td><td><code>#1b5e20</code></td><td><code>#4caf50</code></td><td><code>#2e7d32</code></td><td>S01, S02</td></tr>
+        <tr><td>Plum &amp; Gold</td><td><code>#4a148c</code></td><td><code>#ffc107</code></td><td><code>#7b1fa2</code></td><td>S05, S02</td></tr>
+      </tbody>
+    </table>
   </section>
 
   <!-- TROUBLESHOOTING -->
   <section id="troubleshooting">
     <h2>Troubleshooting</h2>
     <p>Common issues when working with Canvas HTML and how to fix them.</p>
+
+    <h3>Before you paste into Canvas</h3>
+    <ul>
+      <li>The output is an HTML fragment, not a full web page.</li>
+      <li>There are no markdown code fences around the HTML.</li>
+      <li>There are no <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>, <code>&lt;style&gt;</code>, or <code>&lt;script&gt;</code> tags.</li>
+      <li>Images use full URLs or clear placeholders such as <code>[CANVAS_IMAGE_URL]</code>.</li>
+      <li>Important deadlines and instructions are visible without opening a collapsed section.</li>
+    </ul>
+
+    <h3>After saving in Canvas</h3>
+    <ul>
+      <li>Confirm formatting still appears after saving and reopening the page.</li>
+      <li>Test all links.</li>
+      <li>Check images and embedded media.</li>
+      <li>Resize the browser window to make sure the page remains readable on narrow screens.</li>
+      <li>Make sure the heading order reads naturally from top to bottom.</li>
+    </ul>
+
+    <h3>If the AI output looks wrong</h3>
+    <p>Send this follow-up prompt: <em>"Please revise this for Canvas. Output only an HTML fragment with inline styles. Remove markdown fences, html/head/body tags, style tags, script tags, unsupported CSS, and relative image paths."</em></p>
 
     <h3>My formatting disappeared after saving</h3>
     <p>Canvas strips <code>&lt;style&gt;</code> blocks, <code>&lt;script&gt;</code> tags, and certain CSS properties when you save. If your formatting vanished, the HTML likely used one of these stripped features. Regenerate the page and tell the agent: <em>"Make sure all styles are inline -- no &lt;style&gt; blocks."</em> The SKILL.md file prevents this, but if you're editing HTML manually, keep all styles in <code>style=""</code> attributes.</p>

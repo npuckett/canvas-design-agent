@@ -1,8 +1,26 @@
 # Simple Syllabus Page
 
 Transform this into a Canvas page using the skill.
-Use the Traditional Serif font stack (F02) with the Plum & Gold color palette.
-Pick whatever layout and design elements look best — I don't have specific preferences about structure.
+
+## Style
+
+- Theme: S02 Bold Academic with the Traditional Serif font stack (F02)
+- Palette: Plum & Gold (primary #4a148c, accent #ffc107, link #7b1fa2)
+- Layout: readable single-column page using L05 Centered Container
+- Let the agent choose appropriate Canvas-safe elements for schedules, grading, and policies
+
+## Accessibility
+
+- Use one clear h1 and ordered section headings
+- Use readable color contrast
+- Use descriptive link text if links are added
+- Keep important policies visible; use collapsibles only for longer supplemental details
+
+## Output Expectations
+
+- Output a Canvas HTML fragment only
+- Use inline styles only
+- Do not include html, head, body, style, script, SVG, or markdown code fences
 
 ## Course Info
 

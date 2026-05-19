@@ -11,6 +11,19 @@ Use S02 Bold Academic but with orange accents (#e67e22) instead of crimson.
 - Submission area: V06 dark background section
 - Buttons: N02 button-styled links
 
+## Accessibility
+
+- Use one clear h1 and ordered section headings
+- Keep due dates, weights, and submission instructions visible
+- Use table headers with scope attributes for milestone or rubric tables
+- Use descriptive button/link text
+
+## Output Expectations
+
+- Output a Canvas HTML fragment only
+- Use inline styles only
+- Do not include html, head, body, style, script, SVG, or markdown code fences
+
 ## Header (V05)
 
 CART 310 — Interactive Environments

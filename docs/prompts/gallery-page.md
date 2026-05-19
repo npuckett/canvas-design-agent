@@ -1,7 +1,7 @@
 # Gallery Page with External Media
 
 Transform this into a Canvas page using the Canvas Design Agent skill.
-Base the visual style on the embedded p5.js sketch at https://npuckett.github.io/thesisBanner/ — it has a dark background with organic, particle-based animations. I want that same dark, creative energy on the page.
+Use S05 Studio Dark as the base theme. The embedded p5.js sketch at https://npuckett.github.io/thesisBanner/ is a style reference for the dark, creative mood, but use the concrete S05 colors and Canvas-safe elements from the skill.
 
 ## Style
 
@@ -9,6 +9,19 @@ Base the visual style on the embedded p5.js sketch at https://npuckett.github.io
 - Section headings: T01
 - Images: hosted on GitHub Pages, loaded by absolute URL (E01, E03)
 - Website embed: iframe from GitHub Pages (E02)
+
+## Accessibility
+
+- Provide descriptive alt text for every image
+- Use descriptive link text for full-size image links
+- Keep the page readable on dark backgrounds
+- Include fallback text or context around iframe embeds
+
+## Output Expectations
+
+- Output a Canvas HTML fragment only
+- Use inline styles only
+- Do not include html, head, body, style, script, SVG, or markdown code fences
 
 ## Page Info
 
@@ -27,7 +40,7 @@ This week's gallery features selected student projects exploring generative form
 
 ## Student Work (L03 + E03)
 
-Display these as a two-column grid of images with student names underneath. All images are hosted on GitHub Pages.
+Display these as a two-column grid of images with student names underneath. All images are hosted on GitHub Pages. Build full absolute image URLs from the base URL and filenames; do not use relative paths.
 
 Image base URL: https://npuckett.github.io/digital-studio/gallery/week8/
 

@@ -229,6 +229,8 @@
   <a href="#L04"><span class="id">L04</span> CSS Grid</a>
   <a href="#L05"><span class="id">L05</span> Centered Container</a>
   <a href="#L06"><span class="id">L06</span> Full-Width Section</a>
+  <a href="#L07"><span class="id">L07</span> Float Wrap</a>
+  <a href="#L08"><span class="id">L08</span> Flex Alignment</a>
 
   <h4>Content Org</h4>
   <a href="#C01"><span class="id">C01</span> Collapsible</a>
@@ -251,6 +253,7 @@
   <a href="#T07"><span class="id">T07</span> Horizontal Rule</a>
   <a href="#T08"><span class="id">T08</span> Super / Subscript</a>
   <a href="#T09"><span class="id">T09</span> Text Truncation</a>
+  <a href="#T10"><span class="id">T10</span> Text & Content Alignment</a>
 
   <h4>Data Display</h4>
   <a href="#D01"><span class="id">D01</span> Data Table</a>
@@ -462,6 +465,108 @@
     <summary>View HTML Code</summary>
     <pre>&lt;div style="background: #f8f8f8; padding: 24px 16px; margin: 24px 0; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;"&gt;
   SECTION CONTENT
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- L07 -->
+<div class="el" id="L07">
+  <div class="el-head"><span class="el-id">L07</span><span class="el-name">Float Wrap</span></div>
+  <p class="el-desc">Float an image or iframe to one side with text wrapping around it. Always include a <code>clear: both</code> div after to prevent layout bleed.</p>
+  <div class="el-preview">
+    <div>
+      <img src="https://placehold.co/160x120/e9ecef/495057?text=Image" alt="Demo image" style="float: left; margin: 0 16px 12px 0; max-width: 40%; height: auto; border-radius: 4px;">
+      <p style="color: #495057; margin: 0;">This paragraph text wraps around the floated image on the left. When the image ends, the text fills the full width again. This pattern is the only way to achieve text-wrap-around-media in Canvas.</p>
+      <div style="clear: both;"></div>
+    </div>
+    <hr style="border: none; border-top: 1px dashed #dee2e6; margin: 16px 0;">
+    <div>
+      <img src="https://placehold.co/160x120/e9ecef/495057?text=Image" alt="Demo image" style="float: right; margin: 0 0 12px 16px; max-width: 40%; height: auto; border-radius: 4px;">
+      <p style="color: #495057; margin: 0;">Same pattern but floated right. Text flows on the left side of the image. Works identically with iframes — just swap the img tag for an iframe.</p>
+      <div style="clear: both;"></div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Image floated left, text wraps right --&gt;
+&lt;div&gt;
+  &lt;img src="IMAGE_URL" alt="Description"
+       style="float: left; margin: 0 16px 12px 0; max-width: 40%; height: auto; border-radius: 4px;"&gt;
+  &lt;p style="color: #495057;"&gt;Text wraps around the floated image.&lt;/p&gt;
+  &lt;div style="clear: both;"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Image floated right --&gt;
+&lt;div&gt;
+  &lt;img src="IMAGE_URL" alt="Description"
+       style="float: right; margin: 0 0 12px 16px; max-width: 40%; height: auto; border-radius: 4px;"&gt;
+  &lt;p style="color: #495057;"&gt;Text wraps on the left side.&lt;/p&gt;
+  &lt;div style="clear: both;"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Iframe floated left with text --&gt;
+&lt;div&gt;
+  &lt;iframe src="URL" style="float: left; width: 50%; height: 200px; border: none; margin: 0 16px 12px 0;"&gt;&lt;/iframe&gt;
+  &lt;p style="color: #495057;"&gt;Description wraps beside the embed.&lt;/p&gt;
+  &lt;div style="clear: both;"&gt;&lt;/div&gt;
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- L08 -->
+<div class="el" id="L08">
+  <div class="el-head"><span class="el-id">L08</span><span class="el-name">Flex Alignment</span></div>
+  <p class="el-desc">Control horizontal and vertical alignment of children using flexbox. Center items, push them apart, right-align, or vertically center mixed-height content.</p>
+  <div class="el-preview">
+    <p style="font-size: 11px; color: #6c757d; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.05em;">Center</p>
+    <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 16px;">
+      <span style="padding: 8px 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; font-size: 13px;">A</span>
+      <span style="padding: 8px 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; font-size: 13px;">B</span>
+    </div>
+    <p style="font-size: 11px; color: #6c757d; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.05em;">Space Between</p>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 8px 12px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;">
+      <span style="font-weight: 600; color: #333; font-size: 13px;">Left Label</span>
+      <span style="color: #6c757d; font-size: 13px;">Right Value</span>
+    </div>
+    <p style="font-size: 11px; color: #6c757d; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.05em;">Flex End (right-align)</p>
+    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px;">
+      <span style="display: inline-block; padding: 6px 14px; background: #0066cc; color: #fff; border-radius: 4px; font-size: 13px; font-weight: 600;">Action</span>
+    </div>
+    <p style="font-size: 11px; color: #6c757d; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.05em;">Vertical Center</p>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 48px; height: 48px; background: #dee2e6; border-radius: 4px;"></div>
+      <div>
+        <p style="margin: 0; font-weight: 600; color: #333; font-size: 14px;">Title</p>
+        <p style="margin: 2px 0 0; font-size: 12px; color: #6c757d;">Subtitle aligned to icon center</p>
+      </div>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Center children horizontally --&gt;
+&lt;div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;"&gt;
+  &lt;div style="padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;"&gt;A&lt;/div&gt;
+  &lt;div style="padding: 16px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px;"&gt;B&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Push children to opposite ends --&gt;
+&lt;div style="display: flex; justify-content: space-between; align-items: center;"&gt;
+  &lt;span style="font-weight: 600; color: #333333;"&gt;Left&lt;/span&gt;
+  &lt;span style="color: #6c757d;"&gt;Right&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- Right-align children --&gt;
+&lt;div style="display: flex; justify-content: flex-end; gap: 12px;"&gt;
+  &lt;a href="#" style="padding: 10px 20px; background: #0066cc; color: #fff; text-decoration: none; border-radius: 4px; font-weight: 600;"&gt;Action&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;!-- Vertically center mixed-height content --&gt;
+&lt;div style="display: flex; align-items: center; gap: 12px;"&gt;
+  &lt;img src="IMAGE_URL" alt="Icon" style="width: 48px; height: 48px; border-radius: 4px;"&gt;
+  &lt;div&gt;
+    &lt;p style="margin: 0; font-weight: 600;"&gt;Title&lt;/p&gt;
+    &lt;p style="margin: 4px 0 0; font-size: 13px; color: #6c757d;"&gt;Subtitle&lt;/p&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</pre>
   </details>
 </div>
@@ -921,6 +1026,49 @@ x&lt;sup&gt;2&lt;/sup&gt;</pre>
     <summary>View HTML Code</summary>
     <pre>&lt;div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #495057;"&gt;
   Long text that will truncate...
+&lt;/div&gt;</pre>
+  </details>
+</div>
+
+<!-- T10 -->
+<div class="el" id="T10">
+  <div class="el-head"><span class="el-id">T10</span><span class="el-name">Text &amp; Content Alignment</span></div>
+  <p class="el-desc">Set horizontal alignment on any block content — text, headings, images, iframes. Apply <code>text-align</code> directly or on a wrapper div.</p>
+  <div class="el-preview">
+    <h3 style="text-align: center; color: #333; margin: 0 0 12px;">Centered Heading</h3>
+    <p style="text-align: right; color: #6c757d; font-size: 13px; margin: 0 0 12px;">Right-aligned date — January 2025</p>
+    <p style="text-align: justify; color: #495057; margin: 0 0 12px;">This justified paragraph text stretches to fill the full width of its container, creating even left and right edges. Useful for formal or print-style page layouts where clean margins are desired.</p>
+    <div style="text-align: center; margin: 12px 0;">
+      <img src="https://placehold.co/200x60/e9ecef/495057?text=Centered+Image" alt="Centered" style="max-width: 100%; height: auto; border-radius: 4px;">
+    </div>
+    <div style="text-align: right; margin: 8px 0 0;">
+      <span style="display: inline-block; padding: 6px 14px; background: #0066cc; color: #fff; border-radius: 4px; font-size: 13px; font-weight: 600;">Right-Aligned Button</span>
+    </div>
+  </div>
+  <details>
+    <summary>View HTML Code</summary>
+    <pre>&lt;!-- Center a heading --&gt;
+&lt;h2 style="text-align: center; color: #333333;"&gt;Centered Heading&lt;/h2&gt;
+
+&lt;!-- Right-align a date or label --&gt;
+&lt;p style="text-align: right; color: #6c757d; font-size: 13px;"&gt;Updated: January 2025&lt;/p&gt;
+
+&lt;!-- Justify paragraph text --&gt;
+&lt;p style="text-align: justify; color: #495057;"&gt;Justified text stretches to fill full width.&lt;/p&gt;
+
+&lt;!-- Center an image --&gt;
+&lt;div style="text-align: center; margin: 16px 0;"&gt;
+  &lt;img src="IMAGE_URL" alt="Description" style="max-width: 100%; height: auto;"&gt;
+&lt;/div&gt;
+
+&lt;!-- Center an iframe --&gt;
+&lt;div style="text-align: center; margin: 16px 0;"&gt;
+  &lt;iframe src="URL" style="width: 80%; height: 300px; border: none;"&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;!-- Right-align a button --&gt;
+&lt;div style="text-align: right; margin: 16px 0;"&gt;
+  &lt;a href="URL" style="display: inline-block; padding: 10px 20px; background: #0066cc; color: #fff; text-decoration: none; border-radius: 4px; font-weight: 600;"&gt;Submit&lt;/a&gt;
 &lt;/div&gt;</pre>
   </details>
 </div>

@@ -10,6 +10,19 @@ Use the Clean Modern theme (S01).
 - Section headings: T01
 - Quick info: 3-card row (L03)
 
+## Accessibility
+
+- Use one clear h1 and ordered section headings
+- Keep the reminder and deliverable visible outside collapsibles
+- Use descriptive link text for resources
+- Use readable contrast throughout
+
+## Output Expectations
+
+- Output a Canvas HTML fragment only
+- Use inline styles only
+- Do not include html, head, body, style, script, SVG, or markdown code fences
+
 ## Header (V02)
 
 Class 06: Feedback Loops & Responsiveness
