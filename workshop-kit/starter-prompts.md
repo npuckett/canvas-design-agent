@@ -75,3 +75,59 @@ Output only the HTML fragment for Canvas.
 
 Content:
 ```
+
+## Component Sketching: Schedule Or Timeline Options
+
+```text
+Use the Canvas Design Agent skill in Component Sketching Mode.
+
+I need to decide how to show schedule or timeline data in Canvas. Analyze the structure of the data below, then show 3-4 Canvas-safe HTML options in a comparison row. Include at least one table/grid option and one more visual option if it fits the data.
+
+Use compact tags such as OPTION-A: D05-S01 Schedule Grid. Include each tag visibly and in an HTML comment so I can reference the option later.
+
+Output one Canvas HTML fragment with inline styles only. No html, head, body, style, script, SVG, or markdown code fence.
+
+Data:
+```
+
+## Component Sketching: Rubric Or Comparison Options
+
+```text
+Use the Canvas Design Agent skill in Component Sketching Mode.
+
+I need to decide how to show rubric, grading, or comparison data in Canvas. Analyze the data below, then show 3-4 Canvas-safe HTML options in a comparison row. Compare table-based and side-by-side formats when appropriate.
+
+Use compact tags such as OPTION-A: D01-S01 Data Table. Include each tag visibly and in an HTML comment so I can reference the option later.
+
+Output one Canvas HTML fragment with inline styles only. No html, head, body, style, script, SVG, or markdown code fence.
+
+Data:
+```
+
+## Component Sketching: Resources Or Agenda Options
+
+```text
+Use the Canvas Design Agent skill in Component Sketching Mode.
+
+I need to decide how to show a resource list, agenda, or set of tasks in Canvas. Analyze the content below, then show 3-4 Canvas-safe HTML options in a comparison row. Compare compact list, card, checklist, or button/link options when appropriate.
+
+Use compact tags such as OPTION-A: C06-S01 Ordered List. Include each tag visibly and in an HTML comment so I can reference the option later.
+
+Output one Canvas HTML fragment with inline styles only. No html, head, body, style, script, SVG, or markdown code fence.
+
+Content:
+```
+
+## Component Sketching: Callout Or Highlight Options
+
+```text
+Use the Canvas Design Agent skill in Component Sketching Mode.
+
+I need to decide how to emphasize the note below in Canvas. Analyze whether it is a reminder, warning, key idea, status note, or quote, then show 3-4 Canvas-safe HTML options in a comparison row.
+
+Use compact tags such as OPTION-A: V01-S01 Accent Box. Include each tag visibly and in an HTML comment so I can reference the option later.
+
+Output one Canvas HTML fragment with inline styles only. No html, head, body, style, script, SVG, or markdown code fence.
+
+Note:
+```

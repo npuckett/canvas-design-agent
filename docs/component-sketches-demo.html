@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Example: Component Sketches -- Canvas Design Agent</title>
+  <style>
+    :root {
+      --color-bg: #fff;
+      --color-text: #333;
+      --color-text-muted: #495057;
+      --color-heading: #000;
+      --color-border: #dee2e6;
+      --color-surface: #f8f8f8;
+      --color-nav-bg: #000;
+      --color-hero-bg: #111;
+      --color-accent: #555;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", "Fira Mono", Menlo, monospace;
+      --container-max: 960px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 48px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      line-height: 1.6;
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--color-heading); text-decoration: none; }
+    a:hover { color: var(--color-accent); }
+
+    .site-nav {
+      background: var(--color-nav-bg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-nav__brand { font-weight: 700; font-size: 1.125rem; color: #fff; }
+    .site-nav__links { display: flex; gap: var(--space-lg); }
+    .site-nav__links a { color: #999; font-size: 0.9375rem; }
+    .site-nav__links a:hover { color: #fff; }
+    .site-nav__toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: var(--space-xs);
+    }
+
+    .hero {
+      background: var(--color-hero-bg);
+      color: #fff;
+      padding: clamp(2rem, 5vw, 3.5rem) var(--space-lg);
+      text-align: center;
+    }
+    .hero__title {
+      font-size: clamp(1.5rem, 3vw, 1.75rem);
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .hero__subtitle {
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      color: #999;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+    .page-section { padding: var(--space-xl) 0; }
+    .page-section + .page-section { border-top: 1px solid var(--color-border); }
+
+    .section-heading {
+      font-size: clamp(1.25rem, 2.5vw, 1.375rem);
+      font-weight: 700;
+      color: var(--color-heading);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    p { margin-bottom: 0.75rem; color: var(--color-text-muted); }
+    code {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+    }
+
+    .elements-used { margin: var(--space-lg) 0; }
+    .elements-used__title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-transform: uppercase;
+      margin-bottom: var(--space-md);
+    }
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      list-style: none;
+      padding: 0;
+    }
+    .tag-grid li {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+    .tag-grid .tag-id {
+      font-weight: 700;
+      color: var(--color-heading);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .callout {
+      border-left: 3px solid #ccc;
+      background: var(--color-surface);
+      padding: var(--space-md) 20px;
+      margin: 20px 0;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout strong { color: var(--color-text); }
+
+    .canvas-preview {
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: var(--space-lg) 0;
+    }
+    .canvas-preview-label {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 10px var(--space-md);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .canvas-preview-label::before { content: "Canvas Preview"; }
+    .canvas-preview-body {
+      padding: var(--space-lg);
+      background: #fff;
+    }
+
+    .site-footer {
+      border-top: 1px solid #e0e0e0;
+      padding: var(--space-lg);
+      text-align: center;
+      font-size: 0.8125rem;
+      color: #999;
+    }
+
+    @media (max-width: 640px) {
+      .site-nav__toggle { display: block; }
+      .site-nav__links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--color-nav-bg);
+        flex-direction: column;
+        padding: 0 var(--space-lg) var(--space-md);
+        gap: var(--space-md);
+      }
+      .site-nav__links.open { display: flex; }
+      .site-nav { flex-wrap: wrap; }
+      .container { padding: 0 var(--space-md); }
+      .page-section { padding: clamp(1.5rem, 5vw, 3rem) 0; }
+      .canvas-preview-body { padding: var(--space-md); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="site-nav__brand">Canvas Design Agent</span>
+  <button class="site-nav__toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">&#9776;</button>
+  <div class="site-nav__links">
+    <a href="index.html">Home</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="guide.html">Guide</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1 class="hero__title">Example: Component Sketches</h1>
+  <p class="hero__subtitle">A comparison output that shows several smaller Canvas-safe element options before choosing one for a complete page.</p>
+</header>
+
+<main class="container">
+
+  <section class="page-section">
+    <h2 class="section-heading">About This Example</h2>
+    <p>This page demonstrates the optional <strong>Component Sketching Mode</strong>. Instead of generating one final course page, the agent analyzes a specific display problem and returns several tagged HTML options in a row for comparison.</p>
+    <p><strong>Sample request:</strong> <em>"Show me 3-4 ways to display a 10-week course schedule with due dates on Fridays. Tag each option so I can reference it later."</em></p>
+
+    <div class="elements-used">
+      <h3 class="elements-used__title">Elements Used</h3>
+      <ul class="tag-grid">
+        <li><a href="elements.html#S01" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">S01</span> Clean Modern Theme</a></li>
+        <li><a href="elements.html#S03" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">S03</span> Warm Minimal Theme</a></li>
+        <li><a href="elements.html#D05" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">D05</span> Schedule Grid</a></li>
+        <li><a href="elements.html#D01" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">D01</span> Data Table</a></li>
+        <li><a href="elements.html#L03" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">L03</span> Flexbox Row</a></li>
+        <li><a href="elements.html#C03" style="color: inherit; text-decoration: none; display: flex; align-items: baseline; gap: 6px;"><span class="tag-id">C03</span> Info Card</a></li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <p><strong>How to replicate:</strong> Ask for Component Sketching Mode and describe one data type at a time. After reviewing the output, say something like <em>"Use OPTION-B for the schedule section in my course homepage"</em> or <em>"Make OPTION-C more compact."</em></p>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <h2 class="section-heading">Canvas Preview</h2>
+    <p>This preview shows a single Canvas HTML fragment containing four tagged options. A faculty member can copy one option later or reference its tag in a full-page request.</p>
+
+    <div class="canvas-preview">
+      <div class="canvas-preview-label"></div>
+      <div class="canvas-preview-body">
+
+        <div style="max-width: 1120px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; color: #495057; line-height: 1.5;">
+          <h2 style="margin: 0 0 8px; color: #333333; font-size: 22px; font-weight: 700;">Schedule Display Sketches</h2>
+          <p style="margin: 0 0 20px; color: #495057;">Data diagnosis: this schedule has repeated week/date/topic/due-date fields, so table and card formats are both plausible. Compare the options below and reference the tag for the one you want to reuse.</p>
+
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: stretch; margin: 0 0 24px;">
+
+            <!-- OPTION-A: D05-S01 Schedule Grid -->
+            <div style="flex: 1; min-width: 240px; border: 1px solid #dee2e6; border-radius: 4px; padding: 14px; background: #ffffff;">
+              <div style="font-size: 12px; font-weight: 700; color: #0066cc; margin-bottom: 6px;">OPTION-A: D05-S01 Schedule Grid</div>
+              <p style="margin: 0 0 10px; font-size: 13px; color: #6c757d;"><strong style="color: #333333;">Best for:</strong> week-by-week course pages where dates and deadlines need strong alignment.</p>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #495057;">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="padding: 8px; border: 1px solid #dee2e6; background: #0066cc; color: #ffffff; text-align: left;">Week</th>
+                      <th scope="col" style="padding: 8px; border: 1px solid #dee2e6; background: #0066cc; color: #ffffff; text-align: left;">Topic</th>
+                      <th scope="col" style="padding: 8px; border: 1px solid #dee2e6; background: #0066cc; color: #ffffff; text-align: left;">Friday Due</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: 600;">1</td>
+                      <td style="padding: 8px; border: 1px solid #dee2e6;">Orientation and setup</td>
+                      <td style="padding: 8px; border: 1px solid #dee2e6;">Reading response</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: 600;">2</td>
+                      <td style="padding: 8px; border: 1px solid #dee2e6;">Inputs and sensors</td>
+                      <td style="padding: 8px; border: 1px solid #dee2e6;">Lab notes</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px; border: 1px solid #dee2e6; font-weight: 600;">3</td>
+                      <td style="padding: 8px; border: 1px solid #dee2e6;">Prototype critique</td>
+                      <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Project sketch</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- OPTION-B: D01-S01 Compact Data Table -->
+            <div style="flex: 1; min-width: 240px; border: 1px solid #dee2e6; border-radius: 4px; padding: 14px; background: #f8f8f8;">
+              <div style="font-size: 12px; font-weight: 700; color: #0066cc; margin-bottom: 6px;">OPTION-B: D01-S01 Compact Data Table</div>
+              <p style="margin: 0 0 10px; font-size: 13px; color: #6c757d;"><strong style="color: #333333;">Best for:</strong> dense schedules where students need to scan many rows quickly.</p>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #495057; background: #ffffff;">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="padding: 8px; border-bottom: 2px solid #0066cc; text-align: left; color: #333333;">Date</th>
+                      <th scope="col" style="padding: 8px; border-bottom: 2px solid #0066cc; text-align: left; color: #333333;">In Class</th>
+                      <th scope="col" style="padding: 8px; border-bottom: 2px solid #0066cc; text-align: left; color: #333333;">Due</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Sep 4</td>
+                      <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Setup</td>
+                      <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Response 1</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Sep 11</td>
+                      <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Sensors</td>
+                      <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Lab notes</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Sep 18</td>
+                      <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Critique</td>
+                      <td style="padding: 8px; border-bottom: 1px solid #dee2e6;"><strong>Project sketch</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- OPTION-C: D05-S03 Warm Schedule Grid -->
+            <div style="flex: 1; min-width: 240px; border: 1px solid #d7ccc8; border-radius: 8px; padding: 14px; background: #fdf6ee;">
+              <div style="font-size: 12px; font-weight: 700; color: #5d4037; margin-bottom: 6px;">OPTION-C: D05-S03 Warm Schedule Grid</div>
+              <p style="margin: 0 0 10px; font-size: 13px; color: #4e3629;"><strong style="color: #5d4037;">Best for:</strong> studio courses that need the same table clarity with a softer visual tone.</p>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #4e3629; background: #ffffff;">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="padding: 8px; border: 1px solid #d7ccc8; background: #5d4037; color: #fdf6ee; text-align: left;">Week</th>
+                      <th scope="col" style="padding: 8px; border: 1px solid #d7ccc8; background: #5d4037; color: #fdf6ee; text-align: left;">Focus</th>
+                      <th scope="col" style="padding: 8px; border: 1px solid #d7ccc8; background: #5d4037; color: #fdf6ee; text-align: left;">Due Friday</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="padding: 8px; border: 1px solid #d7ccc8; font-weight: 600;">1</td>
+                      <td style="padding: 8px; border: 1px solid #d7ccc8;">Orientation</td>
+                      <td style="padding: 8px; border: 1px solid #d7ccc8;">Reading response</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px; border: 1px solid #d7ccc8; font-weight: 600;">2</td>
+                      <td style="padding: 8px; border: 1px solid #d7ccc8;">Sensor tests</td>
+                      <td style="padding: 8px; border: 1px solid #d7ccc8;">Lab notes</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px; border: 1px solid #d7ccc8; font-weight: 600;">3</td>
+                      <td style="padding: 8px; border: 1px solid #d7ccc8;">Critique</td>
+                      <td style="padding: 8px; border: 1px solid #d7ccc8;"><strong>Project sketch</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- OPTION-D: C03-L03-S01 Timeline Cards -->
+            <div style="flex: 1; min-width: 240px; border: 1px solid #dee2e6; border-radius: 4px; padding: 14px; background: #ffffff;">
+              <div style="font-size: 12px; font-weight: 700; color: #0066cc; margin-bottom: 6px;">OPTION-D: C03-L03-S01 Timeline Cards</div>
+              <p style="margin: 0 0 10px; font-size: 13px; color: #6c757d;"><strong style="color: #333333;">Best for:</strong> shorter schedules where the weekly rhythm matters more than dense comparison.</p>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="border-left: 4px solid #0066cc; background: #f8f8f8; padding: 10px 12px; border-radius: 4px;">
+                  <h3 style="margin: 0 0 4px; color: #333333; font-size: 15px;">Week 1: Setup</h3>
+                  <p style="margin: 0; color: #495057; font-size: 13px;">Due Friday: Reading response</p>
+                </div>
+                <div style="border-left: 4px solid #0066cc; background: #f8f8f8; padding: 10px 12px; border-radius: 4px;">
+                  <h3 style="margin: 0 0 4px; color: #333333; font-size: 15px;">Week 2: Sensors</h3>
+                  <p style="margin: 0; color: #495057; font-size: 13px;">Due Friday: Lab notes</p>
+                </div>
+                <div style="border-left: 4px solid #0066cc; background: #f8f8f8; padding: 10px 12px; border-radius: 4px;">
+                  <h3 style="margin: 0 0 4px; color: #333333; font-size: 15px;">Week 3: Critique</h3>
+                  <p style="margin: 0; color: #495057; font-size: 13px;">Due Friday: <strong>Project sketch</strong></p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  Canvas Design Agent -- Example: Component Sketches<br>
+  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> &middot; <a href="https://github.com/npuckett/canvas-design-agent/blob/main/workshop-kit/SKILL.md" style="color:#999;">SKILL.md</a>
+</footer>
+
+</body>
+</html>

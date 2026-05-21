@@ -45,6 +45,9 @@ Common triage order:
 ## Optional Extension
 
 - Show themes and element IDs.
+- Show Component Sketching Mode: ask for 3-4 ways to display one schedule, rubric, resource list, or callout.
+- Pick one option tag, such as `OPTION-B: D05-S01 Schedule Grid`, and ask for a focused revision.
+- Show how the chosen option tag can feed into a later full-page prompt.
 - Show a course-specific template.
 - Show how to revise the page by sending the current HTML back to the AI with a specific request.
 

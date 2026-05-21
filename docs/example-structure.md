@@ -4,7 +4,7 @@ This document explains the anatomy of the generated example HTML pages. Every ex
 
 ## Page Layout Overview
 
-Each example HTML file has these sections in order:
+Each full-page example HTML file has these sections in order:
 
 ```
 1. CSS Custom Properties   (:root variables)
@@ -18,6 +18,8 @@ Each example HTML file has these sections in order:
 ```
 
 Sections 1--5 and 7 are the **documentation wrapper**. They exist only on the reference website. Section 6 contains the actual Canvas-compatible HTML with inline styles.
+
+Component sketch examples use the same wrapper and preview frame, but section 6 contains a row of tagged option groups instead of one final page. Each option is still Canvas-safe HTML and can be copied or referenced by its tag.
 
 ## The Two Style Systems
 
@@ -57,7 +59,7 @@ Uses **only inline `style=""` attributes** on every element. No classes, no CSS 
 </style>
 ```
 
-Defines the design tokens for the wrapper. All four examples use the same set of variables, keeping the documentation site visually consistent.
+Defines the design tokens for the wrapper. The examples use a shared set of variables, keeping the documentation site visually consistent.
 
 ### 2. Site Styles
 
@@ -140,9 +142,17 @@ Inside the preview body, HTML comments mark which element from the catalog is be
 </footer>
 ```
 
-## How the Four Examples Differ
+## How the Examples Differ
 
-Each example demonstrates a different type of Canvas page with a different mix of elements:
+Each example demonstrates a different type of Canvas output with a different mix of elements:
+
+### Component Sketches (`component-sketches-demo.html`)
+
+An opt-in prototyping output for comparing several smaller element options before generating a full page. Shows a schedule data diagnosis, compact reusable option tags, and four side-by-side options that mix table, grid, theme, and card formats.
+
+**Key structural pattern:** Comparison row -- short diagnosis, tagged option containers, one "best for" note per option, and Canvas-safe inline HTML inside each option. Designed to help faculty choose `OPTION-A`, `OPTION-B`, etc. before asking for a full page.
+
+**Elements:** S01, S03, D05, D01, L03, C03
 
 ### Class Page (`example-class-page.html`)
 
@@ -215,3 +225,5 @@ To add a new example page:
 5. Mark each element with an HTML comment (`<!-- ID: Name -->`).
 6. Add a card to `examples.html` linking to the new page.
 7. Create a matching prompt file in `docs/prompts/` showing the markdown input.
+
+For component sketch examples, keep the same page structure but replace the single final Canvas page with a comparison row. Label each option with a visible compact tag and matching HTML comment, such as `<!-- OPTION-A: D05-S01 Schedule Grid -->`.

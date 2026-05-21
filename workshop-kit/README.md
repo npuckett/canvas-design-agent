@@ -4,6 +4,8 @@ This folder is a portable workshop packet for faculty who will use a web-based A
 
 The default workshop path is Microsoft Copilot in a browser. ChatGPT and Claude can also work if participants can upload or paste the skill file.
 
+The kit also supports an optional component sketching step: participants can ask the agent to compare 3-4 tagged Canvas-safe element options before generating a complete page.
+
 ## What To Copy
 
 Copy this entire `workshop-kit/` folder into the workshop repository.
