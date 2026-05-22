@@ -46,12 +46,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
       position: sticky;
       top: 0;
       z-index: 100;
     }
     .site-nav__brand { font-weight: 700; font-size: 1.125rem; color: #fff; }
-    .site-nav__links { display: flex; gap: var(--space-lg); }
+    .site-nav__links { display: flex; flex-wrap: wrap; gap: var(--space-md); }
     .site-nav__links a { color: #999; font-size: 0.9375rem; }
     .site-nav__links a:hover { color: #fff; }
     .site-nav__toggle {
@@ -213,9 +215,12 @@
   <button class="site-nav__toggle" aria-label="Toggle navigation" onclick="this.nextElementSibling.classList.toggle('open')">&#9776;</button>
   <div class="site-nav__links">
     <a href="index.html">Home</a>
+    <a href="guide.html">Guide</a>
+    <a href="methods.html">Methods</a>
+    <a href="outputs.html">Outputs</a>
     <a href="elements.html">Elements</a>
     <a href="examples.html">Examples</a>
-    <a href="guide.html">Guide</a>
+    <a href="downloads.html">Downloads</a>
     <a href="about.html">About</a>
     <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
   </div>
@@ -397,7 +402,7 @@
 
 <footer class="site-footer">
   Canvas Design Agent -- Example: Component Sketches<br>
-  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> &middot; <a href="https://github.com/npuckett/canvas-design-agent/blob/main/workshop-kit/SKILL.md" style="color:#999;">SKILL.md</a>
+  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> &middot; <a href="downloads/SKILL.md" style="color:#999;">SKILL.md</a>
 </footer>
 
 </body>

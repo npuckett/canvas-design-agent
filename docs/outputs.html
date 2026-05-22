@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outputs -- Canvas Design Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #222;
+      line-height: 1.6;
+      background: #fff;
+    }
+    a { color: #222; }
+    a:hover { color: #000; }
+
+    nav {
+      background: #000;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav .brand { font-weight: 700; font-size: 18px; color: #fff; text-decoration: none; }
+    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
+    nav .links a { color: #999; font-size: 15px; text-decoration: none; }
+    nav .links a:hover { color: #fff; }
+
+    .header {
+      padding: 64px 24px 0;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .header h1 {
+      font-size: 30px;
+      font-weight: 800;
+      color: #000;
+    }
+    .header p {
+      font-size: 16px;
+      color: #666;
+      margin-top: 8px;
+    }
+    .content {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 32px 24px 72px;
+    }
+    section { padding-top: 40px; }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 6px;
+    }
+    p { margin-bottom: 12px; color: #444; }
+    ul { padding-left: 22px; margin-bottom: 12px; color: #444; }
+    li { margin-bottom: 6px; }
+    code {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: monospace;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 680px) { .type-grid { grid-template-columns: 1fr; } }
+    .type-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 18px;
+      background: #fff;
+    }
+    .type-card p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid #e0e0e0;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fafafa; font-weight: 700; color: #222; }
+    .callout {
+      border-left: 3px solid #ccc;
+      background: #fafafa;
+      padding: 14px 18px;
+      margin: 18px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 16px 0 4px;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 4px;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .button.secondary {
+      background: #fff;
+      color: #000;
+      border: 1px solid #ccc;
+    }
+
+    footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Canvas Design Agent</span>
+  <span class="links">
+    <a href="index.html">Home</a>
+    <a href="guide.html">Guide</a>
+    <a href="methods.html">Methods</a>
+    <a href="outputs.html">Outputs</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="downloads.html">Downloads</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
+  </span>
+</nav>
+
+<div class="header">
+  <h1>Outputs</h1>
+  <p>What you can give the skill, what it can produce, and which output type to ask for in different teaching situations.</p>
+</div>
+
+<main class="content">
+
+  <section id="concept">
+    <h2>The Basic Exchange</h2>
+    <p>Canvas Design Agent turns course content into Canvas-safe HTML. You provide the skill file plus an input type, and the agent returns an output type that respects Canvas Rich Content Editor constraints.</p>
+    <div class="button-row">
+      <a class="button" href="downloads/SKILL.md" download>Download SKILL.md</a>
+      <a class="button secondary" href="methods.html">Choose a Method</a>
+    </div>
+    <div class="callout">
+      <p><strong>Most common path:</strong> upload <code>SKILL.md</code>, paste rough course notes, ask for a Canvas HTML fragment, then paste that fragment into Canvas.</p>
+    </div>
+  </section>
+
+  <section id="input-types">
+    <h2>Input Types</h2>
+    <div class="type-grid">
+      <div class="type-card">
+        <h3>Rough Notes</h3>
+        <p>Plain text, pasted syllabus sections, bullet lists, agendas, or assignment descriptions. Best for fast first drafts.</p>
+      </div>
+      <div class="type-card">
+        <h3>Markdown Prompt Files</h3>
+        <p>Reusable <code>.md</code> files with headings, content, style notes, and output expectations. Best for repeatable course production.</p>
+      </div>
+      <div class="type-card">
+        <h3>Element ID Requests</h3>
+        <p>Optional control handles such as <code>V05</code>, <code>D05</code>, or <code>C01</code>. Use them when you want specific catalog elements.</p>
+      </div>
+      <div class="type-card">
+        <h3>Course Templates</h3>
+        <p>Style preferences, colors, recurring sections, page types, and layout patterns that should repeat across many pages.</p>
+      </div>
+      <div class="type-card">
+        <h3>Media URLs</h3>
+        <p>Absolute image, video, iframe, or GitHub Pages URLs. Canvas cannot use relative paths from your computer.</p>
+      </div>
+      <div class="type-card">
+        <h3>Existing Canvas HTML</h3>
+        <p>Paste an existing page as a reference when you want revision, cleanup, consistency, or style extraction.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="output-types">
+    <h2>Output Types</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Output</th>
+          <th>Use It For</th>
+          <th>Ask For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Canvas HTML Fragment</strong></td>
+          <td>The default paste-ready output for Canvas pages, assignments, announcements, and module content.</td>
+          <td>"Output only a Canvas HTML fragment with inline styles."</td>
+        </tr>
+        <tr>
+          <td><strong>Component Sketch Options</strong></td>
+          <td>Comparing several ways to present one schedule, rubric, resource list, callout, or data block.</td>
+          <td>"Use Component Sketching Mode and show 3-4 tagged options."</td>
+        </tr>
+        <tr>
+          <td><strong>Reusable Prompt File</strong></td>
+          <td>Creating a clean markdown source that can generate the same kind of page again later.</td>
+          <td>"Turn these notes into a reusable prompt file before generating HTML."</td>
+        </tr>
+        <tr>
+          <td><strong>Course Page Template</strong></td>
+          <td>Defining repeated page structure, colors, headers, sections, and layout choices across a course.</td>
+          <td>"Create a course-specific template I can reuse for weekly pages."</td>
+        </tr>
+        <tr>
+          <td><strong>Revision Prompt</strong></td>
+          <td>Fixing generated HTML after Canvas strips something, a layout breaks, or content changes.</td>
+          <td>"Revise this for Canvas-safe inline HTML and keep the same content."</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="page-types">
+    <h2>Common Page Types</h2>
+    <div class="type-grid">
+      <div class="type-card">
+        <h3>Weekly Module Page</h3>
+        <p>Header, goals, agenda, resources, due dates, next steps. Start from <a href="prompts/class-page.md">class-page.md</a>.</p>
+      </div>
+      <div class="type-card">
+        <h3>Assignment Or Project Page</h3>
+        <p>Overview, requirements, deliverables, submission instructions, rubric, milestones. Start from <a href="prompts/assignment-page.md">assignment-page.md</a> or <a href="prompts/project-brief.md">project-brief.md</a>.</p>
+      </div>
+      <div class="type-card">
+        <h3>Course Timeline</h3>
+        <p>Week-by-week schedule, units, due dates, grading breakdown, anchor links. Start from <a href="prompts/course-timeline.md">course-timeline.md</a>.</p>
+      </div>
+      <div class="type-card">
+        <h3>Course Homepage</h3>
+        <p>Welcome message, module navigation, key dates, instructor contact, quick links. Start from <a href="prompts/homepage.md">homepage.md</a>.</p>
+      </div>
+      <div class="type-card">
+        <h3>Media Gallery</h3>
+        <p>Images, linked thumbnails, iframe embeds, and media notes using absolute URLs. Start from <a href="prompts/gallery-page.md">gallery-page.md</a>.</p>
+      </div>
+      <div class="type-card">
+        <h3>Syllabus Or Course Info</h3>
+        <p>Course description, meeting details, grading, schedule overview, policies, resources. Start from <a href="prompts/simple-syllabus.md">simple-syllabus.md</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="rules">
+    <h2>Output Format Rules</h2>
+    <ul>
+      <li>Use an HTML fragment, not a full web page.</li>
+      <li>Use inline <code>style=""</code> attributes only.</li>
+      <li>Do not include <code>html</code>, <code>head</code>, <code>body</code>, <code>style</code>, <code>script</code>, or SVG.</li>
+      <li>Do not wrap paste-ready HTML in a markdown code fence unless you are saving it outside Canvas first.</li>
+      <li>Use absolute URLs for images and iframes.</li>
+      <li>Keep critical deadlines and instructions visible without requiring collapsible sections.</li>
+    </ul>
+    <div class="callout">
+      <p>Need the element-level details? Use the <a href="elements.html">Element Catalog</a>. Need examples of finished outputs? Use the <a href="examples.html">Examples</a> page.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="downloads/SKILL.md" style="color:#999;">SKILL.md</a>
+</footer>
+
+</body>
+</html>

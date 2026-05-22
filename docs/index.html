@@ -22,12 +22,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
       position: sticky;
       top: 0;
       z-index: 100;
     }
     nav .brand { font-weight: 700; font-size: 18px; color: #fff; }
-    nav .links a { color: #999; margin-left: 24px; font-size: 15px; }
+    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
+    nav .links a { color: #999; font-size: 15px; }
     nav .links a:hover { color: #fff; }
 
     /* LAYOUT */
@@ -42,7 +45,6 @@
       font-size: 36px;
       font-weight: 800;
       color: #000;
-      letter-spacing: -0.5px;
       margin-bottom: 12px;
     }
     .header p {
@@ -100,7 +102,7 @@
       font-size: 14px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0;
       color: #999;
       margin-bottom: 24px;
     }
@@ -140,7 +142,7 @@
       font-size: 14px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0;
       color: #999;
       margin-bottom: 20px;
     }
@@ -177,9 +179,12 @@
   <span class="brand">Canvas Design Agent</span>
   <span class="links">
     <a href="index.html">Home</a>
+    <a href="guide.html">Guide</a>
+    <a href="methods.html">Methods</a>
+    <a href="outputs.html">Outputs</a>
     <a href="elements.html">Elements</a>
     <a href="examples.html">Examples</a>
-    <a href="guide.html">Guide</a>
+    <a href="downloads.html">Downloads</a>
     <a href="about.html">About</a>
     <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
   </span>
@@ -187,28 +192,38 @@
 
 <div class="header">
   <h1>Canvas Design Agent</h1>
-  <p>An AI skill that transforms plain text into visually rich, Canvas LMS-compatible HTML pages.</p>
+  <p>A portable AI skill and documentation system for turning course content into Canvas LMS-compatible HTML.</p>
 </div>
 
 <div class="card-grid">
+  <a href="downloads.html" class="card">
+    <h3>Download SKILL.md</h3>
+    <p>Get the portable instruction file that teaches an AI agent Canvas constraints, elements, and output rules.</p>
+    <span class="arrow">&rarr;</span>
+  </a>
   <a href="guide.html" class="card">
     <h3>Guide</h3>
-    <p>Start here for the web-based workflow: upload SKILL.md, generate HTML, and paste into Canvas.</p>
+    <p>Start here for the first-page walkthrough and the shortest path from notes to a saved Canvas page.</p>
+    <span class="arrow">&rarr;</span>
+  </a>
+  <a href="methods.html" class="card">
+    <h3>Methods</h3>
+    <p>Choose a workflow: web chat, prompt files, local editor, component sketching, or Canvas review.</p>
+    <span class="arrow">&rarr;</span>
+  </a>
+  <a href="outputs.html" class="card">
+    <h3>Outputs</h3>
+    <p>Learn what inputs to provide and what output types to ask for: fragments, sketches, templates, and pages.</p>
     <span class="arrow">&rarr;</span>
   </a>
   <a href="elements.html" class="card">
     <h3>Element Catalog</h3>
-    <p>Browse Canvas-safe elements after your first page is working, with previews and copy-ready code.</p>
+    <p>Browse optional element IDs for layouts, data displays, callouts, typography, media, and themes.</p>
     <span class="arrow">&rarr;</span>
   </a>
   <a href="examples.html" class="card">
     <h3>Examples</h3>
-    <p>Full page examples -- course timelines, class pages, and project briefs.</p>
-    <span class="arrow">&rarr;</span>
-  </a>
-  <a href="https://github.com/npuckett/canvas-design-agent" class="card">
-    <h3>GitHub</h3>
-    <p>Get the SKILL.md file, clone the repo, or contribute to the project.</p>
+    <p>See finished Canvas pages and component sketches built from the same skill and prompt patterns.</p>
     <span class="arrow">&rarr;</span>
   </a>
 </div>
@@ -218,23 +233,23 @@
   <div class="how-steps">
     <div class="how-step">
       <div class="num">01</div>
-      <h3>Get the skill</h3>
-      <p>Download SKILL.md and place it in your project or upload it to a web-based AI chat.</p>
+      <h3>Canvas has constraints</h3>
+      <p>Canvas strips normal web features like style blocks, scripts, SVG, and some CSS properties.</p>
     </div>
     <div class="how-step">
       <div class="num">02</div>
-      <h3>Write your content</h3>
-      <p>Describe your Canvas page in plain text -- schedules, assignments, resources, anything.</p>
+      <h3>The skill carries the rules</h3>
+      <p>SKILL.md gives the AI Canvas-safe layout rules, element templates, themes, and output checks.</p>
     </div>
     <div class="how-step">
       <div class="num">03</div>
-      <h3>Ask the agent</h3>
-      <p>The AI generates Canvas-compatible HTML using only inline styles and tested elements.</p>
+      <h3>You provide course content</h3>
+      <p>Use rough notes, prompt files, templates, media URLs, or optional element IDs to guide the result.</p>
     </div>
     <div class="how-step">
       <div class="num">04</div>
-      <h3>Paste into Canvas</h3>
-      <p>Switch to the HTML editor in Canvas RCE, paste, and save. Done.</p>
+      <h3>The agent returns HTML</h3>
+      <p>The output is a Canvas HTML fragment with inline styles, ready to paste into the RCE HTML view.</p>
     </div>
   </div>
 </div>
@@ -254,7 +269,7 @@
 
 <footer>
   Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
-  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md" style="color:#999;">SKILL.md</a>
+  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="downloads/SKILL.md" style="color:#999;">SKILL.md</a>
 </footer>
 
 </body>

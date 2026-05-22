@@ -22,12 +22,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
       position: sticky;
       top: 0;
       z-index: 100;
     }
     nav .brand { font-weight: 700; font-size: 18px; color: #fff; text-decoration: none; }
-    nav .links a { color: #999; margin-left: 24px; font-size: 15px; text-decoration: none; }
+    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
+    nav .links a { color: #999; font-size: 15px; text-decoration: none; }
     nav .links a:hover { color: #fff; }
 
     /* LAYOUT */
@@ -158,6 +161,28 @@
     }
     .callout p:last-child { margin-bottom: 0; }
 
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 4px;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .button.secondary {
+      background: #fff;
+      color: #000;
+      border: 1px solid #ccc;
+    }
+
     /* TEMPLATE EXAMPLE */
     .template-example {
       background: #111;
@@ -188,9 +213,12 @@
   <span class="brand">Canvas Design Agent</span>
   <span class="links">
     <a href="index.html">Home</a>
+    <a href="guide.html">Guide</a>
+    <a href="methods.html">Methods</a>
+    <a href="outputs.html">Outputs</a>
     <a href="elements.html">Elements</a>
     <a href="examples.html">Examples</a>
-    <a href="guide.html">Guide</a>
+    <a href="downloads.html">Downloads</a>
     <a href="about.html">About</a>
     <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
   </span>
@@ -198,12 +226,15 @@
 
 <div class="header">
   <h1>Guide</h1>
-  <p>Step-by-step workflows for using the Canvas Design Agent skill with any AI tool.</p>
+  <p>Start here for the quickest path from plain course content to a saved Canvas page.</p>
 </div>
 
 <div class="toc">
   <a href="#getting-started">Getting Started</a>
   <a href="#first-page">Your First Page</a>
+  <a href="methods.html">Methods</a>
+  <a href="outputs.html">Outputs</a>
+  <a href="downloads.html">Downloads</a>
   <a href="#local-workflow">Local Workflow</a>
   <a href="#web-workflow">Web Workflow</a>
   <a href="#comparison">Comparison</a>
@@ -220,12 +251,17 @@
   <section id="getting-started">
     <h2>Getting Started</h2>
     <ol class="steps">
-      <li><strong>Get the skill file.</strong> Download <code>SKILL.md</code> from the <a href="https://github.com/npuckett/canvas-design-agent">GitHub repository</a>. This single file contains the Canvas constraints and element templates.</li>
+      <li><strong>Get the skill file.</strong> Download <code>SKILL.md</code> from the public docs download. This single file contains the Canvas constraints and element templates.</li>
       <li><strong>Open a web AI chat.</strong> Microsoft Copilot is the recommended workshop path when your organization supports it. ChatGPT or Claude can also work.</li>
       <li><strong>Upload or paste <code>SKILL.md</code>.</strong> If file upload is unavailable, open the file, copy all text, and paste it into the chat.</li>
       <li><strong>Write your content.</strong> Describe your page in plain text -- schedules, assignments, resources, anything. Element IDs are optional.</li>
       <li><strong>Paste into Canvas.</strong> Open your Canvas page, switch to the HTML editor (<code>&lt;/&gt;</code> icon in RCE), paste the generated HTML, and save.</li>
     </ol>
+
+    <div class="button-row">
+      <a class="button" href="downloads/SKILL.md" download>Download SKILL.md</a>
+      <a class="button secondary" href="methods.html">See All Methods</a>
+    </div>
 
     <div class="callout">
       <p><strong>First time?</strong> Try the walkthrough below -- it takes about 5 minutes and requires zero HTML knowledge.</p>
@@ -275,7 +311,7 @@ Participation: 10%</div>
       <li>
         <strong>Give it to an AI agent along with SKILL.md.</strong>
         <ul style="margin-top: 8px;">
-          <li><strong>Recommended workshop workflow:</strong> Open Microsoft Copilot in your browser. Upload or paste the contents of <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md">SKILL.md</a>, then paste your content and say <em>"Use the uploaded Canvas Design Agent skill. Transform this into a Canvas-ready HTML fragment using inline styles only."</em></li>
+          <li><strong>Recommended workshop workflow:</strong> Open Microsoft Copilot in your browser. Upload or paste the contents of <a href="downloads/SKILL.md">SKILL.md</a>, then paste your content and say <em>"Use the uploaded Canvas Design Agent skill. Transform this into a Canvas-ready HTML fragment using inline styles only."</em></li>
           <li><strong>Other web tools:</strong> ChatGPT and Claude can follow the same attach-or-paste workflow.</li>
           <li><strong>Advanced local workflow:</strong> If you use VS Code or another AI editor, you can keep prompt files and generated HTML locally, but this is not required for the workshop.</li>
         </ul>
@@ -299,6 +335,9 @@ Participation: 10%</div>
 
     <h3>Next Steps</h3>
     <ul>
+      <li>Use the <a href="methods.html">Methods</a> page when you want a step-by-step workflow for web chat, prompt files, local editors, or component sketching.</li>
+      <li>Use the <a href="outputs.html">Outputs</a> page when you are deciding what kind of page, fragment, sketch, or template to ask for.</li>
+      <li>Use the <a href="downloads.html">Downloads</a> page when you need the skill file or prompt templates.</li>
       <li>Browse the <a href="elements.html">Element Catalog</a> and reference specific element IDs in your next prompt (e.g., "use a V05 gradient header").</li>
       <li>Look at the <a href="examples.html">example pages</a> for inspiration on more complex layouts.</li>
       <li>Create a <a href="#templates">course-specific template</a> to keep all your pages visually consistent.</li>
@@ -517,7 +556,7 @@ CART 310 · Week 3 · September 22, 2026
     </table>
 
     <div class="callout">
-      <p><strong>Try it yourself:</strong> Copy one of the prompt files above, modify it with your own course content, and ask an AI agent to generate the Canvas HTML. The <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md">SKILL.md</a> file gives the agent everything it needs to produce the output.</p>
+      <p><strong>Try it yourself:</strong> Copy one of the prompt files above, modify it with your own course content, and ask an AI agent to generate the Canvas HTML. The <a href="downloads/SKILL.md">SKILL.md</a> file gives the agent everything it needs to produce the output.</p>
     </div>
   </section>
 
@@ -774,7 +813,7 @@ Important dates: T02 highlighted in yellow</div>
 
 <footer>
   Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
-  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="https://github.com/npuckett/canvas-design-agent/blob/main/.github/SKILL.md" style="color:#999;">SKILL.md</a>
+  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="downloads/SKILL.md" style="color:#999;">SKILL.md</a>
 </footer>
 
 </body>

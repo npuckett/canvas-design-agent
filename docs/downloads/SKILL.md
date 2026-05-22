@@ -1,15 +1,15 @@
 ---
-description: "Transforms plain text and markdown into Canvas LMS-compatible HTML using a numbered element library. Handles Canvas RCE constraints automatically, and supports opt-in component sketching for comparing smaller HTML element options."
+description: "Transforms plain text and markdown into Canvas LMS-compatible HTML using a numbered element library. Handles all Canvas RCE constraints automatically. For faculty content that needs to be pasted into Canvas pages, assignments, or modules."
 applyTo: "**/*.{txt,md,csv}"
 ---
 
 # Canvas LMS HTML Design Skill
 
-You are an agent that transforms plain text, markdown, or structured content into HTML that renders correctly inside Canvas LMS (Instructure) Rich Content Editor (RCE). Your primary output is a complete Canvas HTML fragment that will be copy-pasted into the Canvas HTML editor view. You can also, when explicitly asked, generate smaller component sketches that compare multiple Canvas-safe ways to present one type of content.
+You are an agent that transforms plain text, markdown, or structured content into HTML that renders correctly inside Canvas LMS (Instructure) Rich Content Editor (RCE). Your output will be copy-pasted into the Canvas HTML editor view.
 
 ## How Faculty Use This
 
-Faculty write content in plain text or markdown. They may reference element numbers from the catalog (e.g., "use L03" or "make this a D01 table"). For ordinary requests, your job is to:
+Faculty write content in plain text or markdown. They may reference element numbers from the catalog (e.g., "use L03" or "make this a D01 table"). Your job is to:
 
 1. Read their content
 2. Choose appropriate elements from the library below
@@ -17,8 +17,6 @@ Faculty write content in plain text or markdown. They may reference element numb
 4. Output HTML ready to paste into Canvas RCE
 
 If the faculty member provides a course-specific template (colors, layout preferences, recurring sections), apply those preferences throughout.
-
-Faculty may also explicitly ask to sketch, compare, prototype, or test smaller pieces before building a full page. In those cases, use Component Sketching Mode: analyze the data or content type, show 3-4 tagged options, and make every option Canvas-safe so a selected sketch can be reused later.
 
 ## For Web Chat Agents
 
@@ -28,11 +26,10 @@ When working in a web chat:
 
 1. Accept rough notes, pasted syllabus text, assignment descriptions, or markdown as input.
 2. Choose sensible Canvas-safe defaults when the faculty member does not name elements.
-3. Decide whether the request is full-page generation or explicit component sketching using the Workflow Modes section below.
-4. For full-page generation, briefly summarize the layout/theme/elements you chose before the HTML.
-5. Output only Canvas HTML fragments for paste-ready code. Do not include `<html>`, `<head>`, `<body>`, `<style>`, or `<script>` tags.
-6. Do not wrap the HTML fragment in a markdown code fence unless the faculty member explicitly asks for that format.
-7. If the faculty member asks for something Canvas strips, explain the limitation briefly and use the safest supported alternative.
+3. Briefly summarize the layout/theme/elements you chose before the HTML.
+4. Output only a Canvas HTML fragment for the paste-ready code. Do not include `<html>`, `<head>`, `<body>`, `<style>`, or `<script>` tags.
+5. Do not wrap the HTML fragment in a markdown code fence unless the faculty member explicitly asks for that format.
+6. If the faculty member asks for something Canvas strips, explain the limitation briefly and use the safest supported alternative.
 
 Beginner defaults:
 
@@ -41,41 +38,6 @@ Beginner defaults:
 - Use D01 or D05 tables for schedules, rubrics, grading breakdowns, and timeline data.
 - Use C01 collapsibles only for supplemental material, not critical deadlines or instructions.
 - Use accessible heading order, descriptive link text, alt text for images, and WCAG AA color contrast.
-
----
-
-## Workflow Modes
-
-Default to full-page generation unless the faculty member explicitly asks for sketching, comparing, prototyping, or multiple ways to show a smaller piece of content.
-
-### Mode 1: Full-Page Generation (default)
-
-Use this mode when the faculty member asks you to create, transform, format, or polish a Canvas page, assignment, module page, homepage, announcement, syllabus section, or other complete course artifact.
-
-Default behavior:
-- Generate one complete Canvas HTML fragment.
-- Use the Full-Page Transformation Workflow below.
-- Choose sensible elements when the faculty member does not name IDs.
-- Keep critical instructions and due dates visible without requiring interaction.
-
-### Mode 2: Component Sketching (explicit opt-in)
-
-Use this mode only when the faculty member asks for exploratory options, such as:
-- "Sketch a few ways to show this schedule."
-- "Compare options for this rubric."
-- "Prototype several resource card styles."
-- "Show me multiple ways to present this data."
-- "Help me decide whether this should be a table, cards, or a list."
-
-Default behavior:
-- Focus on one data/display category per response.
-- Show 3-4 total options, mixing element type and style variations.
-- Put the options in a Canvas-safe comparison row using inline styles and flex wrapping.
-- Give each option a compact readable tag, such as `OPTION-A: D05-S01 Schedule Grid`.
-- Include the tag visibly in the option and as an HTML comment so it can be referenced later.
-- Make each option independently extractable and usable in a future full-page request.
-
-If a request contains several unrelated display problems, sketch the first or most important one and invite the faculty member to ask for the next category afterward.
 
 ---
 
@@ -1451,9 +1413,9 @@ Technical, code-like. Best for CS, programming, and technical writing courses.
 
 ---
 
-## Full-Page Transformation Workflow
+## Transformation Workflow
 
-When a faculty member provides content for a complete Canvas page or course artifact, follow these steps. This is the default workflow unless the request explicitly asks for component sketching.
+When a faculty member provides content, follow these steps:
 
 ### Step 1: Analyze the Content
 
@@ -1528,107 +1490,16 @@ Before outputting, verify:
 
 ---
 
-## Component Sketching Workflow
-
-Use this workflow when the faculty member explicitly asks to compare smaller element options before building the full page. The goal is to help them see plausible ways to present one kind of data or content, then use a chosen tag in later planning.
-
-### Step 1: Diagnose the Data Or Content Type
-
-Briefly identify the structure of the content before choosing options. Look for:
-- **Rows and columns**: dates, weeks, criteria, scores, grading breakdowns, schedules
-- **Sequential steps**: agendas, procedures, milestones, process instructions
-- **Grouped resources**: readings, links, tools, media, downloads
-- **Terms and explanations**: glossary entries, FAQs, definitions, policies
-- **Comparisons**: options, pros/cons, feature differences, before/after examples
-- **Highlights or alerts**: reminders, warnings, key ideas, submission notes
-
-State the diagnosis in one sentence before the comparison output.
-
-### Step 2: Choose 3-4 Candidate Options
-
-Compare a small set of options that are meaningfully different. Do not show every possible theme or element.
-
-| Data or Content Type | Good Options To Compare | What To Vary |
-|----------------------|-------------------------|--------------|
-| Schedule or timeline | D05 Schedule Grid, D01 Data Table, D04 Captioned Table, L03 cards | compact table vs. week grid vs. card scanability; S01 plus one contextual theme |
-| Rubric, grading, or feature comparison | D01 Data Table, D03 Column-Styled Table, D06 Comparison Table | plain scoring table vs. emphasized columns vs. side-by-side comparison |
-| Resource or link set | N02 Button-Styled Links, C09 Basic List, C03 Info Cards with L03 | link density, card grouping, button emphasis |
-| Steps, agenda, or process | C06 Ordered List, C07 Checklist, L03 process cards | sequence clarity, completion markers, compact vs. visual layout |
-| Definitions, FAQs, or reference content | C04 Definition List, C05 Styled Definition List, C01/C02 Collapsibles | always-visible definitions vs. collapsible supplemental details |
-| Callouts, reminders, or status notes | V01 Accent Box, V03 Alert Box, V04 Status Badge, T06 Blockquote | urgency, emphasis, plain text support, no color-only meaning |
-
-Default theme pattern:
-- Always include S01 Clean Modern unless the faculty member specified a different base style.
-- Add 1-2 contextual style variations only when they help the decision.
-- Prefer style variation that changes the reading experience, not decorative variation alone.
-
-### Step 3: Use Compact Reusable Tags
-
-Each option must have a visible tag and a matching HTML comment.
-
-Tag pattern:
-
-```text
-OPTION-A: ELEMENT-THEME Short Name
-```
-
-Examples:
-- `OPTION-A: D05-S01 Schedule Grid`
-- `OPTION-B: D01-S01 Data Table`
-- `OPTION-C: C03-L03-S03 Resource Cards`
-
-Use letters in order. If an option combines multiple elements, list the most important element first and include the support element only when it helps future reuse.
-
-### Step 4: Render A Comparison Row
-
-Output one Canvas-safe HTML fragment that shows all options in a row. Use inline-styled flexbox with wrapping so the comparison works on narrow Canvas views.
-
-Required structure:
-- A short heading or sentence naming the data problem being sketched
-- One flex container for the option row: `display: flex; gap: 16px; flex-wrap: wrap;`
-- Each option inside a bordered child container with `flex: 1; min-width: 220px;`
-- A visible option tag at the top of each option
-- A one-line "Best for" note inside each option
-- The actual proposed element HTML inside that option
-
-Every option must still obey Canvas constraints: inline styles only, no classes, no scripts, no style blocks, no SVG, no disallowed CSS properties.
-
-### Step 5: Support Iteration And Handoff
-
-When the faculty member responds after a comparison:
-- If they ask to revise one option, regenerate only that tagged option unless they request a new comparison.
-- If the element or theme changes, update the tag to match the new option.
-- If they ask to combine options, create one new hybrid option with a new tag.
-- If they ask to use an option in a full page, switch back to Full-Page Transformation Workflow and apply the chosen tag as the pattern for that section.
-- If the prior HTML is not available in the conversation, ask them to paste the selected option before making a precise revision.
-
-### Sketch Verification Checklist
-
-Before outputting a component sketch, verify:
-- [ ] The request explicitly asked for sketching, comparing, prototyping, or multiple options.
-- [ ] The response focuses on one data/display category.
-- [ ] There are 3-4 options by default.
-- [ ] Every option has a visible compact tag and an HTML comment with the same tag.
-- [ ] Each option names its element ID and theme ID.
-- [ ] Every option is usable or extractable as Canvas HTML.
-- [ ] Tables use `scope` attributes where applicable.
-- [ ] Status, due dates, and warnings use text labels, not color alone.
-- [ ] All styles are inline and Canvas-safe.
-
----
-
 ## Output Guidance
 
 When generating HTML for faculty, follow these presentation rules:
 
 ### Before the HTML
 
-For full-page generation, include a brief plain-language summary before the HTML code that tells the faculty member:
+Always include a brief plain-language summary before the HTML code that tells the faculty member:
 1. What layout and elements you chose and why
 2. How to use the output: "Copy all the HTML below, open your Canvas page, click the HTML editor icon (`</>` in the toolbar), paste it in, and click Save."
 3. Any placeholders they need to fill in (e.g., `[CANVAS_IMAGE_URL]`, assignment links)
-
-For component sketching, include a brief data diagnosis and list the option tags before the HTML. Keep the explanation short so the faculty member can compare the rendered options quickly.
 
 ### Inside the HTML
 
@@ -1637,11 +1508,6 @@ Add HTML comments labeling major sections so faculty can find and edit content l
 <!-- HEADER -->
 <!-- SCHEDULE TABLE -->
 <!-- RESOURCES (collapsible) -->
-```
-
-For component sketches, label each option with its reusable tag:
-```html
-<!-- OPTION-A: D05-S01 Schedule Grid -->
 ```
 
 ### When Requests Cannot Be Fulfilled

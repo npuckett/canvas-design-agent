@@ -2,7 +2,7 @@
 
 A portable skill and reference system that transforms plain text into Canvas LMS-compatible HTML. The easiest workshop workflow is web-based: upload `SKILL.md` to Microsoft Copilot, ChatGPT, or Claude, paste course content, and ask for Canvas-ready HTML.
 
-[Documentation Site](https://npuckett.github.io/canvas-design-agent/docs/) · [Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html) · [Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html) · [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html) · [About](https://npuckett.github.io/canvas-design-agent/docs/about.html)
+[Documentation Site](https://npuckett.github.io/canvas-design-agent/docs/) · [Download SKILL.md](https://npuckett.github.io/canvas-design-agent/docs/downloads/SKILL.md) · [Methods](https://npuckett.github.io/canvas-design-agent/docs/methods.html) · [Outputs](https://npuckett.github.io/canvas-design-agent/docs/outputs.html) · [Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html) · [Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html) · [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html)
 
 ## Table of Contents
 
@@ -10,10 +10,11 @@ A portable skill and reference system that transforms plain text into Canvas LMS
 - [What This Is](#what-this-is)
 - [Getting the Skill](#getting-the-skill)
 - [Quick Start](#quick-start)
-- [Portable Workshop Kit](#portable-workshop-kit)
-- [Example Prompt Files](#example-prompt-files)
+- [Interaction Methods](#interaction-methods)
+- [Input and Output Types](#input-and-output-types)
+- [Downloads](#downloads)
+- [Prompt Templates](#prompt-templates)
 - [Example Page Structure](#example-page-structure)
-- [File Structure](#file-structure)
 - [Documentation Site](#documentation-site)
 - [Element Numbering System](#element-numbering-system)
 - [Canvas Constraints (Summary)](#canvas-constraints-summary)
@@ -81,14 +82,15 @@ The agent reads this content plus `SKILL.md`, then outputs Canvas-ready HTML wit
 Canvas LMS strips most CSS (no `<style>` blocks, no external stylesheets, no JavaScript) and many HTML elements. Only inline `style=""` attributes and specific HTML elements survive the Rich Content Editor (RCE). This project provides:
 
 1. **[SKILL.md](.github/SKILL.md)** -- A portable instruction file containing Canvas constraints, a numbered element library, and transformation rules. It can be uploaded or pasted into web-based AI chats.
-2. **[Reference Website](https://npuckett.github.io/canvas-design-agent/)** -- A visual catalog of every available element, step-by-step workflow instructions, and a methods guide for creating course-specific templates.
-3. **[Workshop Kit](workshop-kit/)** -- Self-contained handouts and starter prompts for web-first faculty workshops.
+2. **[Public Skill Download](docs/downloads/SKILL.md)** -- A docs-hosted copy of the skill file for workshop-friendly download links.
+3. **[Reference Website](https://npuckett.github.io/canvas-design-agent/docs/)** -- A complete documentation site with start-here guidance, step-by-step methods, output type guidance, downloads, examples, and the element catalog.
+4. **[Prompt Templates](docs/prompts/)** -- Markdown source examples for common Canvas page types.
 
 ## Getting the Skill
 
 **Option A: Use the web workshop path** (recommended for most faculty):
 
-1. Download [SKILL.md](.github/SKILL.md), or use the copy in [workshop-kit/SKILL.md](workshop-kit/SKILL.md).
+1. Download [SKILL.md](docs/downloads/SKILL.md) from the public docs download copy.
 2. Open Microsoft Copilot, ChatGPT, or Claude.
 3. Upload `SKILL.md`. If upload is not available, paste the file contents into the chat.
 4. Paste your course content and ask for Canvas-ready HTML.
@@ -103,13 +105,13 @@ Open the folder in your editor if you want to manage prompt files and generated 
 
 **Option C: Download only the skill file for a local project:**
 
-If you already have a project and just need the skill, download [SKILL.md](.github/SKILL.md). You can upload it to a web chat, paste it into a conversation, or place it wherever your local AI editor expects reusable instructions.
+If you already have a project and just need the skill, download [SKILL.md](docs/downloads/SKILL.md). The canonical source remains [.github/SKILL.md](.github/SKILL.md). You can upload the public copy to a web chat, paste it into a conversation, or place it wherever your local AI editor expects reusable instructions.
 
 ## Quick Start
 
 ### New to This? Start Here (No HTML Knowledge Required)
 
-1. Download [SKILL.md](.github/SKILL.md) from this repository, or use [workshop-kit/SKILL.md](workshop-kit/SKILL.md).
+1. Download [SKILL.md](docs/downloads/SKILL.md).
 2. Open Microsoft Copilot in your browser. ChatGPT or Claude can also work.
 3. Upload or paste the contents of SKILL.md into the conversation.
 4. Type or paste your course content in plain text — just describe your page naturally. (See [simple-syllabus.md](docs/prompts/simple-syllabus.md) for an example that uses zero element IDs.)
@@ -120,7 +122,7 @@ That's it. The agent handles the formatting. See the [Your First Page walkthroug
 
 ### Workflow A: Web-Based Agent (Recommended For Workshops)
 
-1. Upload [`.github/SKILL.md`](.github/SKILL.md) to Microsoft Copilot, ChatGPT, or Claude, or paste its contents into a new chat.
+1. Upload [`docs/downloads/SKILL.md`](docs/downloads/SKILL.md) to Microsoft Copilot, ChatGPT, or Claude, or paste its contents into a new chat.
 2. Paste your plain text course content.
 3. Ask the agent to generate Canvas HTML using the skill instructions.
 4. Copy the HTML fragment.
@@ -135,26 +137,35 @@ That's it. The agent handles the formatting. See the [Your First Page walkthroug
 5. The agent writes an `.html` file in your project. Preview it in a browser and keep it under version control.
 6. Open the generated HTML file, copy its contents into Canvas RCE (switch to HTML editor view), and save.
 
-> **See also:** The [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html) on the docs site walks through both workflows in detail, with template examples and a comparison table.
+> **See also:** The [Methods](https://npuckett.github.io/canvas-design-agent/docs/methods.html) page walks through web chat, prompt files, local AI editors, component sketching, and Canvas paste/review workflows.
 
-## Portable Workshop Kit
+## Interaction Methods
 
-The [workshop-kit](workshop-kit/) folder contains self-contained materials that can be copied into a separate workshop repository:
+The documentation site now treats methods as first-class documentation rather than workshop-only handouts:
 
-- participant start-here handout
-- Microsoft Copilot upload guide
-- ChatGPT/Claude alternate guide
-- copy/paste starter prompts
-- sample course notes
-- Canvas paste checklist
-- troubleshooting guide
-- media URL guide
-- facilitator run of show
-- portable copy of `SKILL.md`
+- **[Web Chat](https://npuckett.github.io/canvas-design-agent/docs/methods.html#web-chat)** -- upload or paste `SKILL.md`, paste course content, and ask for Canvas HTML.
+- **[Prompt Files](https://npuckett.github.io/canvas-design-agent/docs/methods.html#prompt-file)** -- keep reusable markdown sources that regenerate Canvas pages.
+- **[Local AI Editor](https://npuckett.github.io/canvas-design-agent/docs/methods.html#local-agent)** -- manage prompts and generated HTML in a local course project.
+- **[Component Sketching](https://npuckett.github.io/canvas-design-agent/docs/methods.html#component-sketching)** -- compare 3-4 tagged Canvas-safe options before generating a full page.
+- **[Canvas Paste and Review](https://npuckett.github.io/canvas-design-agent/docs/methods.html#canvas-review)** -- check that the saved Canvas page survived RCE sanitization.
 
-Refresh [workshop-kit/SKILL.md](workshop-kit/SKILL.md) from [.github/SKILL.md](.github/SKILL.md) before each workshop if the canonical skill changes.
+## Input and Output Types
 
-## Example Prompt Files
+Use the [Outputs](https://npuckett.github.io/canvas-design-agent/docs/outputs.html) page to decide what to give the skill and what to ask it to produce.
+
+Common input types include rough notes, markdown prompt files, element ID requests, course templates, media URLs, and existing Canvas HTML. Common output types include Canvas HTML fragments, component sketch options, reusable prompt files, course page templates, assignment pages, timelines, media galleries, and revision prompts.
+
+## Downloads
+
+The [Downloads](https://npuckett.github.io/canvas-design-agent/docs/downloads.html) page is the public asset hub. It includes:
+
+- [SKILL.md](docs/downloads/SKILL.md) for web chat and local AI workflows
+- prompt templates from [docs/prompts](docs/prompts/)
+- links from each downloadable asset to the relevant method documentation
+
+Workshop-specific handouts can be built around these docs, but the durable source of truth is now the web documentation.
+
+## Prompt Templates
 
 These example prompt files show the markdown input that generates each example page. View them to see the format, then adapt them for your own courses:
 
@@ -168,7 +179,7 @@ These example prompt files show the markdown input that generates each example p
 | [homepage.md](docs/prompts/homepage.md) | [Course Homepage](https://npuckett.github.io/canvas-design-agent/docs/example-homepage.html) | S03, V05, N02, L03, D05 |
 | [assignment-page.md](docs/prompts/assignment-page.md) | [Assignment Page](https://npuckett.github.io/canvas-design-agent/docs/example-assignment.html) | S06, F03, C01, D01, C05 |
 
-See the [Prompt Files section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#prompt-files) of the Guide for a full explanation of the format and tips for writing effective prompts.
+See the [Downloads page](https://npuckett.github.io/canvas-design-agent/docs/downloads.html#prompts) for template descriptions and the [Prompt Files section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#prompt-files) of the Guide for format tips.
 
 ## Example Page Structure
 
@@ -183,9 +194,12 @@ The full reference site is hosted on GitHub Pages:
 **[npuckett.github.io/canvas-design-agent/docs](https://npuckett.github.io/canvas-design-agent/docs/)**
 
 The site includes:
+- **[Downloads](https://npuckett.github.io/canvas-design-agent/docs/downloads.html)** -- Public `SKILL.md` download and prompt templates grouped by use case
+- **[Methods](https://npuckett.github.io/canvas-design-agent/docs/methods.html)** -- Step-by-step workflows for web chat, prompt files, local agents, component sketching, and Canvas paste/review
+- **[Outputs](https://npuckett.github.io/canvas-design-agent/docs/outputs.html)** -- Input types, output types, and common Canvas page archetypes
 - **[Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html)** -- Visual preview of every Canvas-safe HTML element with its ID number
 - **[Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html)** -- Six full page examples (course timeline, class page, project brief, external media gallery, course homepage, assignment page) showing realistic Canvas pages built from the element library
-- **[Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html)** -- Step-by-step workflows for both local and web-based agents, course templates, prompt file format, and a constraints quick reference
+- **[Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html)** -- Start-here walkthrough, prompt file format, course templates, constraints, themes, and troubleshooting
 - **[About](https://npuckett.github.io/canvas-design-agent/docs/about.html)** -- About this project and its author
 
 You can also run the site locally by opening `docs/index.html` in a browser.
@@ -215,7 +229,7 @@ Faculty reference elements by number (e.g., "use C01 for collapsible sections").
 
 **Stripped:** `<style>` blocks, `<script>`, SVG, meter/progress, fieldset/legend, box-shadow, text-shadow, opacity, transform, letter-spacing, external CSS/JS, data URIs.
 
-See [SKILL.md](.github/SKILL.md) for the complete constraint reference, or the [Constraints section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#constraints) on the docs site.
+See [SKILL.md](.github/SKILL.md) for the canonical constraint reference, the public [download copy](docs/downloads/SKILL.md), or the [Constraints section](https://npuckett.github.io/canvas-design-agent/docs/guide.html#constraints) on the docs site.
 
 ## License
 

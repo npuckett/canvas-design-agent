@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methods -- Canvas Design Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #222;
+      line-height: 1.6;
+      background: #fff;
+    }
+    a { color: #222; }
+    a:hover { color: #000; }
+
+    nav {
+      background: #000;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav .brand { font-weight: 700; font-size: 18px; color: #fff; text-decoration: none; }
+    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
+    nav .links a { color: #999; font-size: 15px; text-decoration: none; }
+    nav .links a:hover { color: #fff; }
+
+    .header {
+      padding: 64px 24px 0;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .header h1 {
+      font-size: 30px;
+      font-weight: 800;
+      color: #000;
+    }
+    .header p {
+      font-size: 16px;
+      color: #666;
+      margin-top: 8px;
+    }
+    .toc {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px 24px 0;
+      font-size: 14px;
+    }
+    .toc a { color: #666; margin-right: 16px; }
+    .toc a:hover { color: #000; }
+
+    .content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px 72px;
+    }
+    section { padding-top: 48px; }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #222;
+      margin: 24px 0 8px;
+    }
+    p { margin-bottom: 12px; color: #444; }
+    ul, ol { padding-left: 24px; margin-bottom: 12px; color: #444; }
+    li { margin-bottom: 8px; }
+    strong { color: #222; }
+    code {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: monospace;
+      font-size: 14px;
+      color: #333;
+    }
+    .steps { counter-reset: step; list-style: none; padding-left: 0; }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 44px;
+      min-height: 32px;
+      margin-bottom: 18px;
+    }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .method-note {
+      border-left: 3px solid #ccc;
+      background: #fafafa;
+      padding: 14px 18px;
+      margin: 16px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .method-note p:last-child { margin-bottom: 0; }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 16px 0 4px;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 4px;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .button.secondary {
+      background: #fff;
+      color: #000;
+      border: 1px solid #ccc;
+    }
+    .prompt-box {
+      background: #111;
+      color: #ddd;
+      padding: 18px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      margin: 14px 0;
+    }
+
+    footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Canvas Design Agent</span>
+  <span class="links">
+    <a href="index.html">Home</a>
+    <a href="guide.html">Guide</a>
+    <a href="methods.html">Methods</a>
+    <a href="outputs.html">Outputs</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="downloads.html">Downloads</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
+  </span>
+</nav>
+
+<div class="header">
+  <h1>Methods</h1>
+  <p>Step-by-step ways to use the skill, from a no-code web chat to repeatable prompt-file workflows.</p>
+</div>
+
+<div class="toc">
+  <a href="#web-chat">Web Chat</a>
+  <a href="#prompt-file">Prompt Files</a>
+  <a href="#local-agent">Local Agent</a>
+  <a href="#component-sketching">Component Sketching</a>
+  <a href="#canvas-review">Canvas Review</a>
+</div>
+
+<main class="content">
+
+  <section id="web-chat">
+    <h2>Method 1: Web Chat</h2>
+    <p>This is the recommended first workflow for workshops and occasional use. It works with Microsoft Copilot, ChatGPT, Claude, or another AI chat that can read an uploaded or pasted markdown file.</p>
+    <div class="button-row">
+      <a class="button" href="downloads/SKILL.md" download>Download SKILL.md</a>
+      <a class="button secondary" href="downloads.html">View Downloads</a>
+    </div>
+    <ol class="steps">
+      <li><strong>Download the skill file.</strong> Save <code>SKILL.md</code> from the button above.</li>
+      <li><strong>Open a new AI chat.</strong> Use Microsoft Copilot if that is the supported tool for your institution. ChatGPT and Claude can follow the same pattern.</li>
+      <li><strong>Upload or paste the skill.</strong> If upload is not available, open <code>SKILL.md</code>, copy all text, and paste it into the chat.</li>
+      <li><strong>Paste your course content.</strong> Rough notes, syllabus text, assignment descriptions, or weekly module content are all acceptable.</li>
+      <li><strong>Ask for a Canvas fragment.</strong> Use the prompt below, then let the agent generate the page.</li>
+      <li><strong>Copy the HTML fragment.</strong> Copy only the generated HTML, not any surrounding explanation.</li>
+      <li><strong>Paste into Canvas.</strong> Open the Canvas Rich Content Editor, switch to HTML view, paste, save, and review.</li>
+    </ol>
+    <div class="prompt-box">Use the uploaded Canvas Design Agent skill. Transform my course content into a Canvas-ready HTML fragment using inline styles only. Do not include html, head, body, style, script, SVG, or markdown code fences.</div>
+  </section>
+
+  <section id="prompt-file">
+    <h2>Method 2: Prompt File Workflow</h2>
+    <p>Use this method when you want a reusable source file for a page. The prompt file becomes your editable course material, and the generated HTML becomes the paste-ready Canvas output.</p>
+    <div class="button-row">
+      <a class="button" href="downloads/SKILL.md" download>Download SKILL.md</a>
+      <a class="button secondary" href="downloads.html#prompts">Browse Prompt Templates</a>
+    </div>
+    <ol class="steps">
+      <li><strong>Download the skill file.</strong> Keep it with your course materials or upload it into the chat each time.</li>
+      <li><strong>Choose a prompt template.</strong> Start from a template in <a href="downloads.html#prompts">Downloads</a> or write a new markdown file.</li>
+      <li><strong>Replace the sample content.</strong> Keep the headings and output expectations, but swap in your course material.</li>
+      <li><strong>Generate the Canvas HTML.</strong> Give the prompt file and <code>SKILL.md</code> to the AI agent and ask for a Canvas HTML fragment.</li>
+      <li><strong>Review and save both versions.</strong> Keep the prompt file as the source, and keep the generated HTML if you want a record of what was pasted.</li>
+      <li><strong>Revise by editing the prompt.</strong> When the course changes, update the markdown source and regenerate.</li>
+    </ol>
+    <div class="method-note">
+      <p><strong>Best for:</strong> weekly pages, assignment templates, project briefs, syllabi, schedules, or any page that will be revised and reused.</p>
+    </div>
+  </section>
+
+  <section id="local-agent">
+    <h2>Method 3: Local AI Editor</h2>
+    <p>This method is useful when you manage many course files locally and want prompt files, generated HTML, examples, and notes in the same project folder.</p>
+    <div class="button-row">
+      <a class="button" href="downloads/SKILL.md" download>Download SKILL.md</a>
+      <a class="button secondary" href="guide.html#local-workflow">Guide Summary</a>
+    </div>
+    <ol class="steps">
+      <li><strong>Download or clone the project.</strong> You can use the full repository or just place <code>SKILL.md</code> wherever your AI editor expects reusable instructions.</li>
+      <li><strong>Create course prompt files.</strong> Store each page as a markdown prompt, such as <code>week-03-module.md</code> or <code>project-01-brief.md</code>.</li>
+      <li><strong>Ask the local agent to transform the prompt.</strong> Reference the skill and the prompt file in the same request.</li>
+      <li><strong>Preview the output.</strong> Open generated HTML locally when possible, then make targeted revisions in the prompt.</li>
+      <li><strong>Paste the final fragment into Canvas.</strong> The same Canvas constraints apply: inline styles only, no full document wrapper.</li>
+    </ol>
+    <div class="method-note">
+      <p><strong>Best for:</strong> faculty who are already comfortable in a code editor or who want versioned course content over multiple semesters.</p>
+    </div>
+  </section>
+
+  <section id="component-sketching">
+    <h2>Method 4: Component Sketching</h2>
+    <p>Use component sketching when you are not sure how a schedule, rubric, resource list, callout, or other small piece of content should appear. Instead of asking for a complete page immediately, ask the agent to compare a few Canvas-safe options.</p>
+    <div class="button-row">
+      <a class="button" href="downloads/SKILL.md" download>Download SKILL.md</a>
+      <a class="button secondary" href="examples.html">See Component Example</a>
+    </div>
+    <ol class="steps">
+      <li><strong>Download or upload the skill.</strong> Component sketching is described inside <code>SKILL.md</code>.</li>
+      <li><strong>Paste one focused content problem.</strong> Use schedule data, a grading breakdown, a resource list, or a short note rather than a full course page.</li>
+      <li><strong>Ask for options.</strong> Request 3-4 Canvas-safe sketches with visible tags such as <code>OPTION-A: D05-S01 Schedule Grid</code>.</li>
+      <li><strong>Choose or revise one option.</strong> Ask for changes by tag, combine options, or ask the agent to use a selected option in a complete page.</li>
+      <li><strong>Generate the full page when ready.</strong> Switch back to the full-page workflow and reference the chosen option tag.</li>
+    </ol>
+    <div class="prompt-box">Use the Canvas Design Agent skill in Component Sketching Mode. Show 3-4 Canvas-safe options for the content below. Give each option a reusable tag, make every option inline-styled HTML, and keep the output compatible with Canvas.</div>
+  </section>
+
+  <section id="canvas-review">
+    <h2>Method 5: Canvas Paste And Review</h2>
+    <p>This method is the final quality check for every workflow. Canvas is the real test because the Rich Content Editor sanitizes HTML when you save.</p>
+    <div class="button-row">
+      <a class="button" href="downloads/SKILL.md" download>Download SKILL.md</a>
+      <a class="button secondary" href="guide.html#troubleshooting">Troubleshooting</a>
+    </div>
+    <ol class="steps">
+      <li><strong>Before pasting, scan the output.</strong> Confirm there are no markdown fences, <code>html</code>, <code>head</code>, <code>body</code>, <code>style</code>, or <code>script</code> tags.</li>
+      <li><strong>Open the Canvas HTML editor.</strong> In the Rich Content Editor toolbar, use the <code>&lt;/&gt;</code> HTML editor control, often inside the more-options menu.</li>
+      <li><strong>Paste and save.</strong> Paste the fragment, save the page, and reopen it if needed.</li>
+      <li><strong>Check what survived.</strong> Confirm formatting remains visible, links work, images load, and collapsible sections open when clicked.</li>
+      <li><strong>Revise with a follow-up prompt.</strong> If Canvas strips something, paste the problem area back into the AI chat and ask for Canvas-safe inline HTML only.</li>
+    </ol>
+  </section>
+
+</main>
+
+<footer>
+  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a> · <a href="downloads/SKILL.md" style="color:#999;">SKILL.md</a>
+</footer>
+
+</body>
+</html>
