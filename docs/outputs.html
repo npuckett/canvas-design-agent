@@ -180,7 +180,7 @@
       <a class="button secondary" href="methods.html">Choose a Method</a>
     </div>
     <div class="callout">
-      <p><strong>Most common path:</strong> upload <code>SKILL.md</code>, paste rough course notes, ask for a Canvas HTML fragment, then paste that fragment into Canvas.</p>
+      <p><strong>Most common path:</strong> upload <code>SKILL.md</code>, paste rough course notes, ask for Canvas-ready HTML source, then paste that source into Canvas's HTML editor view.</p>
     </div>
   </section>
 
@@ -228,7 +228,7 @@
         <tr>
           <td><strong>Canvas HTML Fragment</strong></td>
           <td>The default paste-ready output for Canvas pages, assignments, announcements, and module content.</td>
-          <td>"Output only a Canvas HTML fragment with inline styles."</td>
+          <td>"Create Canvas-ready HTML source with inline styles. Use a downloadable canvas-fragment.html file or artifact when possible."</td>
         </tr>
         <tr>
           <td><strong>Component Sketch Options</strong></td>
@@ -287,10 +287,12 @@
   <section id="rules">
     <h2>Output Format Rules</h2>
     <ul>
+      <li>Use HTML source, not a rendered visual preview.</li>
       <li>Use an HTML fragment, not a full web page.</li>
+      <li>Use a downloadable source file or artifact when the AI tool supports it.</li>
       <li>Use inline <code>style=""</code> attributes only.</li>
       <li>Do not include <code>html</code>, <code>head</code>, <code>body</code>, <code>style</code>, <code>script</code>, or SVG.</li>
-      <li>Do not wrap paste-ready HTML in a markdown code fence unless you are saving it outside Canvas first.</li>
+      <li>If source appears in a code block, copy only the HTML inside the block. Do not paste backticks into Canvas.</li>
       <li>Use absolute URLs for images and iframes.</li>
       <li>Keep critical deadlines and instructions visible without requiring collapsible sections.</li>
     </ul>

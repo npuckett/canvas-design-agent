@@ -253,7 +253,7 @@
     <ol class="steps">
       <li><strong>Get the skill file.</strong> Download <code>SKILL.md</code> from the public docs download. This single file contains the Canvas constraints and element templates.</li>
       <li><strong>Open a web AI chat.</strong> Microsoft Copilot is the recommended workshop path when your organization supports it. ChatGPT or Claude can also work.</li>
-      <li><strong>Upload or paste <code>SKILL.md</code>.</strong> If file upload is unavailable, open the file, copy all text, and paste it into the chat.</li>
+      <li><strong>Paste or upload <code>SKILL.md</code>.</strong> Open the file, copy all text, and paste it into the chat; uploading the file also works when your tool handles uploads well. The top of the file tells the AI to treat it as instructions and reply when ready.</li>
       <li><strong>Write your content.</strong> Describe your page in plain text -- schedules, assignments, resources, anything. Element IDs are optional.</li>
       <li><strong>Paste into Canvas.</strong> Open your Canvas page, switch to the HTML editor (<code>&lt;/&gt;</code> icon in RCE), paste the generated HTML, and save.</li>
     </ol>
@@ -311,19 +311,19 @@ Participation: 10%</div>
       <li>
         <strong>Give it to an AI agent along with SKILL.md.</strong>
         <ul style="margin-top: 8px;">
-          <li><strong>Recommended workshop workflow:</strong> Open Microsoft Copilot in your browser. Upload or paste the contents of <a href="downloads/SKILL.md">SKILL.md</a>, then paste your content and say <em>"Use the uploaded Canvas Design Agent skill. Transform this into a Canvas-ready HTML fragment using inline styles only."</em></li>
+          <li><strong>Recommended workshop workflow:</strong> Open Microsoft Copilot in your browser. Paste the contents of <a href="downloads/SKILL.md">SKILL.md</a> into the chat, or upload it if your tool handles uploads well. The starter prompt at the top of the file should make the AI reply that it is ready; then paste your content and any preferences.</li>
           <li><strong>Other web tools:</strong> ChatGPT and Claude can follow the same attach-or-paste workflow.</li>
           <li><strong>Advanced local workflow:</strong> If you use VS Code or another AI editor, you can keep prompt files and generated HTML locally, but this is not required for the workshop.</li>
         </ul>
       </li>
       <li>
-        <strong>Paste the HTML into Canvas.</strong> The agent returns HTML code. To put it in Canvas:
+        <strong>Paste the HTML source into Canvas.</strong> The agent returns downloadable source HTML or raw HTML source in chat. Do not copy a rendered visual preview. To put the source in Canvas:
         <ol type="a" style="margin-top: 8px;">
           <li>Open your Canvas course and navigate to the page you want to edit (or create a new one).</li>
           <li>Click <strong>Edit</strong>.</li>
           <li>In the Rich Content Editor toolbar, click the <strong>HTML editor</strong> icon -- it looks like <code>&lt;/&gt;</code> and is usually in the toolbar's overflow menu (click <strong>⋮</strong> or <strong>more options</strong> if you don't see it).</li>
           <li>Select all existing content in the HTML view and delete it.</li>
-          <li>Paste the generated HTML.</li>
+          <li>Paste the generated HTML source.</li>
           <li>Click <strong>Save</strong> (or <strong>Save &amp; Publish</strong>).</li>
         </ol>
       </li>
@@ -347,18 +347,19 @@ Participation: 10%</div>
   <!-- WEB WORKFLOW -->
   <section id="web-workflow">
     <h2>Workflow A: Web-Based Agent (Recommended)</h2>
-    <p>Best for workshops and first-time users. Microsoft Copilot is the recommended organizational path; ChatGPT and Claude can follow the same upload-or-paste pattern.</p>
+    <p>Best for workshops and first-time users. Microsoft Copilot is the recommended organizational path; ChatGPT and Claude can follow the same paste-or-upload pattern.</p>
 
     <ol class="steps">
-      <li><strong>Upload the skill.</strong> Start a new conversation. Upload or paste the contents of <code>SKILL.md</code>. This gives the AI all Canvas constraints and element templates it needs.</li>
+      <li><strong>Paste the skill.</strong> Start a new conversation. Open <code>SKILL.md</code>, copy all text, and paste it into the chat. Uploading the file also works when your tool handles uploads well.</li>
+      <li><strong>Wait for ready.</strong> The starter prompt at the top of <code>SKILL.md</code> tells the AI to treat the file as instructions and ask for course content.</li>
       <li><strong>Provide your content.</strong> Type or paste your page content in the same conversation. Describe what kind of page it is and what elements you want.</li>
-      <li><strong>Ask for a fragment.</strong> Say: <em>"Output only a Canvas HTML fragment. No html, head, body, style, script, SVG, or markdown code fence."</em></li>
-      <li><strong>Copy the HTML.</strong> Copy the generated fragment. If it includes explanations, copy only the HTML part.</li>
+      <li><strong>Add preferences if needed.</strong> You can ask for a theme, layout, or element ID; the skill already tells the AI to produce Canvas-ready HTML source with inline styles.</li>
+      <li><strong>Copy the HTML source.</strong> Copy from the source file or from inside the raw-code block. Do not copy a rendered preview or surrounding explanation.</li>
       <li><strong>Paste into Canvas.</strong> Open Canvas RCE's HTML editor view, paste, save, and review.</li>
     </ol>
 
     <div class="callout">
-      <p><strong>Upload not available?</strong> Open <code>SKILL.md</code>, copy all of its text, paste it into the chat, and tell the AI: <em>"Treat this as the instruction set for this conversation."</em></p>
+      <p><strong>Why paste the whole file?</strong> The first section of <code>SKILL.md</code> is written as a web-chat starter prompt, so pasted-file workflows do not require a separate setup prompt.</p>
     </div>
   </section>
 
@@ -370,7 +371,7 @@ Participation: 10%</div>
     <ol class="steps">
       <li><strong>Set up the skill.</strong> Put <code>SKILL.md</code> where your local AI editor expects reusable instructions. This location varies by tool.</li>
       <li><strong>Create a prompt file.</strong> Write your page content in a <code>.md</code> file. Use plain language and optional element IDs.</li>
-      <li><strong>Ask the agent to generate HTML.</strong> Example: <em>"Transform this into a Canvas HTML fragment using the skill."</em></li>
+      <li><strong>Ask the agent to generate HTML.</strong> Example: <em>"Transform this into Canvas-ready HTML source using the skill. Create a canvas-fragment.html source file if you can; otherwise show raw HTML source in chat."</em></li>
       <li><strong>Review the HTML file.</strong> Preview it in a browser, keep it with your course files, and regenerate when your content changes.</li>
       <li><strong>Paste into Canvas.</strong> Copy the generated HTML into Canvas RCE's HTML editor view and save.</li>
     </ol>
@@ -431,7 +432,7 @@ Participation: 10%</div>
     <ol>
       <li><strong>Task</strong> -- A sentence telling the agent what kind of Canvas page to create.</li>
       <li><strong>Style and layout</strong> -- Optional theme, mood, layout, or element preferences.</li>
-      <li><strong>Accessibility and output expectations</strong> -- A short reminder to use accessible structure and output only a Canvas HTML fragment.</li>
+      <li><strong>Accessibility and output expectations</strong> -- A short reminder to use accessible structure and provide Canvas-ready HTML source.</li>
       <li><strong>Content sections</strong> -- Your actual page content organized with markdown headings.</li>
     </ol>
 
@@ -446,9 +447,11 @@ Participation: 10%</div>
 
   ## Output Expectations
 
-  - Output a Canvas HTML fragment only
+  - Provide Canvas-ready HTML source
   - Use inline styles only
-  - Do not include html, head, body, style, script, SVG, or markdown code fences
+  - Create a downloadable canvas-fragment.html source file if the tool supports files or artifacts
+  - If no file output is available, show raw HTML source in chat
+  - Do not include html, head, body, style, script, or SVG
 
 ## Header
 Class 03: Sensor Fundamentals
@@ -757,8 +760,9 @@ Important dates: T02 highlighted in yellow</div>
 
     <h3>Before you paste into Canvas</h3>
     <ul>
+      <li>The output is HTML source, not a rendered visual preview.</li>
       <li>The output is an HTML fragment, not a full web page.</li>
-      <li>There are no markdown code fences around the HTML.</li>
+      <li>If the source appears in a code block, copy only the HTML inside it. Do not paste the backticks into Canvas.</li>
       <li>There are no <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>, <code>&lt;style&gt;</code>, or <code>&lt;script&gt;</code> tags.</li>
       <li>Images use full URLs or clear placeholders such as <code>[CANVAS_IMAGE_URL]</code>.</li>
       <li>Important deadlines and instructions are visible without opening a collapsed section.</li>
@@ -774,7 +778,10 @@ Important dates: T02 highlighted in yellow</div>
     </ul>
 
     <h3>If the AI output looks wrong</h3>
-    <p>Send this follow-up prompt: <em>"Please revise this for Canvas. Output only an HTML fragment with inline styles. Remove markdown fences, html/head/body tags, style tags, script tags, unsupported CSS, and relative image paths."</em></p>
+    <p>Send this follow-up prompt: <em>"Please revise this for Canvas. Provide Canvas-ready HTML source with inline styles only. If you can create files or artifacts, create a downloadable canvas-fragment.html source file. If not, show raw HTML source in chat. Remove html/head/body tags, style tags, script tags, SVG, unsupported CSS, and relative image paths."</em></p>
+
+    <h3>The chat shows a rendered preview instead of HTML source</h3>
+    <p>Ask for the source again: <em>"Show the raw HTML source for this Canvas fragment. Do not show a rendered preview. If needed, put the source inside an html code block and I will copy only the code inside the block."</em></p>
 
     <h3>My formatting disappeared after saving</h3>
     <p>Canvas strips <code>&lt;style&gt;</code> blocks, <code>&lt;script&gt;</code> tags, and certain CSS properties when you save. If your formatting vanished, the HTML likely used one of these stripped features. Regenerate the page and tell the agent: <em>"Make sure all styles are inline -- no &lt;style&gt; blocks."</em> The SKILL.md file prevents this, but if you're editing HTML manually, keep all styles in <code>style=""</code> attributes.</p>

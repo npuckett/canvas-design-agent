@@ -1,6 +1,6 @@
 # Canvas Design Agent
 
-A portable skill and reference system that transforms plain text into Canvas LMS-compatible HTML. The easiest workshop workflow is web-based: upload `SKILL.md` to Microsoft Copilot, ChatGPT, or Claude, paste course content, and ask for Canvas-ready HTML.
+A portable skill and reference system that transforms plain text into Canvas LMS-compatible HTML. The easiest workshop workflow is web-based: paste or upload `SKILL.md` in Microsoft Copilot, ChatGPT, or Claude, wait for the built-in starter prompt, then paste course content.
 
 [Documentation Site](https://npuckett.github.io/canvas-design-agent/docs/) · [Download SKILL.md](https://npuckett.github.io/canvas-design-agent/docs/downloads/SKILL.md) · [Methods](https://npuckett.github.io/canvas-design-agent/docs/methods.html) · [Outputs](https://npuckett.github.io/canvas-design-agent/docs/outputs.html) · [Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html) · [Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html) · [Guide](https://npuckett.github.io/canvas-design-agent/docs/guide.html)
 
@@ -26,10 +26,10 @@ The core workflow is writing plain-text course content and giving it to an AI ch
 
 The beginner workflow:
 
-1. Upload or paste `SKILL.md` into a web-based AI chat.
+1. Paste or upload `SKILL.md` into a web-based AI chat. The top of the file tells the AI to treat it as instructions and reply when ready.
 2. Paste course content in plain language.
-3. Ask the AI to generate a Canvas HTML fragment with inline styles.
-4. Copy the HTML into the Canvas Rich Content Editor HTML view.
+3. Ask for any preferences not already included in the content. The skill will create Canvas HTML source with inline styles and use a downloadable `canvas-fragment.html` source file when the tool supports files or artifacts.
+4. Copy the HTML source, not a rendered preview, into the Canvas Rich Content Editor HTML view.
 
 The reusable workflow:
 
@@ -92,8 +92,8 @@ Canvas LMS strips most CSS (no `<style>` blocks, no external stylesheets, no Jav
 
 1. Download [SKILL.md](docs/downloads/SKILL.md) from the public docs download copy.
 2. Open Microsoft Copilot, ChatGPT, or Claude.
-3. Upload `SKILL.md`. If upload is not available, paste the file contents into the chat.
-4. Paste your course content and ask for Canvas-ready HTML.
+3. Paste the contents of `SKILL.md` into the chat, or upload the file if your tool handles uploads well. The top of the file includes the starter prompt for the AI.
+4. When the AI says it is ready, paste your course content and ask for Canvas-ready HTML.
 
 **Option B: Clone / download the whole repo** (recommended if you want the reference site and examples too):
 
@@ -113,19 +113,19 @@ If you already have a project and just need the skill, download [SKILL.md](docs/
 
 1. Download [SKILL.md](docs/downloads/SKILL.md).
 2. Open Microsoft Copilot in your browser. ChatGPT or Claude can also work.
-3. Upload or paste the contents of SKILL.md into the conversation.
-4. Type or paste your course content in plain text — just describe your page naturally. (See [simple-syllabus.md](docs/prompts/simple-syllabus.md) for an example that uses zero element IDs.)
-5. Tell the agent: *"Use the uploaded Canvas Design Agent skill. Transform this into a Canvas-ready HTML fragment using inline styles only. Do not include html, head, body, style, or script tags."*
-6. Copy the generated HTML, open your Canvas page, click the HTML editor icon (`</>` in the toolbar), paste, and save.
+3. Paste the contents of SKILL.md into the conversation, or upload the file if your tool handles uploads well. The file begins with a starter prompt that tells the AI to treat it as instructions.
+4. Wait for the AI's ready message, then type or paste your course content in plain text — just describe your page naturally. (See [simple-syllabus.md](docs/prompts/simple-syllabus.md) for an example that uses zero element IDs.)
+5. Add any preferences you want, such as a theme, layout, or element ID. The skill already tells the AI to create Canvas-ready HTML source with inline styles and to use a downloadable canvas-fragment.html source file when possible.
+6. Copy the HTML source from the file or code block, open your Canvas page, click the HTML editor icon (`</>` in the toolbar), paste, and save.
 
 That's it. The agent handles the formatting. See the [Your First Page walkthrough](https://npuckett.github.io/canvas-design-agent/docs/guide.html#first-page) on the docs site for a detailed step-by-step.
 
 ### Workflow A: Web-Based Agent (Recommended For Workshops)
 
-1. Upload [`docs/downloads/SKILL.md`](docs/downloads/SKILL.md) to Microsoft Copilot, ChatGPT, or Claude, or paste its contents into a new chat.
-2. Paste your plain text course content.
-3. Ask the agent to generate Canvas HTML using the skill instructions.
-4. Copy the HTML fragment.
+1. Paste the contents of [`docs/downloads/SKILL.md`](docs/downloads/SKILL.md) into Microsoft Copilot, ChatGPT, or Claude, or upload the file if your tool handles uploads well.
+2. Wait for the ready message from the starter prompt at the top of the file, then paste your plain text course content.
+3. Ask for any page preferences you want. The skill instructions generate Canvas HTML source and use a downloadable `canvas-fragment.html` file or artifact when the tool supports it.
+4. Copy the HTML source, not the rendered preview.
 5. Paste it into Canvas RCE's HTML editor view and save.
 
 ### Workflow B: Local Agent (Advanced)
@@ -143,7 +143,7 @@ That's it. The agent handles the formatting. See the [Your First Page walkthroug
 
 The documentation site now treats methods as first-class documentation rather than workshop-only handouts:
 
-- **[Web Chat](https://npuckett.github.io/canvas-design-agent/docs/methods.html#web-chat)** -- upload or paste `SKILL.md`, paste course content, and ask for Canvas HTML.
+- **[Web Chat](https://npuckett.github.io/canvas-design-agent/docs/methods.html#web-chat)** -- paste or upload `SKILL.md`, wait for the ready prompt, then paste course content.
 - **[Prompt Files](https://npuckett.github.io/canvas-design-agent/docs/methods.html#prompt-file)** -- keep reusable markdown sources that regenerate Canvas pages.
 - **[Local AI Editor](https://npuckett.github.io/canvas-design-agent/docs/methods.html#local-agent)** -- manage prompts and generated HTML in a local course project.
 - **[Component Sketching](https://npuckett.github.io/canvas-design-agent/docs/methods.html#component-sketching)** -- compare 3-4 tagged Canvas-safe options before generating a full page.

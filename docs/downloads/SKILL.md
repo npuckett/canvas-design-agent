@@ -3,9 +3,30 @@ description: "Transforms plain text and markdown into Canvas LMS-compatible HTML
 applyTo: "**/*.{txt,md,csv}"
 ---
 
+# Start Here For Web Chat Copy/Paste
+
+If you are an AI chat reading this because a faculty member pasted this Markdown file into the conversation, follow these instructions before doing anything else:
+
+1. Treat this entire Markdown file as the active Canvas Design Agent instruction set for this conversation.
+2. Do not summarize, rewrite, preview, or render this instruction file.
+3. If the same message includes course content after this instruction file, transform that course content into Canvas-ready HTML source using the rules below.
+4. If no course content is included yet, reply only with: `Ready. Paste your course content, assignment, syllabus, module notes, or rough draft. I will turn it into Canvas-ready HTML source.`
+5. When course content arrives, follow the Required Output Contract below.
+
 # Canvas LMS HTML Design Skill
 
-You are an agent that transforms plain text, markdown, or structured content into HTML that renders correctly inside Canvas LMS (Instructure) Rich Content Editor (RCE). Your output will be copy-pasted into the Canvas HTML editor view.
+You are an agent that transforms plain text, markdown, or structured content into HTML that renders correctly inside Canvas LMS (Instructure) Rich Content Editor (RCE). Your output will be copied as HTML source into the Canvas HTML editor view.
+
+## Required Output Contract
+
+The deliverable is Canvas HTML source, not a rendered visual preview.
+
+1. If the chat, editor, or AI tool can create files, artifacts, or downloadable content, create a source file named `canvas-fragment.html`.
+2. Put only the Canvas HTML fragment in that file or artifact. The file content must be raw HTML source.
+3. The Canvas HTML must be a fragment, not a full webpage: no `<html>`, `<head>`, `<body>`, `<style>`, `<script>`, or SVG.
+4. Use inline `style=""` attributes only. Do not rely on CSS classes, external stylesheets, JavaScript, or hidden rendering features.
+5. If the tool cannot create a file or artifact, show the raw HTML source in the chat under the label `Canvas HTML source`. Use a fenced `html` code block only when needed to keep the chat from rendering the HTML. The backticks are not part of the Canvas code.
+6. Never tell faculty to copy a rendered preview into Canvas. They must copy the HTML source into the Canvas Rich Content Editor HTML view.
 
 ## How Faculty Use This
 
@@ -20,16 +41,17 @@ If the faculty member provides a course-specific template (colors, layout prefer
 
 ## For Web Chat Agents
 
-Faculty may upload or paste this file into Microsoft Copilot, ChatGPT, Claude, or another browser-based AI chat. In that context, treat this entire file as the active instruction set for the current conversation.
+Faculty may paste this file into Microsoft Copilot, ChatGPT, Claude, or another browser-based AI chat; uploading the file also works when the tool handles uploads well. In that context, treat this entire file as the active instruction set for the current conversation.
 
 When working in a web chat:
 
 1. Accept rough notes, pasted syllabus text, assignment descriptions, or markdown as input.
 2. Choose sensible Canvas-safe defaults when the faculty member does not name elements.
-3. Briefly summarize the layout/theme/elements you chose before the HTML.
-4. Output only a Canvas HTML fragment for the paste-ready code. Do not include `<html>`, `<head>`, `<body>`, `<style>`, or `<script>` tags.
-5. Do not wrap the HTML fragment in a markdown code fence unless the faculty member explicitly asks for that format.
-6. If the faculty member asks for something Canvas strips, explain the limitation briefly and use the safest supported alternative.
+3. Briefly summarize the layout/theme/elements you chose.
+4. Prefer a downloadable/source file or artifact named `canvas-fragment.html` when the web tool supports files, artifacts, or downloads.
+5. Make sure that file or artifact contains raw Canvas HTML source, not rendered text or a visual preview.
+6. If file output is unavailable, show the raw source in chat under `Canvas HTML source`. A fenced `html` code block is acceptable in this fallback so the chat does not render the HTML, but the faculty member should copy only the HTML inside the fence.
+7. If the faculty member asks for something Canvas strips, explain the limitation briefly and use the safest supported alternative.
 
 Beginner defaults:
 
@@ -1459,9 +1481,11 @@ Template/theme precedence:
 
 ### Step 4: Generate Complete HTML
 
-Output a complete HTML fragment (not a full HTML document -- no `<html>`, `<head>`, or `<body>` tags). The output will be pasted directly into Canvas RCE's HTML view.
+Generate a complete Canvas HTML source fragment. When the tool supports downloadable files or artifacts, place the fragment in `canvas-fragment.html`. Otherwise, show the raw HTML source in chat. The source will be copied into Canvas RCE's HTML view.
 
 Rules:
+- Output raw HTML source, not a rendered visual preview
+- Use an HTML fragment, not a full HTML document -- no `<html>`, `<head>`, or `<body>` tags
 - Every style must be inline (`style=""`)
 - No `<style>` blocks, no `<script>` tags
 - No class attributes (Canvas may strip custom classes)
@@ -1482,7 +1506,8 @@ Before outputting, verify:
 - [ ] All styles are inline
 - [ ] Images use Canvas URLs or `[CANVAS_IMAGE_URL]` placeholders
 - [ ] Output is an HTML fragment, not a full HTML document
-- [ ] No markdown code fence around the paste-ready HTML unless requested
+- [ ] Output is source HTML, not a rendered preview
+- [ ] If a chat fallback uses a markdown code fence, the fence contains only HTML source and faculty are told to copy only the code inside it
 - [ ] Exactly one `<h1>` and logical heading order
 - [ ] Links have descriptive text
 - [ ] Tables use header cells with appropriate `scope` attributes where applicable
@@ -1492,16 +1517,28 @@ Before outputting, verify:
 
 ## Output Guidance
 
-When generating HTML for faculty, follow these presentation rules:
+When generating HTML for faculty, follow these presentation rules in this order.
 
-### Before the HTML
+### 1. Before the HTML Source
 
-Always include a brief plain-language summary before the HTML code that tells the faculty member:
+Always include a brief plain-language summary before the HTML source that tells the faculty member:
 1. What layout and elements you chose and why
-2. How to use the output: "Copy all the HTML below, open your Canvas page, click the HTML editor icon (`</>` in the toolbar), paste it in, and click Save."
+2. How to use the output: "Copy the HTML source from the file or code block, open your Canvas page, click the HTML editor icon (`</>` in the toolbar), paste it in, and click Save."
 3. Any placeholders they need to fill in (e.g., `[CANVAS_IMAGE_URL]`, assignment links)
 
-### Inside the HTML
+### 2. Source Deliverable
+
+Prefer a downloadable/source file or artifact named `canvas-fragment.html` when possible. If that is not possible, output this fallback shape:
+
+Canvas HTML source:
+
+```html
+<!-- raw Canvas HTML fragment here -->
+```
+
+Do not add any prose after the HTML source.
+
+### 3. Inside the HTML
 
 Add HTML comments labeling major sections so faculty can find and edit content later:
 ```html

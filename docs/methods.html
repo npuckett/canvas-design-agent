@@ -198,7 +198,7 @@
 
   <section id="web-chat">
     <h2>Method 1: Web Chat</h2>
-    <p>This is the recommended first workflow for workshops and occasional use. It works with Microsoft Copilot, ChatGPT, Claude, or another AI chat that can read an uploaded or pasted markdown file.</p>
+    <p>This is the recommended first workflow for workshops and occasional use. It works with Microsoft Copilot, ChatGPT, Claude, or another AI chat that can read a pasted markdown file or file upload.</p>
     <div class="button-row">
       <a class="button" href="downloads/SKILL.md" download>Download SKILL.md</a>
       <a class="button secondary" href="downloads.html">View Downloads</a>
@@ -206,13 +206,14 @@
     <ol class="steps">
       <li><strong>Download the skill file.</strong> Save <code>SKILL.md</code> from the button above.</li>
       <li><strong>Open a new AI chat.</strong> Use Microsoft Copilot if that is the supported tool for your institution. ChatGPT and Claude can follow the same pattern.</li>
-      <li><strong>Upload or paste the skill.</strong> If upload is not available, open <code>SKILL.md</code>, copy all text, and paste it into the chat.</li>
+      <li><strong>Paste the skill.</strong> Open <code>SKILL.md</code>, copy all text, and paste it into the chat. Uploading the file also works when your tool handles uploads well.</li>
+      <li><strong>Wait for ready.</strong> The starter prompt at the top of <code>SKILL.md</code> tells the AI to treat the file as instructions and ask for course content.</li>
       <li><strong>Paste your course content.</strong> Rough notes, syllabus text, assignment descriptions, or weekly module content are all acceptable.</li>
-      <li><strong>Ask for a Canvas fragment.</strong> Use the prompt below, then let the agent generate the page.</li>
-      <li><strong>Copy the HTML fragment.</strong> Copy only the generated HTML, not any surrounding explanation.</li>
+      <li><strong>Add preferences if needed.</strong> Ask for a theme, layout, or element ID. The skill already tells the AI to generate Canvas-ready HTML source.</li>
+      <li><strong>Copy the HTML source.</strong> Use the downloadable source file or artifact when available. If the source appears in chat, copy only the HTML source, not a rendered preview or surrounding explanation.</li>
       <li><strong>Paste into Canvas.</strong> Open the Canvas Rich Content Editor, switch to HTML view, paste, save, and review.</li>
     </ol>
-    <div class="prompt-box">Use the uploaded Canvas Design Agent skill. Transform my course content into a Canvas-ready HTML fragment using inline styles only. Do not include html, head, body, style, script, SVG, or markdown code fences.</div>
+    <div class="prompt-box">Paste the full contents of SKILL.md first. When the AI replies that it is ready, paste your course content and any preferences, such as theme, layout, or element IDs.</div>
   </section>
 
   <section id="prompt-file">
@@ -226,7 +227,7 @@
       <li><strong>Download the skill file.</strong> Keep it with your course materials or upload it into the chat each time.</li>
       <li><strong>Choose a prompt template.</strong> Start from a template in <a href="downloads.html#prompts">Downloads</a> or write a new markdown file.</li>
       <li><strong>Replace the sample content.</strong> Keep the headings and output expectations, but swap in your course material.</li>
-      <li><strong>Generate the Canvas HTML.</strong> Give the prompt file and <code>SKILL.md</code> to the AI agent and ask for a Canvas HTML fragment.</li>
+      <li><strong>Generate the Canvas HTML.</strong> Give the prompt file and <code>SKILL.md</code> to the AI agent and ask for Canvas-ready HTML source. Use a downloadable source file when the tool supports it.</li>
       <li><strong>Review and save both versions.</strong> Keep the prompt file as the source, and keep the generated HTML if you want a record of what was pasted.</li>
       <li><strong>Revise by editing the prompt.</strong> When the course changes, update the markdown source and regenerate.</li>
     </ol>
