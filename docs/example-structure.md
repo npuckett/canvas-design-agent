@@ -75,7 +75,6 @@ Class-based CSS for the navigation bar, hero, layout containers, headings, tag g
     <a href="index.html">Home</a>
     <a href="elements.html">Elements</a>
     <a href="examples.html">Examples</a>
-    <a href="guide.html">Guide</a>
     <a href="about.html">About</a>
     <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
   </div>
