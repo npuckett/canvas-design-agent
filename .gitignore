@@ -1,0 +1,6 @@
+# large Canvas export packages and build output
+*.imscc
+dist/
+
+# OS noise
+.DS_Store

@@ -1,0 +1,7 @@
+# build output
+dist/
+*.imscc
+
+# OS noise
+.DS_Store
+Thumbs.db
