@@ -4,6 +4,11 @@
 #   ./app/build.sh                 build unsigned
 #   ./app/build.sh --sign "Developer ID Application: Name (TEAMID)"
 #   ./app/build.sh --sign "..." --notarize "Keychain Profile Name"
+#   ./app/build.sh --sign "..." --notarize "..." --dmg 0.1
+#
+# --dmg additionally produces app/dist/CanvasDesigner-<v>-macOS-<arch>.dmg
+# (app + /Applications symlink), signs/notarizes/staples the DMG itself,
+# and writes a .sha256 sidecar — ready for `gh release create`.
 #
 # The notary profile is a keychain profile created once with
 # `xcrun notarytool store-credentials` — no credentials live in this repo.
@@ -15,15 +20,20 @@ APP="$REPO/app"
 PY="${PYTHON:-/opt/homebrew/bin/python3.12}"
 SIGN_ID=""
 NOTARY_PROFILE=""
+DMG_VERSION=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --sign) SIGN_ID="$2"; shift 2 ;;
     --notarize) NOTARY_PROFILE="$2"; shift 2 ;;
+    --dmg) DMG_VERSION="$2"; shift 2 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
 done
 if [[ -n "$NOTARY_PROFILE" && -z "$SIGN_ID" ]]; then
   echo "--notarize requires --sign" >&2; exit 2
+fi
+if [[ -n "$DMG_VERSION" && ( -z "$SIGN_ID" || -z "$NOTARY_PROFILE" ) ]]; then
+  echo "--dmg requires --sign and --notarize" >&2; exit 2
 fi
 
 cd "$APP"
@@ -64,6 +74,25 @@ if [[ -n "$NOTARY_PROFILE" ]]; then
   xcrun stapler validate "$APP_BUNDLE"
   spctl --assess --type execute -v "$APP_BUNDLE" || true
   rm -f "$NOTARY_ZIP"
+fi
+
+if [[ -n "$DMG_VERSION" ]]; then
+  ARCH="$(uname -m)"
+  DMG="$APP/dist/CanvasDesigner-$DMG_VERSION-macOS-$ARCH.dmg"
+  STAGING="$APP/build/dmg-staging"
+  rm -rf "$STAGING" "$DMG" "$DMG.sha256"
+  mkdir -p "$STAGING"
+  ditto "$APP_BUNDLE" "$STAGING/Canvas Designer.app"
+  ln -s /Applications "$STAGING/Applications"
+  hdiutil create -volname "Canvas Designer $DMG_VERSION" \
+    -srcfolder "$STAGING" -ov -format UDZO "$DMG"
+  codesign --force --timestamp --sign "$SIGN_ID" "$DMG"
+  xcrun notarytool submit "$DMG" \
+    --keychain-profile "$NOTARY_PROFILE" --wait --timeout 1h
+  xcrun stapler staple "$DMG"
+  hdiutil verify "$DMG"
+  (cd "$APP/dist" && shasum -a 256 "$(basename "$DMG")" > "$(basename "$DMG").sha256")
+  echo "DMG: $DMG"
 fi
 
 echo "Built: $APP_BUNDLE"
