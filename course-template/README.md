@@ -75,7 +75,12 @@ Package** → pick the file → All Content. Re-importing after edits updates
 existing content instead of duplicating it.
 
 No AI tools? Everything is editable by hand — each file documents its own
-format, and [tools/README.md](tools/README.md) is the full reference.
+format, and [tools/README.md](tools/README.md) is the full reference. Or
+edit visually: `python3 tools/designer.py .` opens the
+[Canvas Designer](tools/designer/README.md), a local block editor with the
+whole element library as an insertable palette, theme switching, and the
+package build behind one button. Designer, agent, and hand editing all work
+on the same files.
 
 ## Customizing your course identity
 

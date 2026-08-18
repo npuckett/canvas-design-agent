@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canvas Designer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ left: course files ============ -->
+  <aside id="sidebar">
+    <div class="side-head">
+      <div id="course-name">Loading…</div>
+      <div id="course-root" class="dim"></div>
+    </div>
+    <div class="side-section">
+      <div class="side-title">
+        <span>Pages</span>
+        <button class="mini" id="new-page" title="New page">+</button>
+      </div>
+      <ul id="page-list" class="file-list"></ul>
+    </div>
+    <div class="side-section">
+      <div class="side-title">
+        <span>Assignments</span>
+        <button class="mini" id="new-assignment" title="New assignment">+</button>
+      </div>
+      <ul id="assignment-list" class="file-list"></ul>
+    </div>
+    <div class="side-foot">
+      <button id="build-btn" class="wide">Build .imscc package</button>
+    </div>
+  </aside>
+
+  <!-- ============ center: editor ============ -->
+  <main id="editor">
+    <div id="toolbar">
+      <span id="doc-title" class="dim">No file open</span>
+      <span id="dirty-dot" title="Unsaved changes" hidden>●</span>
+      <span class="spacer"></span>
+      <label class="tb-label">Theme
+        <select id="theme-select"></select>
+      </label>
+      <button id="style-edit-btn" title="Customize this theme / create a course style">✎ Style</button>
+      <button id="undo-btn" title="Undo last block change" disabled>Undo</button>
+      <button id="lint-btn" title="Canvas-safety check">✓ Canvas-safe</button>
+      <button id="save-btn" class="primary" disabled>Save</button>
+    </div>
+    <div id="canvas-scroll">
+      <div id="canvas-page">
+        <div id="canvas" class="empty-hint">Choose a page or assignment from the left to start editing.</div>
+      </div>
+    </div>
+    <!-- floating block toolbar -->
+    <div id="blk-tools" hidden>
+      <span id="blk-crumb"></span>
+      <button data-act="up" title="Move up">↑</button>
+      <button data-act="down" title="Move down">↓</button>
+      <button data-act="dup" title="Duplicate">⧉</button>
+      <button data-act="html" title="Edit HTML">&lt;/&gt;</button>
+      <button data-act="del" title="Delete block" class="danger">✕</button>
+    </div>
+  </main>
+
+  <!-- ============ right: palette + inspector ============ -->
+  <aside id="panel">
+    <div id="panel-tabs">
+      <button data-tab="insert" class="active">Insert</button>
+      <button data-tab="settings">Settings</button>
+    </div>
+    <div id="tab-insert" class="tab-body">
+      <input id="palette-search" type="search" placeholder="Filter elements…">
+      <div id="palette"></div>
+    </div>
+    <div id="tab-settings" class="tab-body" hidden>
+      <div id="fm-form" class="dim">Open a file to edit its settings.</div>
+    </div>
+  </aside>
+</div>
+
+<!-- ============ modals ============ -->
+<dialog id="html-modal">
+  <h3>Block HTML</h3>
+  <textarea id="html-editor" spellcheck="false"></textarea>
+  <div class="dialog-row">
+    <button id="html-cancel">Cancel</button>
+    <button id="html-apply" class="primary">Apply</button>
+  </div>
+</dialog>
+
+<dialog id="msg-modal">
+  <h3 id="msg-title"></h3>
+  <pre id="msg-body"></pre>
+  <div class="dialog-row">
+    <button id="msg-close" class="primary">Close</button>
+  </div>
+</dialog>
+
+<dialog id="style-modal">
+  <h3>Course style</h3>
+  <div class="style-grid">
+    <label class="field">Name <input id="st-name" placeholder="My Course Style"></label>
+    <label class="field">Start from
+      <select id="st-base"></select>
+    </label>
+    <div id="st-colors" class="color-grid"></div>
+    <label class="field">Font
+      <select id="st-font"></select>
+    </label>
+    <label class="field" id="st-font-custom-wrap" hidden>Custom font stack
+      <input id="st-font-custom" placeholder="Georgia, serif">
+    </label>
+    <label class="field">Corner radius
+      <select id="st-radius">
+        <option value="0px">Square (0px)</option>
+        <option value="4px">Subtle (4px)</option>
+        <option value="8px">Rounded (8px)</option>
+        <option value="12px">Very rounded (12px)</option>
+      </select>
+    </label>
+    <label class="field check"><input type="checkbox" id="st-grad-on"> Gradient page header</label>
+    <div id="st-grad-colors">
+      <label class="field">Header from <input type="color" id="st-grad-a"></label>
+      <label class="field">Header to <input type="color" id="st-grad-b"></label>
+    </div>
+    <label class="field check"><input type="checkbox" id="st-default"> Use as this course's default style</label>
+  </div>
+  <div class="dialog-row">
+    <button id="st-delete" class="danger" hidden>Delete style</button>
+    <span class="spacer"></span>
+    <button id="st-cancel">Cancel</button>
+    <button id="st-save" class="primary">Save &amp; apply</button>
+  </div>
+</dialog>
+
+<dialog id="new-modal">
+  <h3 id="new-title">New page</h3>
+  <label class="field">Title <input id="new-doc-title" placeholder="Class 2 - Prototyping"></label>
+  <label class="field">Filename <input id="new-doc-slug" placeholder="class-2"><span class="dim">.md</span></label>
+  <div class="dialog-row">
+    <button id="new-cancel">Cancel</button>
+    <button id="new-create" class="primary">Create</button>
+  </div>
+</dialog>
+
+<script src="catalog.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

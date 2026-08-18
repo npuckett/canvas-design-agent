@@ -30,6 +30,8 @@ Web chat is the easiest way to try the skill, but the more reasonable workflow f
 - **Course-wide changes are one instruction** — "shift all due dates a week later", "restyle every class page" — the agent edits many files, you review the diff, rebuild, re-import.
 - **Next semester is a copy of the folder** with new dates.
 
+The repo is also editable **without any AI tool**: `python3 tools/designer.py .` opens the [Canvas Designer](tools/designer/README.md), a local visual block editor over the same files — insert elements from the catalog, switch themes, edit assignment settings, and build the import package from a browser. The agent and the designer read and write the same format, so they are interchangeable creation options, not competing ones.
+
 Start from the **[canvas-course-template](https://github.com/npuckett/canvas-course-template)** repository — a self-contained starter with the skill file, build tools, agent instructions, style template, and starter content. Click **"Use this template"** on GitHub to create your own course repo, or grab a copy without an account:
 
 ```bash

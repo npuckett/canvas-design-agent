@@ -10,6 +10,12 @@ syllabus.
 All tools are single-file Python scripts with **no dependencies** — any
 Python 3.9+ works (`python3` on macOS, `py -3` on Windows).
 
+> **Prefer editing visually?** `python3 tools/designer.py .` opens the
+> [Canvas Designer](designer/README.md) — a local browser-based block editor
+> over the same files, with the full element library as an insertable
+> palette, theme switching, and a one-click package build. No AI tool
+> required.
+
 > **Faculty-friendly version:** the [Workflows page](https://npuckett.github.io/canvas-design-agent/docs/workflows.html)
 > on the docs site covers the same three methods with step-by-step
 > instructions and a decision guide. This file is the full technical
