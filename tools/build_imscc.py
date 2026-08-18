@@ -556,7 +556,7 @@ def xml_manifest(course: dict, course_id: str, pages: list[dict], assignments: l
 # Build
 # ---------------------------------------------------------------------------
 
-def build(source: Path, output: Path) -> None:
+def build(source: Path, output: Path, only: list[str] | None = None) -> None:
     course = load_course(source)
     code = course["course_code"]
     course_id = stable_id(code, "course", "")
@@ -612,6 +612,41 @@ def build(source: Path, output: Path) -> None:
     if syllabus_body is not None:
         syllabus_body = rewrite_wiki_links(syllabus_body)
 
+    # Partial build: emit only the requested items. Link rewriting above used
+    # the FULL page list, so links to pages not in this package still resolve
+    # by migration id against content from earlier imports.
+    partial = bool(only)
+    if partial:
+        keep_pages, keep_assignments, keep_syllabus = [], [], False
+        lookup: dict[str, tuple[str, dict]] = {}
+        for p in pages:
+            for key in (f"pages/{p['slug']}.md", f"pages/{p['slug']}", p["slug"]):
+                lookup[key] = ("page", p)
+        for a in assignments:
+            for key in (f"assignments/{a['slug']}.md", f"assignments/{a['slug']}"):
+                lookup[key] = ("assignment", a)
+        for entry in only:
+            key = entry.replace("\\", "/").lstrip("./")
+            if key in ("syllabus.md", "syllabus"):
+                keep_syllabus = True
+                continue
+            kind_item = lookup.get(key)
+            if kind_item is None:
+                sys.exit(f"error: --only {entry!r} matches no page or assignment "
+                         "(use a path like pages/class-7.md or assignments/project-2.md)")
+            kind, item = kind_item
+            (keep_pages if kind == "page" else keep_assignments).append(item)
+        pages = [p for p in pages if p in keep_pages]
+        assignments = [a for a in assignments if a in keep_assignments]
+        if not keep_syllabus:
+            syllabus_body = None
+        if modules:
+            print("note: partial build — modules.md skipped (module structure "
+                  "is only written on full builds)")
+            modules = []
+        web_paths = []
+        front_pages = [p for p in pages if p.get("front_page")]
+
     files: dict[str, bytes] = {}
 
     def add(path: str, content: str, validate_xml: bool = False) -> None:
@@ -647,7 +682,7 @@ def build(source: Path, output: Path) -> None:
         for rel in web_paths:
             zf.write(web_dir / rel, f"web_resources/{rel}")
 
-    print(f"Built {output}")
+    print(f"Built {output}" + (" (partial)" if partial else ""))
     print(f"  course:      {course['title']}")
     print(f"  pages:       {len(pages)}" + (f" (front page: {front_pages[0]['slug']})" if front_pages else ""))
     print(f"  assignments: {len(assignments)}")
@@ -665,12 +700,17 @@ def main() -> None:
     parser.add_argument("source", type=Path, help="course source folder (contains course.md)")
     parser.add_argument("-o", "--output", type=Path, default=None,
                         help="output .imscc path (default: <source-name>.imscc next to the folder)")
+    parser.add_argument("--only", action="append", default=[], metavar="FILE",
+                        help="build a partial package with just this page/assignment "
+                             "(e.g. pages/class-7.md; repeatable; 'syllabus.md' also allowed). "
+                             "Assignment groups are always included so weights stay in sync; "
+                             "modules and web_resources are skipped")
     args = parser.parse_args()
     source = args.source.resolve()
     if not source.is_dir():
         sys.exit(f"error: {source} is not a directory")
     output = args.output or source.parent / f"{source.name}.imscc"
-    build(source, output)
+    build(source, output, args.only)
 
 
 if __name__ == "__main__":

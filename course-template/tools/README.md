@@ -220,7 +220,48 @@ rewrites them to real `/courses/:id/...` paths.
 Each `#` heading is a module; items reference pages and assignments by their
 filename slug. `header:` adds a text divider, `url:` an external link.
 
+## Keeping a live course in sync during the semester
+
+Once a course is managed from a source folder, you never need to re-export
+from Canvas. The folder is the source of truth and sync is one-directional:
+edit or add files → rebuild → import. Because identifiers are stable,
+imports **update matching content in place** and simply add anything new.
+
+Three levels of granularity, all ending at the same Import button:
+
+- **Full rebuild** (the default): `python3 tools/build_imscc.py my-course`
+  and import All Content. Unchanged items are re-imported identically, so
+  this is always safe — it just touches everything.
+- **Partial package** with `--only`: ship exactly the items you changed or
+  added this week:
+
+  ```bash
+  python3 tools/build_imscc.py my-course \
+      --only pages/class-7.md --only assignments/project-2.md
+  ```
+
+  The package contains just those items (plus assignment groups, so grade
+  weights stay in sync). Links to pages *not* in the package still resolve,
+  because they reference stable migration ids from earlier imports. Modules
+  and `web_resources/` are only written on full builds.
+- **Canvas-side selection**: import a full package but choose "Select
+  specific content" instead of "All Content" during import, then tick just
+  the items you want. Same result as `--only`, no extra build.
+
+Two things imports **don't** do:
+
+- **Deletes.** Removing a file from the folder doesn't remove the item from
+  Canvas — delete it in Canvas by hand.
+- **Merging.** If you hand-edit an item inside Canvas, the next import that
+  includes that item overwrites the Canvas version. Keep edits in the
+  folder, or use `--only` to keep re-imports away from items you've touched
+  in Canvas.
+
 ## Bulk-update workflow for an existing course
+
+Use this when a course exists **only in Canvas** and you want to start
+managing it from a folder (the one-time bootstrap — not needed once the
+folder exists):
 
 1. **Export** the course: Canvas → Settings → Export Course Content →
    "Course" → download the `.imscc`.

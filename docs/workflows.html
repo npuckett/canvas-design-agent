@@ -41,7 +41,7 @@
     <li><a href="#paste">Publish 1 — Copy &amp; paste</a></li>
     <li><a href="#package">Publish 2 — Course package import</a></li>
     <li><a href="#api">Publish 3 — Direct API sync</a></li>
-    <li><a href="#updating">Updating a course in bulk</a></li>
+    <li><a href="#updating">Keeping a course in sync as the semester goes</a></li>
   </ol>
 </div>
 
@@ -221,8 +221,20 @@ python3 tools/canvas_api_sync.py my-course \
 
 <div class="section" id="updating">
   <div class="kicker">Management</div>
-  <h2>Updating a course in bulk</h2>
-  <p>The package tools work in both directions, which unlocks course-wide edits that would be painful to click through:</p>
+  <h2>Keeping a course in sync as the semester goes</h2>
+  <p>Once your course lives in a repo, you never export from Canvas again — the repo is the source of truth and sync flows one way. Add next week's class page as a new file, tweak an assignment, rebuild, import. Because every item has a stable internal ID, Canvas <strong>updates matching content in place</strong> and adds anything new. Nothing gets duplicated.</p>
+  <p>A package doesn't have to be a whole course, either. Three levels of granularity:</p>
+  <ul>
+    <li><strong>Full rebuild</strong> — <code>python3 tools/build_imscc.py .</code> and import All Content. Always safe: unchanged items are re-imported identically.</li>
+    <li><strong>Partial package</strong> — ship only what changed this week:
+      <pre><code>python3 tools/build_imscc.py . --only pages/class-7.md --only assignments/project-2.md</code></pre>
+      The package contains just those items (grade weights ride along so grading stays in sync), and links to pages outside the package still resolve.</li>
+    <li><strong>Canvas-side selection</strong> — import a full package but pick "Select specific content" instead of "All Content", then tick just the items you want.</li>
+  </ul>
+  <p>Two things imports won't do: they never <strong>delete</strong> (removing a file from the repo doesn't remove the Canvas item — do that in Canvas), and they never <strong>merge</strong> (if you hand-edit an item inside Canvas, the next import that includes it overwrites the Canvas version — so keep edits in the repo, or use a partial package that leaves that item alone).</p>
+
+  <h3>Bootstrapping a repo from an existing Canvas course</h3>
+  <p>The tools also work in reverse — a one-time step for courses that so far exist only in Canvas:</p>
   <ol>
     <li><strong>Export</strong> your existing course: Canvas → Settings → Export Course Content → "Course" → download the <code>.imscc</code>.</li>
     <li><strong>Extract</strong> it into an editable folder:
