@@ -1,245 +1,138 @@
 # Canvas Design Agent
 
-A portable skill and reference system that transforms plain text into Canvas LMS-compatible HTML. The easiest workshop workflow is web-based: paste or upload `SKILL.md` in Microsoft Copilot, ChatGPT, or Claude, wait for the built-in starter prompt, then paste course content.
+Design Canvas LMS courses as plain files — **visually** with the Canvas Designer app, or **with an AI agent** working from a portable skill file — then import the whole course into Canvas in one step.
 
-[Documentation Site](https://npuckett.github.io/canvas-design-agent/docs/) · [Download SKILL.md](https://npuckett.github.io/canvas-design-agent/docs/downloads/SKILL.md) · [Workflows](https://npuckett.github.io/canvas-design-agent/docs/workflows.html) · [Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html) · [Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html) · [Downloads](https://npuckett.github.io/canvas-design-agent/docs/downloads.html)
+[Documentation Site](https://npuckett.github.io/canvas-design-agent/docs/) · [Canvas Designer app](https://npuckett.github.io/canvas-design-agent/docs/designer.html) · [Workflows](https://npuckett.github.io/canvas-design-agent/docs/workflows.html) · [Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html) · [Download SKILL.md](https://npuckett.github.io/canvas-design-agent/docs/downloads/SKILL.md)
 
 ## Table of Contents
 
-- [Course Repos: The Recommended Workflow](#course-repos-the-recommended-workflow)
-- [Bulk Course Creation (No Copy/Paste)](#bulk-course-creation-no-copypaste)
-- [How It Works: Prompt Files](#how-it-works-prompt-files)
-- [What This Is](#what-this-is)
-- [Getting the Skill](#getting-the-skill)
-- [Quick Start](#quick-start)
-- [Three Ways Into Canvas](#three-ways-into-canvas)
-- [Input and Output Types](#input-and-output-types)
-- [Downloads](#downloads)
-- [Prompt Templates](#prompt-templates)
-- [Example Page Structure](#example-page-structure)
-- [Documentation Site](#documentation-site)
+- [The Idea in One Diagram](#the-idea-in-one-diagram)
+- [Method 1: Canvas Designer (Visual, No AI)](#method-1-canvas-designer-visual-no-ai)
+- [Method 2: AI Agent + SKILL.md](#method-2-ai-agent--skillmd)
+- [The Course Repo: The Shared Foundation](#the-course-repo-the-shared-foundation)
+- [Publishing Into Canvas: Three Paths](#publishing-into-canvas-three-paths)
+- [What's In This Repository](#whats-in-this-repository)
+- [Quick Starts](#quick-starts)
 - [Element Numbering System](#element-numbering-system)
 - [Canvas Constraints (Summary)](#canvas-constraints-summary)
 - [License](#license)
 
-## Course Repos: The Recommended Workflow
+## The Idea in One Diagram
 
-Web chat is the easiest way to try the skill, but the more reasonable workflow for actually managing a course is a **course repo**: one folder (ideally under git) that holds your whole course as small text files, driven by an AI coding agent (Claude Code, Cursor, VS Code + Copilot) instead of a chat window. The repo — not Canvas — becomes the source of truth:
-
-- Your **customizations live in the repo** — a `style.md` captures your course's theme, colors, and recurring page sections, and `CLAUDE.md` tells the agent to apply them, so every generated page is consistent without re-explaining.
-- **Course-wide changes are one instruction** — "shift all due dates a week later", "restyle every class page" — the agent edits many files, you review the diff, rebuild, re-import.
-- **Next semester is a copy of the folder** with new dates.
-
-The repo is also editable **without any AI tool**: `python3 tools/designer.py .` opens the [Canvas Designer](tools/designer/README.md), a local visual block editor over the same files — insert elements from the catalog, switch themes, edit assignment settings, and build the import package from a browser. The agent and the designer read and write the same format, so they are interchangeable creation options, not competing ones.
-
-Start from the **[canvas-course-template](https://github.com/npuckett/canvas-course-template)** repository — a self-contained starter with the skill file, build tools, agent instructions, style template, and starter content. Click **"Use this template"** on GitHub to create your own course repo, or grab a copy without an account:
-
-```bash
-npx degit npuckett/canvas-course-template my-course
-```
-
-Open it in your AI coding tool and describe your course; build with `python3 tools/build_imscc.py . -o dist/course.imscc` and import into Canvas. See the [template README](https://github.com/npuckett/canvas-course-template#readme) and the [Workflows page](https://npuckett.github.io/canvas-design-agent/docs/workflows.html#course-repo). (The template's source of truth lives in this repo at [course-template/](course-template/).)
-
-## Bulk Course Creation (No Copy/Paste)
-
-Copy/paste works for single pages, but whole courses can now be built and updated in bulk. The [tools/](tools/) folder contains dependency-free Python scripts that turn a folder of markdown files into a Canvas-importable course package (`.imscc`) — every assignment (points, due dates, submission types, grading type), assignment groups with grade weights and drop rules, wiki pages, modules, the syllabus, and the course front page, all in one import:
-
-```bash
-python3 tools/build_imscc.py my-course        # folder of .md files -> my-course.imscc
-```
-
-Then in Canvas: **Settings → Import Course Content → Canvas Course Export Package**. Identifiers are stable across rebuilds, so editing your markdown and re-importing updates content in place instead of duplicating it.
-
-Also included:
-
-- `extract_imscc.py` — turn an existing Canvas course export back into the editable markdown folder (bootstrap next semester's course from this one)
-- `canvas_api_sync.py` — push individual page/assignment edits straight into Canvas over the REST API, no import step at all (needs an access token)
-
-See [tools/README.md](tools/README.md) for the folder format, a comparison of the three ways to get HTML into Canvas, and a worked example course in [tools/example-course/](tools/example-course/).
-
-## How It Works: Prompt Files
-
-The core workflow is writing plain-text course content and giving it to an AI chat along with `SKILL.md`. Faculty can use a formal `.md` prompt file, but they can also paste rough notes directly into Microsoft Copilot, ChatGPT, or Claude.
-
-The beginner workflow:
-
-1. Paste or upload `SKILL.md` into a web-based AI chat. The top of the file tells the AI to treat it as instructions and reply when ready.
-2. Paste course content in plain language.
-3. Ask for any preferences not already included in the content. The skill will create Canvas HTML source with inline styles and use a downloadable `canvas-fragment.html` source file when the tool supports files or artifacts.
-4. Copy the HTML source, not a rendered preview, into the Canvas Rich Content Editor HTML view.
-
-The reusable workflow:
-
-1. Save the content as a `.md` prompt file.
-2. Regenerate the Canvas HTML whenever the source content changes.
-3. Keep the prompt as the editable source and the generated HTML as the paste-ready output.
+Canvas strips most CSS and many HTML elements — only inline `style=""` attributes and specific elements survive its Rich Content Editor. This project encodes what survives into a catalog of **51 elements and 7 themes**, then gives you two interchangeable ways to build with it. Both write the same **course folder** of plain text files, which builds into a one-shot Canvas import:
 
 ```mermaid
 flowchart LR
-    A["<b>Course Content</b><br/>plain text or <code>.md</code><br/>element IDs optional"] --> C["<b>AI Chat</b><br/>Microsoft Copilot,<br/>ChatGPT, Claude"]
-    B["<b>SKILL.md</b><br/>Element library,<br/>Canvas constraints,<br/>transformation rules"] --> C
-    C --> D["<b>Canvas HTML</b><br/><code>.html</code> with<br/>inline styles only"]
-    D --> E["<b>Canvas LMS</b><br/>Paste into RCE<br/>HTML editor"]
+    UI["<b>Canvas Designer</b><br/>visual block editor<br/>(Mac app or Python script)"] --> REPO
+    AG["<b>AI Agent</b><br/>SKILL.md in a web chat,<br/>or a coding agent"] --> REPO
+    TXT["<b>Any text editor</b><br/>it's just files"] --> REPO
+    REPO["<b>Course folder</b><br/>pages/ · assignments/<br/>modules.md · groups.md"] --> OUT1["<b>.imscc package</b><br/>one Canvas import:<br/>everything"]
+    REPO --> OUT2["<b>Copy &amp; paste</b><br/>single page into the RCE"]
+    REPO --> OUT3["<b>API sync</b><br/>push edits directly"]
 
-    style A fill:#f8f8f8,stroke:#333,color:#000
-    style B fill:#f8f8f8,stroke:#333,color:#000
-    style C fill:#111,stroke:#333,color:#fff
-    style D fill:#f8f8f8,stroke:#333,color:#000
-    style E fill:#111,stroke:#333,color:#fff
+    style UI fill:#eef0fe,stroke:#4f46e5,color:#000
+    style AG fill:#e6f4ef,stroke:#0d7a5f,color:#000
+    style TXT fill:#f8f8f8,stroke:#999,color:#000
+    style REPO fill:#111,stroke:#111,color:#fff
+    style OUT1 fill:#f8f8f8,stroke:#333,color:#000
+    style OUT2 fill:#f8f8f8,stroke:#333,color:#000
+    style OUT3 fill:#f8f8f8,stroke:#333,color:#000
 ```
 
-Here's a minimal prompt file:
+The two creation methods aren't rivals — they read and write the same files. Have an agent draft a semester and polish pages visually, or design one page you love and ask an agent to repeat it for every week.
 
-```markdown
-# Week 3 Class Page
+## Method 1: Canvas Designer (Visual, No AI)
 
-Transform this into a Canvas page using the Canvas Design Agent skill.
-Use the default Clean Modern style and a readable single-column layout.
+A free visual editor for whole Canvas courses. It feels like the Canvas page editor, with three upgrades: every block you insert is **guaranteed to survive the Canvas sanitizer**, your **whole course** is open at once, and assignment settings (points, due dates, grading) are a form beside the content.
 
-## Header
-Class 03: Sensor Fundamentals
-CART 310 · Week 3 · September 22, 2026
+- **[Download for Mac](https://github.com/npuckett/canvas-design-agent/releases/latest)** — signed and notarized DMG, Apple Silicon. Drag to Applications.
+- **Any platform, no install** — the app is a shell around one dependency-free script that ships in every course repo:
 
-## Agenda
-1. Review: Input/Output exercise (10 min)
-2. Lecture: Sensor types and applications (40 min)
-3. Break (10 min)
-4. Lab: Sensor workshop (60 min)
+  ```bash
+  python3 tools/designer.py .
+  ```
 
-## Resources (collapsible)
-- Slides: sensor-fundamentals.pdf
-- Arduino sensor starter kit docs
-- Recommended: Igoe, "Making Things Talk" Ch. 4
+Features: click-to-insert palette of the full element library (with live themed previews), nested layout editing with breadcrumbs, theme switching, a custom style editor (saved to `styles.json`, which AI agents also honor), assignment settings forms, a deterministic Canvas-safety checker, new-course scaffolding, and a one-click `.imscc` build. Everything is local — no accounts, no cloud, no AI calls.
+
+Full tour: **[Designer page](https://npuckett.github.io/canvas-design-agent/docs/designer.html)** · Technical notes: [tools/designer/README.md](tools/designer/README.md)
+
+## Method 2: AI Agent + SKILL.md
+
+**[SKILL.md](.github/SKILL.md)** is a portable instruction file containing the Canvas constraints, the numbered element library, and transformation rules. Any AI that reads it can turn plain course notes into Canvas-ready HTML. Two sizes:
+
+### Web chat — single pages, zero setup
+
+1. Paste the contents of [SKILL.md](docs/downloads/SKILL.md) into Microsoft Copilot, ChatGPT, or Claude (or upload the file). The top of the file tells the AI what to do; wait for its ready message.
+2. Paste your course content in plain language — rough notes are fine.
+3. Copy the **HTML source** it produces (not the rendered preview) into the Canvas RCE HTML view (`</>` icon).
+
+### Coding agent in a course repo — whole courses
+
+Open a [course repo](#the-course-repo-the-shared-foundation) in Claude Code, Cursor, or VS Code + Copilot. The repo's `CLAUDE.md` and `SKILL.md` teach the agent the rules automatically, and you work in plain language:
+
+> "Create class pages for weeks 1–6 from my notes in notes.txt, using our course style."
+>
+> "Add Project 2: 100 points, letter grade, PDF upload, due Oct 30, under the Projects group."
+>
+> "Shift every due date after reading week one week later, then rebuild."
+
+The agent writes one file per page/assignment; you review the diff, rebuild, re-import. [Prompt templates](docs/prompts/) show good input formats for common page types.
+
+## The Course Repo: The Shared Foundation
+
+Both methods work best on a **course repo**: one folder (ideally under git) holding your whole course as small text files. The repo — not Canvas — is the source of truth:
+
+- **Customizations live in the repo** — `style.md` captures your theme and recurring sections; `styles.json` holds Designer-made custom styles; agents and the Designer both apply them, so every page is consistent.
+- **Course-wide changes are cheap** — one sentence to an agent, or one theme switch in the Designer.
+- **Next semester is a copy of the folder** with new dates.
+
+Every `.md` file is **front matter (settings) + body (Canvas-safe HTML fragment)**:
+
+```
+my-course/
+├── course.md          course title, code, timezone
+├── style.md           your course's visual identity
+├── styles.json        custom styles from the Designer (optional)
+├── groups.md          grading scheme (weights, drop rules)
+├── modules.md         week-by-week module structure
+├── syllabus.md
+├── assignments/       one .md file per assignment (points, due date + HTML)
+├── pages/             one .md file per page
+└── web_resources/     images/files shipped into Canvas
 ```
 
-The agent reads this content plus `SKILL.md`, then outputs Canvas-ready HTML with inline styles. When your content changes, edit the prompt and regenerate.
+**Get one:** the Designer app's **New course** button scaffolds this structure, or start from the **[canvas-course-template](https://github.com/npuckett/canvas-course-template)** repository ("Use this template" on GitHub, or `npx degit npuckett/canvas-course-template my-course`). The template bundles the tools, the skill file, agent instructions, and the Designer script; its source of truth is [course-template/](course-template/) in this repo.
 
-## What This Is
+## Publishing Into Canvas: Three Paths
 
-Canvas LMS strips most CSS (no `<style>` blocks, no external stylesheets, no JavaScript) and many HTML elements. Only inline `style=""` attributes and specific HTML elements survive the Rich Content Editor (RCE). This project provides:
+However you create content, three ways to get it into your course — documented step-by-step on the [Workflows page](https://npuckett.github.io/canvas-design-agent/docs/workflows.html):
 
-1. **[SKILL.md](.github/SKILL.md)** -- A portable instruction file containing Canvas constraints, a numbered element library, and transformation rules. It can be uploaded or pasted into web-based AI chats.
-2. **[Public Skill Download](docs/downloads/SKILL.md)** -- A docs-hosted copy of the skill file for workshop-friendly download links.
-3. **[Reference Website](https://npuckett.github.io/canvas-design-agent/docs/)** -- A complete documentation site with start-here guidance, step-by-step methods, output type guidance, downloads, examples, and the element catalog.
-4. **[Prompt Templates](docs/prompts/)** -- Markdown source examples for common Canvas page types.
-5. **[Course-Building Tools](tools/)** -- Dependency-free Python scripts that package a folder of markdown files into a Canvas-importable `.imscc` course (assignments with grading, weighted groups, pages, modules, syllabus), extract existing Canvas exports back into editable files, and sync content over the Canvas REST API.
-6. **[Course Repo Template](https://github.com/npuckett/canvas-course-template)** -- A self-contained GitHub template repository ("Use this template" button) for managing a course as a repo with an AI coding agent: skill file, tools, agent instructions, and a course style template. Maintained here in [course-template/](course-template/).
+1. **[Copy & Paste](https://npuckett.github.io/canvas-design-agent/docs/workflows.html#paste)** — paste one page's HTML into the Canvas RCE HTML view. No setup; assignment settings still clicked by hand.
+2. **[Course Package Import](https://npuckett.github.io/canvas-design-agent/docs/workflows.html#package)** — build a `.imscc` with [tools/build_imscc.py](tools/build_imscc.py) (or the Designer's Build button) and import it via Settings → Import Course Content. Carries *everything*: pages, assignments with points/due dates/submission types/grading, weighted assignment groups, modules, syllabus, home page. Identifiers are stable, so re-imports **update in place** instead of duplicating. Needs no special permissions.
+3. **[Direct API Sync](https://npuckett.github.io/canvas-design-agent/docs/workflows.html#api)** — push pages and assignments straight into Canvas with [tools/canvas_api_sync.py](tools/canvas_api_sync.py). Fully hands-off, but requires a Canvas access token (some institutions disable self-service tokens).
 
-## Getting the Skill
+There's also the reverse direction: [tools/extract_imscc.py](tools/extract_imscc.py) turns an existing Canvas course export back into an editable course folder — bootstrap next semester's repo from this year's course.
 
-**Option A: Use the web workshop path** (recommended for most faculty):
+## What's In This Repository
 
-1. Download [SKILL.md](docs/downloads/SKILL.md) from the public docs download copy.
-2. Open Microsoft Copilot, ChatGPT, or Claude.
-3. Paste the contents of `SKILL.md` into the chat, or upload the file if your tool handles uploads well. The top of the file includes the starter prompt for the AI.
-4. When the AI says it is ready, paste your course content and ask for Canvas-ready HTML.
+1. **[Canvas Designer](tools/designer.py)** — the visual editor: stdlib-only local server + [tools/designer/](tools/designer/) frontend, plus the [Mac app shell](app/) and its signed-release build pipeline. Releases on the [Releases page](https://github.com/npuckett/canvas-design-agent/releases).
+2. **[SKILL.md](.github/SKILL.md)** — the portable AI instruction file (public download copy in [docs/downloads/](docs/downloads/)).
+3. **[Course-building tools](tools/)** — dependency-free Python: `build_imscc.py`, `extract_imscc.py`, `canvas_api_sync.py`. Full format reference in [tools/README.md](tools/README.md); worked example in [tools/example-course/](tools/example-course/).
+4. **[Course repo template](course-template/)** — source of truth for the [canvas-course-template](https://github.com/npuckett/canvas-course-template) starter repository.
+5. **[Documentation site](docs/)** — the [reference site](https://npuckett.github.io/canvas-design-agent/docs/): Designer, workflows, element catalog, examples, downloads.
+6. **[Prompt templates](docs/prompts/)** — markdown input examples for common Canvas page types.
 
-**Option B: Clone / download the whole repo** (recommended if you want the reference site and examples too):
+## Quick Starts
 
-```
-git clone https://github.com/npuckett/canvas-design-agent.git
-```
+**Visual, five minutes:** [download the Designer](https://github.com/npuckett/canvas-design-agent/releases/latest) → New course → insert blocks from the palette → Build → import the `.imscc` in Canvas (Settings → Import Course Content → Canvas Course Export Package).
 
-Open the folder in your editor if you want to manage prompt files and generated HTML locally. Local agent behavior varies by editor, so the web upload path above is the most reliable beginner workflow.
+**AI, five minutes:** download [SKILL.md](docs/downloads/SKILL.md) → paste it into Copilot/ChatGPT/Claude → paste your notes → copy the HTML into a Canvas page's HTML editor (`</>`).
 
-**Option C: Download only the skill file for a local project:**
-
-If you already have a project and just need the skill, download [SKILL.md](docs/downloads/SKILL.md). The canonical source remains [.github/SKILL.md](.github/SKILL.md). You can upload the public copy to a web chat, paste it into a conversation, or place it wherever your local AI editor expects reusable instructions.
-
-## Quick Start
-
-### New to This? Start Here (No HTML Knowledge Required)
-
-1. Download [SKILL.md](docs/downloads/SKILL.md).
-2. Open Microsoft Copilot in your browser. ChatGPT or Claude can also work.
-3. Paste the contents of SKILL.md into the conversation, or upload the file if your tool handles uploads well. The file begins with a starter prompt that tells the AI to treat it as instructions.
-4. Wait for the AI's ready message, then type or paste your course content in plain text — just describe your page naturally. (See [simple-syllabus.md](docs/prompts/simple-syllabus.md) for an example that uses zero element IDs.)
-5. Add any preferences you want, such as a theme, layout, or element ID. The skill already tells the AI to create Canvas-ready HTML source with inline styles and to use a downloadable canvas-fragment.html source file when possible.
-6. Copy the HTML source from the file or code block, open your Canvas page, click the HTML editor icon (`</>` in the toolbar), paste, and save.
-
-That's it. The agent handles the formatting. See the [Copy & Paste walkthrough](https://npuckett.github.io/canvas-design-agent/docs/workflows.html#paste) on the docs site for a detailed step-by-step.
-
-### Workflow A: Web-Based Agent (Recommended For Workshops)
-
-1. Paste the contents of [`docs/downloads/SKILL.md`](docs/downloads/SKILL.md) into Microsoft Copilot, ChatGPT, or Claude, or upload the file if your tool handles uploads well.
-2. Wait for the ready message from the starter prompt at the top of the file, then paste your plain text course content.
-3. Ask for any page preferences you want. The skill instructions generate Canvas HTML source and use a downloadable `canvas-fragment.html` file or artifact when the tool supports it.
-4. Copy the HTML source, not the rendered preview.
-5. Paste it into Canvas RCE's HTML editor view and save.
-
-### Workflow B: Course Repo with a Local Agent (Recommended for Managing a Course)
-
-1. Create your course repo from [canvas-course-template](https://github.com/npuckett/canvas-course-template) — "Use this template" on GitHub, or `npx degit npuckett/canvas-course-template my-course` (see [Course Repos](#course-repos-the-recommended-workflow) above). It ships with `SKILL.md`, the build tools, and `CLAUDE.md` agent instructions.
-2. Open the folder in your AI coding tool (Claude Code, Cursor, VS Code + Copilot). The agent picks up the instructions automatically.
-3. Fill in `course.md` (title, code, timezone), `groups.md` (grading scheme), and `style.md` (your course's look and recurring sections) — or just describe them to the agent.
-4. Give the agent your course content in plain language: *"Create class pages for weeks 1–6 from these notes."* It writes one markdown file per page/assignment, with Canvas-safe HTML inside.
-5. Build the import package: `python3 tools/build_imscc.py . -o dist/course.imscc`
-6. Canvas → Settings → Import Course Content → "Canvas Course Export Package". Re-import after edits to update in place — no copy/paste at any step.
-
-> **See also:** The [Workflows](https://npuckett.github.io/canvas-design-agent/docs/workflows.html) page walks through all three paths for getting content into Canvas, with step-by-step instructions for each.
-
-## Three Ways Into Canvas
-
-However you generate the HTML, there are three ways to get it into your course — documented in full on the [Workflows](https://npuckett.github.io/canvas-design-agent/docs/workflows.html) page:
-
-1. **[Copy & Paste](https://npuckett.github.io/canvas-design-agent/docs/workflows.html#paste)** -- paste generated HTML into the Canvas RCE HTML view (`</>` icon). No setup; one page at a time; assignment settings still set by hand in Canvas.
-2. **[Course Package Import](https://npuckett.github.io/canvas-design-agent/docs/workflows.html#package)** -- build a `.imscc` package with [tools/build_imscc.py](tools/build_imscc.py) and import it via Settings → Import Course Content. Carries everything: pages, assignments with points/due dates/submission types/grading, weighted assignment groups, modules, and the syllabus. Re-imports update in place. Needs no special permissions.
-3. **[Direct API Sync](https://npuckett.github.io/canvas-design-agent/docs/workflows.html#api)** -- push pages and assignments straight into Canvas with [tools/canvas_api_sync.py](tools/canvas_api_sync.py). Fully hands-off, but requires a Canvas access token (Account → Settings → "+ New Access Token" — some institutions disable this; the Workflows page shows how to check yours).
-
-## Input and Output Types
-
-Common input types include rough notes, markdown prompt files, element ID requests, course templates, media URLs, existing Canvas HTML, and full Canvas course exports (via [tools/extract_imscc.py](tools/extract_imscc.py)). Common output types include Canvas HTML fragments, component sketch options, reusable prompt files, course page templates, assignment pages, timelines, media galleries, and complete importable course packages.
-
-## Downloads
-
-The [Downloads](https://npuckett.github.io/canvas-design-agent/docs/downloads.html) page is the public asset hub. It includes:
-
-- [SKILL.md](docs/downloads/SKILL.md) for web chat and local AI workflows
-- prompt templates from [docs/prompts](docs/prompts/)
-- links from each downloadable asset to the relevant method documentation
-
-Workshop-specific handouts can be built around these docs, but the durable source of truth is now the web documentation.
-
-## Prompt Templates
-
-These example prompt files show the markdown input that generates each example page. View them to see the format, then adapt them for your own courses:
-
-| Prompt File | Generated Example | Key Elements |
-|---|---|---|
-| [simple-syllabus.md](docs/prompts/simple-syllabus.md) | *(beginner — no element IDs)* | Agent's choice |
-| [course-timeline.md](docs/prompts/course-timeline.md) | [Course Timeline](https://npuckett.github.io/canvas-design-agent/docs/example-course-timeline.html) | V05, D05, D07, C01 |
-| [class-page.md](docs/prompts/class-page.md) | [Class Page](https://npuckett.github.io/canvas-design-agent/docs/example-class-page.html) | V02, L03, C06, C01 |
-| [project-brief.md](docs/prompts/project-brief.md) | [Project Brief](https://npuckett.github.io/canvas-design-agent/docs/example-project-brief.html) | V05, L04, D01, D07 |
-| [gallery-page.md](docs/prompts/gallery-page.md) | [External Media Gallery](https://npuckett.github.io/canvas-design-agent/docs/example-external-media.html) | E01, E02, E03, L03, C01 |
-| [homepage.md](docs/prompts/homepage.md) | [Course Homepage](https://npuckett.github.io/canvas-design-agent/docs/example-homepage.html) | S03, V05, N02, L03, D05 |
-| [assignment-page.md](docs/prompts/assignment-page.md) | [Assignment Page](https://npuckett.github.io/canvas-design-agent/docs/example-assignment.html) | S06, F03, C01, D01, C05 |
-
-See the [Downloads page](https://npuckett.github.io/canvas-design-agent/docs/downloads.html) for template descriptions and the [How It Works: Prompt Files](#how-it-works-prompt-files) section above for format tips.
-
-## Example Page Structure
-
-The example HTML pages on the documentation site use a two-part structure: a **documentation wrapper** (site navigation, hero, description) and a **Canvas preview** containing only inline-styled HTML. The [docs/example-structure.md](docs/example-structure.md) file documents this structure for contributors who want to add new examples to the reference site.
-
-> **Note:** This is developer documentation about the reference site's HTML structure — you don't need to read it to use the skill.
-
-## Documentation Site
-
-The full reference site is hosted on GitHub Pages:
-
-**[npuckett.github.io/canvas-design-agent/docs](https://npuckett.github.io/canvas-design-agent/docs/)**
-
-The site includes:
-- **[Workflows](https://npuckett.github.io/canvas-design-agent/docs/workflows.html)** -- The three paths for getting content into Canvas (copy/paste, course package import, API sync), with step-by-step instructions, a decision guide, and the bulk-update workflow
-- **[Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html)** -- Visual preview of every Canvas-safe HTML element with its ID number
-- **[Examples](https://npuckett.github.io/canvas-design-agent/docs/examples.html)** -- Six full page examples (course timeline, class page, project brief, external media gallery, course homepage, assignment page) showing realistic Canvas pages built from the element library
-- **[Downloads](https://npuckett.github.io/canvas-design-agent/docs/downloads.html)** -- Public `SKILL.md` download, prompt templates, and links to the course-building tools
-- **[About](https://npuckett.github.io/canvas-design-agent/docs/about.html)** -- About this project and its author
-
-You can also run the site locally by opening `docs/index.html` in a browser.
+**Managing a real course:** make a repo from [canvas-course-template](https://github.com/npuckett/canvas-course-template) → open it in your AI coding tool and/or the Designer → build with `python3 tools/build_imscc.py . -o dist/course.imscc` → import → re-import after edits to update in place.
 
 ## Element Numbering System
 
-Elements are organized by category with a letter prefix:
+Elements are organized by category with a letter prefix. In the Designer they're the palette; with an AI you can reference them by ID ("use C01 for collapsible sections") or just describe what you want.
 
 | Prefix | Category | Count |
 |--------|----------|-------|
@@ -254,7 +147,7 @@ Elements are organized by category with a letter prefix:
 | S | Style Themes | 7 |
 | F | Font Stacks | 5 |
 
-Faculty reference elements by number (e.g., "use C01 for collapsible sections"). The agent knows the corresponding HTML.
+Browse them all with live previews in the [Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html).
 
 ## Canvas Constraints (Summary)
 
@@ -262,7 +155,7 @@ Faculty reference elements by number (e.g., "use C01 for collapsible sections").
 
 **Stripped:** `<style>` blocks, `<script>`, SVG, meter/progress, fieldset/legend, box-shadow, text-shadow, opacity, transform, letter-spacing, external CSS/JS, data URIs.
 
-See [SKILL.md](.github/SKILL.md) for the canonical constraint reference, or the public [download copy](docs/downloads/SKILL.md).
+See [SKILL.md](.github/SKILL.md) for the canonical constraint reference. The Designer enforces these by construction; its safety checker and the skill's output checks guard hand-written HTML.
 
 ## License
 

@@ -4,181 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Canvas Design Agent</title>
+  <meta name="description" content="Design Canvas LMS courses as plain files — visually with the Canvas Designer app, or with an AI agent. Build everything into one Canvas import.">
+  <link rel="stylesheet" href="site.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #222;
-      line-height: 1.6;
-      background: #fff;
+    .format-strip {
+      background: var(--wash);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 48px 24px;
+      margin-top: 56px;
     }
-    a { color: #222; text-decoration: none; }
-    a:hover { color: #000; }
-
-    /* NAV */
-    nav {
-      background: #000;
-      padding: 16px 24px;
+    .format-strip .inner { max-width: 860px; margin: 0 auto; text-align: center; }
+    .format-strip h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.015em; color: var(--ink); margin-bottom: 10px; }
+    .format-strip > .inner > p { font-size: 15.5px; color: var(--muted); max-width: 640px; margin: 0 auto 28px; }
+    .format-diagram {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
+      align-items: stretch;
+      justify-content: center;
+      gap: 14px;
       flex-wrap: wrap;
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
-    nav .brand { font-weight: 700; font-size: 18px; color: #fff; }
-    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
-    nav .links a { color: #999; font-size: 15px; }
-    nav .links a:hover { color: #fff; }
-
-    /* LAYOUT */
-    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
-
-    /* HEADER */
-    .header {
-      padding: 80px 24px 48px;
-      text-align: center;
+    .format-node {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      font-size: 13.5px;
+      color: var(--body);
+      min-width: 168px;
     }
-    .header h1 {
-      font-size: 36px;
-      font-weight: 800;
-      color: #000;
-      margin-bottom: 12px;
+    .format-node strong { display: block; font-size: 14px; color: var(--ink); margin-bottom: 2px; }
+    .format-node.hub { border-color: var(--ink); border-width: 2px; }
+    .format-node.hub code { background: none; border: none; padding: 0; font-size: 12px; color: var(--muted); }
+    .format-arrow { align-self: center; color: var(--faint); font-size: 20px; }
+    .sources { display: flex; flex-direction: column; gap: 10px; }
+    .sources .format-node.ui { border-left: 4px solid var(--accent); }
+    .sources .format-node.agent { border-left: 4px solid var(--agent); }
+    @media (max-width: 700px) {
+      .format-diagram { flex-direction: column; align-items: center; }
+      .format-arrow { transform: rotate(90deg); }
     }
-    .header p {
-      font-size: 17px;
-      color: #666;
-      max-width: 520px;
-      margin: 0 auto;
-    }
-
-    /* CARDS */
-    .card-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      padding: 0 24px 64px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    @media (max-width: 540px) { .card-grid { grid-template-columns: 1fr; } }
-    .card {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 24px;
-      transition: border-color 0.15s;
-    }
-    .card:hover { border-color: #999; }
-    .card h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #000;
-      margin-bottom: 6px;
-    }
-    .card p {
-      font-size: 14px;
-      color: #666;
-      margin: 0;
-      line-height: 1.5;
-    }
-    .card .arrow {
-      display: inline-block;
-      margin-top: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #000;
-    }
-
-    /* HOW IT WORKS */
-    .how {
-      border-top: 1px solid #e0e0e0;
-      padding: 48px 24px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .how h2 {
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0;
-      color: #999;
-      margin-bottom: 24px;
-    }
-    .how-steps {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-    @media (max-width: 540px) { .how-steps { grid-template-columns: 1fr; } }
-    .how-step .num {
-      font-size: 12px;
-      font-weight: 700;
-      color: #999;
-      margin-bottom: 4px;
-    }
-    .how-step h3 {
-      font-size: 15px;
-      font-weight: 700;
-      color: #000;
-      margin-bottom: 4px;
-    }
-    .how-step p {
-      font-size: 14px;
-      color: #666;
-      margin: 0;
-      line-height: 1.5;
-    }
-
-    /* ELEMENT CATEGORIES */
-    .categories {
-      border-top: 1px solid #e0e0e0;
-      padding: 48px 24px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .categories h2 {
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0;
-      color: #999;
-      margin-bottom: 20px;
-    }
-    .cat-list {
-      display: grid;
-      grid-template-columns: 48px 1fr;
-      gap: 8px 16px;
-      align-items: baseline;
-    }
-    .cat-prefix {
-      font-family: monospace;
-      font-weight: 700;
-      font-size: 15px;
-      color: #000;
-    }
-    .cat-desc {
-      font-size: 14px;
-      color: #666;
-    }
-
-    /* FOOTER */
-    footer {
-      border-top: 1px solid #e0e0e0;
-      padding: 32px 24px;
-      text-align: center;
-      font-size: 13px;
-      color: #999;
-    }
+    .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+    @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
+    .step .num { font-size: 12px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
+    .step h3 { font-size: 15.5px; font-weight: 700; color: var(--ink); margin: 0 0 4px; }
+    .step p { font-size: 14px; color: var(--muted); margin: 0; }
+    .cat-list { display: grid; grid-template-columns: 48px 1fr; gap: 8px 16px; align-items: baseline; }
+    .cat-prefix { font-family: var(--mono); font-weight: 700; font-size: 15px; color: var(--ink); }
+    .cat-desc { font-size: 14px; color: var(--muted); }
   </style>
 </head>
 <body>
 
-<nav>
-  <span class="brand">Canvas Design Agent</span>
+<nav class="site-nav">
+  <a class="brand" href="index.html"><span class="logo"></span>Canvas Design Agent</a>
   <span class="links">
-    <a href="index.html">Home</a>
+    <a href="index.html" class="active">Home</a>
+    <a href="designer.html">Designer</a>
     <a href="workflows.html">Workflows</a>
     <a href="elements.html">Elements</a>
     <a href="examples.html">Examples</a>
@@ -188,76 +70,151 @@
   </span>
 </nav>
 
-<div class="header">
-  <h1>Canvas Design Agent</h1>
-  <p>A portable AI skill and documentation system for turning course content into Canvas LMS-compatible HTML.</p>
+<div class="hero">
+  <span class="eyebrow">For Canvas LMS</span>
+  <h1>Design better Canvas courses,<br>two ways</h1>
+  <p class="lede">Build your course as a folder of plain files — visually with the <strong>Canvas Designer</strong> app, or in plain language with an <strong>AI&nbsp;agent</strong> — then import the whole thing into Canvas in one step.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="designer.html">Get the Designer app</a>
+    <a class="btn btn-ghost" href="workflows.html">See the workflows</a>
+  </div>
 </div>
 
-<div class="card-grid">
-  <a href="workflows.html" class="card">
-    <h3>Workflows</h3>
-    <p>Three ways to get content into Canvas: paste a single page, import a whole course in one package, or sync directly over the API.</p>
-    <span class="arrow">&rarr;</span>
-  </a>
-  <a href="elements.html" class="card">
-    <h3>Element Catalog</h3>
-    <p>Browse optional element IDs for layouts, data displays, callouts, typography, media, and themes.</p>
-    <span class="arrow">&rarr;</span>
-  </a>
-  <a href="examples.html" class="card">
-    <h3>Examples</h3>
-    <p>See finished Canvas pages and component sketches built from the same skill and prompt patterns.</p>
-    <span class="arrow">&rarr;</span>
-  </a>
-  <a href="downloads.html" class="card">
-    <h3>Downloads</h3>
-    <p>Get SKILL.md for your AI chat, prompt templates for common page types, and the course-building tools.</p>
-    <span class="arrow">&rarr;</span>
-  </a>
-</div>
-
-<div class="how">
-  <h2>How It Works</h2>
-  <div class="how-steps">
-    <div class="how-step">
-      <div class="num">01</div>
-      <h3>Canvas has constraints</h3>
-      <p>Canvas strips normal web features like style blocks, scripts, SVG, and some CSS properties.</p>
+<div class="container-wide" style="padding-bottom:0;">
+  <div class="card-grid">
+    <div class="method-card ui">
+      <span class="pill pill-ui">Visual · No AI required</span>
+      <h3>Canvas Designer</h3>
+      <p>A visual page builder that feels like the Canvas editor — but every block it inserts is guaranteed to survive Canvas, and it edits your whole course, not one page at a time.</p>
+      <ul>
+        <li>Click-to-insert palette of every Canvas-safe element</li>
+        <li>Live theme switching and custom course styles</li>
+        <li>Assignment settings (points, due dates, grading) as a form</li>
+        <li>One-click build of the Canvas import package</li>
+        <li>Free Mac app, or a zero-install Python script anywhere</li>
+      </ul>
+      <span class="cta"><a class="btn btn-primary" href="designer.html">Designer &rarr;</a></span>
     </div>
-    <div class="how-step">
-      <div class="num">02</div>
-      <h3>The skill carries the rules</h3>
-      <p>SKILL.md begins with a web-chat starter prompt, then gives the AI Canvas-safe layout rules, element templates, themes, and output checks.</p>
-    </div>
-    <div class="how-step">
-      <div class="num">03</div>
-      <h3>You provide course content</h3>
-      <p>Work in a web chat for single pages, or manage a whole course as a folder of files with an AI coding agent — starting from the <a href="workflows.html#course-repo" style="border-bottom:1px solid #ccc;">course repo template</a>.</p>
-    </div>
-    <div class="how-step">
-      <div class="num">04</div>
-      <h3>The HTML goes into Canvas</h3>
-      <p>Paste a single page into the RCE HTML view, or scale up: package a whole course of pages and assignments into one Canvas import, or push edits over the API. See <a href="workflows.html" style="border-bottom:1px solid #ccc;">Workflows</a>.</p>
+    <div class="method-card agent">
+      <span class="pill pill-agent">AI · Plain language</span>
+      <h3>AI Agent + SKILL.md</h3>
+      <p>Hand an AI the skill file and describe your course in plain words. Works in a free web chat for single pages, or with a coding agent for whole-course generation and bulk edits.</p>
+      <ul>
+        <li>Paste SKILL.md into Copilot, ChatGPT, or Claude — no setup</li>
+        <li>Rough notes in, polished Canvas pages out</li>
+        <li>Coding agents generate an entire course from your notes</li>
+        <li>Bulk edits in one sentence: "shift all due dates a week"</li>
+        <li>Same element library and themes as the Designer</li>
+      </ul>
+      <span class="cta"><a class="btn btn-ghost" href="workflows.html#agent">Agent workflows &rarr;</a></span>
     </div>
   </div>
 </div>
 
-<div class="categories">
-  <h2>Element Categories</h2>
-  <div class="cat-list">
-    <span class="cat-prefix">L</span><span class="cat-desc">Layout -- columns, flexbox, CSS grid, containers</span>
-    <span class="cat-prefix">C</span><span class="cat-desc">Content -- collapsibles, cards, definition lists, checklists</span>
-    <span class="cat-prefix">T</span><span class="cat-desc">Typography -- headings, highlights, blockquotes, keyboard shortcuts</span>
-    <span class="cat-prefix">D</span><span class="cat-desc">Data -- tables, schedule grids, comparison tables, progress bars</span>
-    <span class="cat-prefix">V</span><span class="cat-desc">Visual -- accent boxes, color headers, alerts, badges, gradients</span>
-    <span class="cat-prefix">N</span><span class="cat-desc">Navigation -- anchor links, button-styled links</span>
-    <span class="cat-prefix">X</span><span class="cat-desc">Canvas -- assignment links, file embeds, video/audio players</span>
+<div class="format-strip">
+  <div class="inner">
+    <h2>Both roads lead through the same files</h2>
+    <p>Designer and agent read and write the same <strong>course folder</strong>: one small text file per page and assignment. Mix them freely — sketch visually, restyle with AI, or the reverse — then publish however suits your school.</p>
+    <div class="format-diagram">
+      <div class="sources">
+        <div class="format-node ui"><strong>Canvas Designer</strong>visual block editing</div>
+        <div class="format-node agent"><strong>AI agent</strong>plain-language generation</div>
+        <div class="format-node"><strong>Any text editor</strong>it's just files</div>
+      </div>
+      <span class="format-arrow">&rarr;</span>
+      <div class="format-node hub" style="align-self:center;">
+        <strong>Your course folder</strong>
+        <code>pages/ · assignments/<br>modules.md · groups.md</code>
+      </div>
+      <span class="format-arrow">&rarr;</span>
+      <div class="sources">
+        <div class="format-node"><strong>Package import</strong>whole course, one upload</div>
+        <div class="format-node"><strong>Copy &amp; paste</strong>one page into the editor</div>
+        <div class="format-node"><strong>API sync</strong>push edits instantly</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<footer>
-  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
-  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a>
+<div class="container" style="padding-top:52px;">
+
+  <div class="section" style="border-top:none;margin-top:0;">
+    <div class="kicker">How it works</div>
+    <h2>From notes to a live course</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="num">01</div>
+        <h3>Canvas has strict rules</h3>
+        <p>The Canvas editor strips style blocks, scripts, SVG, and many CSS properties. Most nice-looking HTML dies on paste.</p>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <h3>This project encodes them</h3>
+        <p>A catalog of 51 elements and 7 themes that all survive Canvas — used as the Designer's palette and as the AI's instruction set (SKILL.md).</p>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <h3>You create, either way</h3>
+        <p>Click blocks together in the Designer, or describe pages to an AI. Your course accumulates as readable files you can keep in git.</p>
+      </div>
+      <div class="step">
+        <div class="num">04</div>
+        <h3>One import, everything in</h3>
+        <p>Build a Canvas Course Export Package: all pages, assignments with points and due dates, weighted grading groups, modules, and the syllabus. Re-import to update in place.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="kicker">Explore</div>
+    <h2>Reference &amp; resources</h2>
+    <div class="card-grid">
+      <a href="elements.html" class="card">
+        <h3>Element Catalog</h3>
+        <p>Every Canvas-safe building block with a live preview — layouts, cards, tables, alerts, timelines, media embeds.</p>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a href="examples.html" class="card">
+        <h3>Examples</h3>
+        <p>Finished Canvas pages — homepages, class pages, assignment briefs, timelines — built from the same catalog.</p>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a href="workflows.html" class="card">
+        <h3>Workflows</h3>
+        <p>Choosing between Designer and agent, and the three ways to publish: paste, package import, or API sync.</p>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a href="downloads.html" class="card">
+        <h3>Downloads</h3>
+        <p>The Designer app, SKILL.md for your AI chat, prompt templates, and the course repo template.</p>
+        <span class="arrow">&rarr;</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="kicker">The shared vocabulary</div>
+    <h2>Element categories</h2>
+    <p>Every element has an ID. In the Designer they're the palette; with an AI you can name them ("use C01 for the resources section") or just describe what you want.</p>
+    <div class="cat-list">
+      <span class="cat-prefix">L</span><span class="cat-desc">Layout — columns, flexbox, CSS grid, containers</span>
+      <span class="cat-prefix">C</span><span class="cat-desc">Content — collapsibles, cards, definition lists, checklists</span>
+      <span class="cat-prefix">T</span><span class="cat-desc">Typography — headings, highlights, blockquotes, keyboard shortcuts</span>
+      <span class="cat-prefix">D</span><span class="cat-desc">Data — tables, schedule grids, comparison tables, progress bars</span>
+      <span class="cat-prefix">V</span><span class="cat-desc">Visual — accent boxes, color headers, alerts, badges, gradients</span>
+      <span class="cat-prefix">N</span><span class="cat-desc">Navigation — anchor links, button-styled links</span>
+      <span class="cat-prefix">X</span><span class="cat-desc">Canvas — assignment links, file embeds, video/audio players</span>
+      <span class="cat-prefix">E</span><span class="cat-desc">External media — images, iframes, embedded sketches</span>
+      <span class="cat-prefix">S</span><span class="cat-desc">Style themes — seven complete visual identities</span>
+      <span class="cat-prefix">F</span><span class="cat-desc">Font stacks — five Canvas-safe typeface sets</span>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  Canvas Design Agent — design Canvas LMS courses visually or with AI, from the same plain files.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a> · <a href="about.html">About &amp; license</a>
 </footer>
 
 </body>

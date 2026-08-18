@@ -1,19 +1,28 @@
-# Canvas Designer (v1)
+# Canvas Designer
 
-A local visual page designer for a Canvas course repo. It is a second way to
-create and edit the same files the AI-agent workflow uses — front matter +
-Canvas-safe HTML in `pages/` and `assignments/` — so the two can be mixed
-freely: generate a course with an agent and touch up pages visually, or build
-pages visually and hand the repo to an agent for bulk changes.
+A local visual editor for a Canvas course repo, and the **visual half** of
+this project's two creation methods. It creates and edits the same files the
+AI-agent workflow uses — front matter + Canvas-safe HTML in `pages/` and
+`assignments/` — so the two can be mixed freely: generate a course with an
+agent and touch up pages visually, or build pages visually and hand the repo
+to an agent for bulk changes.
 
-No install, no dependencies:
+Two ways to run it:
 
-```bash
-python3 tools/designer.py .
-```
+- **Mac app** — a signed, notarized build from the
+  [Releases page](https://github.com/npuckett/canvas-design-agent/releases/latest).
+  Open it, pick (or create) a course folder, done. Built from
+  [app/](../../app/) in this repo.
+- **Script, any platform** — no install, no dependencies:
 
-Run it from your course folder (or pass the folder as the first argument). It
-starts a local-only server on `http://127.0.0.1:8730` and opens your browser.
+  ```bash
+  python3 tools/designer.py .
+  ```
+
+  Run it from your course folder (or pass the folder as the first argument).
+  It starts a local-only server and opens the editor in your browser.
+
+Either way, everything is local: no accounts, no cloud, no AI calls.
 
 ## What it does
 
@@ -46,6 +55,9 @@ starts a local-only server on `http://127.0.0.1:8730` and opens your browser.
   palette are safe by construction; the check guards hand-edited HTML.
 - **Assignment settings** — points, due date, group, grading type, submission
   type, published — a form over the same front matter `build_imscc.py` reads.
+- **Course management** — a welcome screen with recent courses, open-folder
+  picking (in the app), and new-course scaffolding that creates the standard
+  folder structure.
 - **Build** — one button runs `tools/build_imscc.py` and produces
   `dist/<course>.imscc`, ready to import into Canvas (Settings → Import
   Course Content → Canvas Course Export Package).
@@ -59,16 +71,18 @@ starts a local-only server on `http://127.0.0.1:8730` and opens your browser.
   if SKILL.md's element HTML or theme tables change, regenerate this file so
   the designer and the skill stay in sync.
 - `index.html`, `app.js`, `style.css` — the editor UI.
+- `../../app/` — the Mac app shell (pywebview) and `build.sh`, the
+  build/sign/notarize/DMG release pipeline.
 
-## v1 limits / roadmap
+## Limits / roadmap
 
 - Theme switching maps the theme token colors; hand-picked spot colors in
   custom HTML are left alone (by design), and the V03 alert palette keeps its
   semantic status colors.
-- Markdown import ("paste an outline, get blocks") is planned but not in v1 —
+- Markdown import ("paste an outline, get blocks") is planned — for now,
   create pages block-by-block or let an agent generate the first draft.
 - `modules.md`, `groups.md`, and `course.md` are still edited as text.
 - No image upload — reference Canvas-hosted or GitHub Pages URLs, as in the
   agent workflow.
-- Packaged desktop app (signed macOS build) is a later milestone; v1 is the
-  plain Python script.
+- The packaged app is macOS (Apple Silicon) for now; other platforms use the
+  script, which is the same editor.

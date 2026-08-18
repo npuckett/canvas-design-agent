@@ -4,34 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Element Catalog -- Canvas Design Agent</title>
+  <link rel="stylesheet" href="site.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #333;
-      line-height: 1.6;
-      background: #fff;
-    }
+    body { color: #333; line-height: 1.6; }
     a { color: #222; text-decoration: none; }
     a:hover { color: #000; }
-
-    /* NAV */
-    nav {
-      background: #000;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    nav .brand { font-weight: 700; font-size: 18px; color: #fff; }
-    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
-    nav .links a { color: #999; font-size: 15px; text-decoration: none; }
-    nav .links a:hover { color: #fff; }
 
     /* PAGE LAYOUT */
     .page { display: flex; min-height: 100vh; }
@@ -209,18 +186,25 @@
     }
 
     /* Reset for preview areas -- prevent site styles from affecting demos */
-    .el-preview table { border-collapse: collapse; }
+    .el-preview table { border-collapse: collapse; margin: 0; width: auto; }
+    .el-preview th, .el-preview td { border: none; padding: 1px; background: none; }
+    .el-preview th { font-weight: bold; }
+    .el-preview code { background: none; border: none; padding: 0; font-size: inherit; color: inherit; }
+    .el-preview pre { background: none; border-radius: 0; padding: 0; margin: 0; }
+    .el-preview pre code { color: inherit; }
+    .el pre code { color: #222; }
     .el-preview p { margin-bottom: 8px; color: #495057; }
   </style>
 </head>
 <body>
 
-<nav>
-  <span class="brand">Canvas Design Agent</span>
+<nav class="site-nav">
+  <a class="brand" href="index.html"><span class="logo"></span>Canvas Design Agent</a>
   <span class="links">
     <a href="index.html">Home</a>
+    <a href="designer.html">Designer</a>
     <a href="workflows.html">Workflows</a>
-    <a href="elements.html">Elements</a>
+    <a href="elements.html" class="active">Elements</a>
     <a href="examples.html">Examples</a>
     <a href="downloads.html">Downloads</a>
     <a href="about.html">About</a>
@@ -326,8 +310,8 @@
 <main class="main">
 
 <div class="orientation">
-  <p><strong>Element IDs are optional control handles.</strong> You can use the skill with plain course notes and no IDs at all. Reference IDs such as <code>V05</code>, <code>D05</code>, or <code>C01</code> only when you want to steer the agent toward a specific layout, data display, or visual treatment.</p>
-  <p>Use these IDs when you want to steer a generated Canvas fragment toward a specific layout, data display, or visual treatment.</p>
+  <p><strong>This catalog is the shared vocabulary of both creation methods.</strong> In the <a href="designer.html" style="border-bottom:1px solid #ccc;">Canvas Designer</a> these elements are the insertable palette. With an AI agent, the IDs are optional control handles — you can work from plain course notes and no IDs at all, or reference <code>V05</code>, <code>D05</code>, or <code>C01</code> to steer toward a specific layout, data display, or visual treatment.</p>
+  <p>Every element here survives the Canvas Rich Content Editor's sanitizer as-is.</p>
 </div>
 
 <!-- ==================== LAYOUT ==================== -->
@@ -2381,9 +2365,9 @@ Colors:
 </main>
 </div>
 
-<footer style="border-top: 1px solid #e0e0e0; padding: 24px; text-align: center; font-size: 13px; color: #999;">
-  Canvas Design Agent -- Element Catalog -- 60 elements across 10 categories<br>
-  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a>
+<footer class="site-footer">
+  Canvas Design Agent — Element Catalog — the shared vocabulary of the Designer palette and the AI skill.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a> · <a href="about.html">About &amp; license</a>
 </footer>
 
 <script>

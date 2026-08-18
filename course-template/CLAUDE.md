@@ -41,9 +41,10 @@ importable package — not to output one-off HTML in chat.
    is a specific local time.
 7. **Don't duplicate what Canvas shows.** Assignment bodies never repeat
    the title, points, or due date. See SKILL.md's CONTEXT RULE.
-8. The instructor may also edit files visually with
-   `python3 tools/designer.py .` (a local block editor over these same
-   files). Treat designer-authored pages exactly like agent-authored ones —
+8. The instructor may also edit files visually with the Canvas Designer
+   (the desktop app, or `python3 tools/designer.py .` — a local block
+   editor over these same files).
+   Treat designer-authored pages exactly like agent-authored ones —
    same format, same rules. If a `styles.json` exists at the course root,
    it holds named custom styles (color roles, font stack, radius, header
    gradient) created in the designer; when generating or restyling content,

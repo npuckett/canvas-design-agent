@@ -10,11 +10,13 @@ syllabus.
 All tools are single-file Python scripts with **no dependencies** — any
 Python 3.9+ works (`python3` on macOS, `py -3` on Windows).
 
-> **Prefer editing visually?** `python3 tools/designer.py .` opens the
-> [Canvas Designer](designer/README.md) — a local browser-based block editor
-> over the same files, with the full element library as an insertable
-> palette, theme switching, and a one-click package build. No AI tool
-> required.
+> **Prefer editing visually?** The [Canvas Designer](designer/README.md) is
+> a visual block editor over the same files — the full element library as an
+> insertable palette, themes and custom course styles, assignment-settings
+> forms, and a one-click package build. No AI tool required. Get it as a
+> [signed Mac app](https://github.com/npuckett/canvas-design-agent/releases/latest)
+> or run the zero-install script from any course folder:
+> `python3 tools/designer.py .`
 
 > **Faculty-friendly version:** the [Workflows page](https://npuckett.github.io/canvas-design-agent/docs/workflows.html)
 > on the docs site covers the same three methods with step-by-step
@@ -34,6 +36,7 @@ Python 3.9+ works (`python3` on macOS, `py -3` on Windows).
 | `build_imscc.py` | Builds a Canvas-importable `.imscc` course package from a course folder |
 | `extract_imscc.py` | Converts an existing Canvas course export into an editable course folder |
 | `canvas_api_sync.py` | Pushes pages/assignments directly into Canvas via the REST API (no import step) |
+| `designer.py` | Opens the [Canvas Designer](designer/README.md) — a local visual block editor over the course folder |
 
 ## Getting HTML into Canvas: the three methods
 

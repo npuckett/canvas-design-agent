@@ -4,125 +4,67 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Downloads — Canvas Design Agent</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #222;
-      line-height: 1.6;
-      background: #fff;
-    }
-    a { color: #222; text-decoration: none; }
-    a:hover { color: #000; }
-
-    nav {
-      background: #000;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    nav .brand { font-weight: 700; font-size: 18px; color: #fff; }
-    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
-    nav .links a { color: #999; font-size: 15px; }
-    nav .links a:hover { color: #fff; }
-
-    .header { padding: 64px 24px 32px; text-align: center; }
-    .header h1 { font-size: 32px; font-weight: 800; color: #000; margin-bottom: 12px; }
-    .header p { font-size: 17px; color: #666; max-width: 560px; margin: 0 auto; }
-
-    .container { max-width: 720px; margin: 0 auto; padding: 0 24px 64px; }
-
-    .section { border-top: 1px solid #e0e0e0; padding-top: 40px; margin-top: 40px; }
-    .section:first-child { border-top: none; margin-top: 0; }
-    .section h2 { font-size: 22px; font-weight: 800; color: #000; margin-bottom: 8px; }
-    .section > p { font-size: 15px; color: #444; margin-bottom: 16px; }
-    .section code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 13px;
-      background: #f5f5f5;
-      border: 1px solid #e0e0e0;
-      border-radius: 3px;
-      padding: 1px 5px;
-    }
-
-    .dl-item {
-      display: block;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 18px 22px;
-      margin-bottom: 12px;
-      transition: border-color 0.15s;
-    }
-    .dl-item:hover { border-color: #999; }
-    .dl-item h3 { font-size: 15px; font-weight: 700; color: #000; margin-bottom: 4px; }
-    .dl-item p { font-size: 14px; color: #666; margin: 0; line-height: 1.5; }
-    .dl-item .meta { font-size: 12px; color: #999; margin-top: 6px; display: block; }
-
-    .hint {
-      border-left: 3px solid #000;
-      background: #f8f8f8;
-      padding: 12px 16px;
-      margin: 16px 0;
-      font-size: 14px;
-      color: #444;
-    }
-    .hint strong { color: #000; }
-
-    footer {
-      border-top: 1px solid #e0e0e0;
-      padding: 32px 24px;
-      text-align: center;
-      font-size: 13px;
-      color: #999;
-    }
-  </style>
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
 
-<nav>
-  <span class="brand">Canvas Design Agent</span>
+<nav class="site-nav">
+  <a class="brand" href="index.html"><span class="logo"></span>Canvas Design Agent</a>
   <span class="links">
     <a href="index.html">Home</a>
+    <a href="designer.html">Designer</a>
     <a href="workflows.html">Workflows</a>
     <a href="elements.html">Elements</a>
     <a href="examples.html">Examples</a>
-    <a href="downloads.html">Downloads</a>
+    <a href="downloads.html" class="active">Downloads</a>
     <a href="about.html">About</a>
     <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
   </span>
 </nav>
 
-<div class="header">
+<div class="page-head">
   <h1>Downloads</h1>
-  <p>The skill file, prompt templates, and course-building tools — everything you need for each of the three <a href="workflows.html" style="border-bottom:1px solid #ccc;">workflows</a>.</p>
+  <p>The Designer app for the <span class="pill pill-ui" style="margin:0;">visual</span> method, the skill file for the <span class="pill pill-agent" style="margin:0;">AI</span> method, and the shared course tools underneath both.</p>
 </div>
 
 <div class="container">
 
 <div class="section">
-  <h2>The Skill File</h2>
-  <p>The one file every workflow starts with. Paste or upload it into Microsoft Copilot, ChatGPT, or Claude; it teaches the AI Canvas's rules and the element library, then waits for your course content.</p>
+  <span class="pill pill-ui">Visual method</span>
+  <h2>Canvas Designer app</h2>
+  <p>The visual course editor — block palette, themes, custom styles, assignment settings, one-click package build. See the <a href="designer.html">Designer page</a> for the full tour.</p>
+  <a class="dl-item" href="https://github.com/npuckett/canvas-design-agent/releases/latest">
+    <h3>Canvas Designer for macOS <span style="font-weight:400;color:var(--faint);">(free)</span></h3>
+    <p>Signed and notarized DMG — download, open, drag to Applications. No accounts, no cloud; everything stays on your machine.</p>
+    <span class="meta">Requires macOS on Apple Silicon · SHA-256 checksum on the release page</span>
+  </a>
+  <a class="dl-item" href="designer.html#script">
+    <h3>Script version (Mac, Windows, Linux)</h3>
+    <p>The same editor as a single dependency-free Python file, included in every course folder: <code>python3 tools/designer.py .</code> opens it in your browser.</p>
+    <span class="meta">Any Python 3.9+ · ships inside the course repo template below</span>
+  </a>
+</div>
+
+<div class="section">
+  <span class="pill pill-agent">AI method</span>
+  <h2>The skill file</h2>
+  <p>The file the AI method starts with. Paste or upload it into Microsoft Copilot, ChatGPT, or Claude; it teaches the AI Canvas's rules and the element library, then waits for your course content.</p>
   <a class="dl-item" href="downloads/SKILL.md" download>
     <h3>SKILL.md</h3>
-    <p>The complete Canvas Design Agent instruction set: Canvas constraints, the numbered element library, style themes, accessibility rules, and output checks.</p>
-    <span class="meta">Right-click → Save Link As… if your browser opens it as text · Used in: all workflows</span>
+    <p>The complete instruction set: Canvas constraints, the numbered element library, style themes, accessibility rules, and output checks.</p>
+    <span class="meta">Right-click → Save Link As… if your browser opens it as text · Used in all AI workflows</span>
   </a>
-  <div class="hint">
-    <strong>Tip:</strong> In most AI chats you can simply paste the file's entire contents as your first message — the file opens with instructions that tell the AI what to do. It replies when it's ready for your course content.
+  <div class="note">
+    <strong>Tip:</strong> in most AI chats you can simply paste the file's entire contents as your first message — it opens with instructions that tell the AI what to do, and the AI replies when it's ready for your content.
   </div>
 </div>
 
 <div class="section">
-  <h2>Prompt Templates</h2>
-  <p>Markdown starting points for common Canvas page types. Open one, replace the content with your own, and paste it into a chat that has the skill loaded. Each generates a page like the ones on the <a href="examples.html" style="border-bottom:1px solid #ccc;">Examples</a> page.</p>
+  <span class="pill pill-agent">AI method</span>
+  <h2>Prompt templates</h2>
+  <p>Markdown starting points for common Canvas page types. Open one, replace the content with your own, and paste it into a chat that has the skill loaded. Each generates a page like the ones on the <a href="examples.html">Examples</a> page.</p>
   <a class="dl-item" href="prompts/simple-syllabus.md" download>
-    <h3>Simple Syllabus <span style="font-weight:400;color:#999;">(best first try)</span></h3>
+    <h3>Simple Syllabus <span style="font-weight:400;color:var(--faint);">(best first try)</span></h3>
     <p>Plain-language course description with zero element IDs — shows that you don't need to learn the catalog to get a good page.</p>
   </a>
   <a class="dl-item" href="prompts/class-page.md" download>
@@ -152,33 +94,34 @@
 </div>
 
 <div class="section">
-  <h2>Course-Building Tools</h2>
-  <p>For the bulk workflows (<a href="workflows.html#package" style="border-bottom:1px solid #ccc;">Course Package Import</a> and <a href="workflows.html#api" style="border-bottom:1px solid #ccc;">API Sync</a>). These are plain Python scripts with no dependencies — they live in the repository rather than as separate downloads, so grab the whole project:</p>
+  <div class="kicker">Shared foundation</div>
+  <h2>Course folder &amp; tools</h2>
+  <p>Both methods work on the same course folder, built and published by the same dependency-free Python tools (see <a href="workflows.html#choosing">the publish paths</a>).</p>
   <a class="dl-item" href="https://github.com/npuckett/canvas-course-template">
-    <h3>Course repo template <span style="font-weight:400;color:#999;">(recommended starting point)</span></h3>
-    <p>A self-contained template repository for managing a whole course as files: skill file, build tools, AI agent instructions, a fillable course style file, and starter content. Click "Use this template" on GitHub to make your own course repo, or download it as a ZIP.</p>
-    <span class="meta">github.com/npuckett/canvas-course-template · Quick copy: npx degit npuckett/canvas-course-template my-course</span>
+    <h3>Course repo template <span style="font-weight:400;color:var(--faint);">(recommended starting point)</span></h3>
+    <p>A self-contained template for managing a whole course as files: the Designer script, build tools, skill file, AI agent instructions, a fillable course style file, and starter content. Click "Use this template" on GitHub, or download it as a ZIP.</p>
+    <span class="meta">github.com/npuckett/canvas-course-template · Quick copy: npx degit npuckett/canvas-course-template my-course · The Designer app's "New course" makes the same structure</span>
   </a>
   <a class="dl-item" href="https://github.com/npuckett/canvas-design-agent/archive/refs/heads/main.zip">
-    <h3>Download the full repository (.zip)</h3>
-    <p>Includes the tools, the skill file, all prompt templates, and a worked example course ready to build and import.</p>
+    <h3>Full project repository (.zip)</h3>
+    <p>Everything: the tools, the Designer, the skill file, all prompt templates, and a worked example course ready to build and import.</p>
     <span class="meta">Or: git clone https://github.com/npuckett/canvas-design-agent.git</span>
   </a>
   <a class="dl-item" href="https://github.com/npuckett/canvas-design-agent/blob/main/tools/README.md">
     <h3>Tools documentation</h3>
-    <p><code>build_imscc.py</code> (build an importable course package), <code>extract_imscc.py</code> (turn a Canvas export into editable files), <code>canvas_api_sync.py</code> (push edits over the API). Full format reference and comparison of the three paths.</p>
+    <p><code>build_imscc.py</code> (build an importable course package), <code>extract_imscc.py</code> (turn a Canvas export into editable files), <code>canvas_api_sync.py</code> (push edits over the API), <code>designer.py</code> (the visual editor). Full format reference.</p>
   </a>
   <a class="dl-item" href="https://github.com/npuckett/canvas-design-agent/tree/main/tools/example-course">
     <h3>Example course folder</h3>
-    <p>A complete miniature course — weighted assignment groups, a group assignment, modules, syllabus, front page — that builds into an importable package. Copy it as your starting structure.</p>
+    <p>A complete miniature course — weighted assignment groups, a group assignment, modules, syllabus, front page — that builds into an importable package.</p>
   </a>
 </div>
 
 </div>
 
-<footer>
-  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
-  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a>
+<footer class="site-footer">
+  Canvas Design Agent — design Canvas LMS courses visually or with AI, from the same plain files.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a> · <a href="about.html">About &amp; license</a>
 </footer>
 
 </body>

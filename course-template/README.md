@@ -46,15 +46,27 @@ pages/               one .md file per page (settings + HTML)
 web_resources/       images/files shipped into Canvas
 SKILL.md             the Canvas HTML rules your AI agent follows
 CLAUDE.md            instructions for AI coding agents working in this repo
-tools/               build/extract/sync scripts (no dependencies, Python 3.9+)
+tools/               build/extract/sync scripts + the visual Designer (no dependencies, Python 3.9+)
 ```
 
-## The workflow
+## Two ways to work on this repo
 
-This repo is designed to be driven by an **AI coding agent** (Claude Code,
-Cursor, VS Code + Copilot, etc.) opened in this folder. The agent reads
-`CLAUDE.md` and `SKILL.md` automatically and knows the rules. You work in
-plain language:
+Both methods read and write the same files, so you can mix them freely.
+
+**Visually — Canvas Designer.** A local block editor with the whole
+Canvas-safe element library as an insertable palette, theme switching and
+custom course styles, assignment-settings forms, and the package build
+behind one button. No AI involved. Use the
+[Mac app](https://github.com/npuckett/canvas-design-agent/releases/latest)
+and open this folder, or run the included script:
+
+```
+python3 tools/designer.py .
+```
+
+**With an AI coding agent** (Claude Code, Cursor, VS Code + Copilot, etc.)
+opened in this folder. The agent reads `CLAUDE.md` and `SKILL.md`
+automatically and knows the rules. You work in plain language:
 
 > "Create class pages for weeks 1–6 from my notes in notes.txt, using our
 > course style."
@@ -64,23 +76,19 @@ plain language:
 >
 > "Shift every due date after reading week one week later, then rebuild."
 
-Then get it into Canvas:
+Either way, get it into Canvas the same way:
 
 ```
 python3 tools/build_imscc.py . -o dist/course.imscc
 ```
 
-Canvas → **Settings → Import Course Content → Canvas Course Export
-Package** → pick the file → All Content. Re-importing after edits updates
-existing content instead of duplicating it.
+(Or click **Build** in the Designer.) Canvas → **Settings → Import Course
+Content → Canvas Course Export Package** → pick the file → All Content.
+Re-importing after edits updates existing content instead of duplicating it.
 
-No AI tools? Everything is editable by hand — each file documents its own
-format, and [tools/README.md](tools/README.md) is the full reference. Or
-edit visually: `python3 tools/designer.py .` opens the
-[Canvas Designer](tools/designer/README.md), a local block editor with the
-whole element library as an insertable palette, theme switching, and the
-package build behind one button. Designer, agent, and hand editing all work
-on the same files.
+No AI tools and no Designer? Everything is still editable by hand — each
+file documents its own format, and [tools/README.md](tools/README.md) is
+the full reference.
 
 ## Customizing your course identity
 
@@ -103,6 +111,7 @@ Your live course becomes editable files in this repo.
 
 ## Learn more
 
-- [Workflows](https://npuckett.github.io/canvas-design-agent/docs/workflows.html) — all the ways to get content into Canvas
+- [Canvas Designer](https://npuckett.github.io/canvas-design-agent/docs/designer.html) — the visual editor for this folder
+- [Workflows](https://npuckett.github.io/canvas-design-agent/docs/workflows.html) — creating with Designer or AI, and all the ways to publish into Canvas
 - [Element Catalog](https://npuckett.github.io/canvas-design-agent/docs/elements.html) — the Canvas-safe building blocks
 - [tools/README.md](tools/README.md) — full front-matter and format reference

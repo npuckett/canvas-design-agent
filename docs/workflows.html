@@ -4,125 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Workflows — Canvas Design Agent</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #222;
-      line-height: 1.6;
-      background: #fff;
-    }
-    a { color: #222; text-decoration: none; }
-    a:hover { color: #000; }
-
-    nav {
-      background: #000;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    nav .brand { font-weight: 700; font-size: 18px; color: #fff; }
-    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
-    nav .links a { color: #999; font-size: 15px; }
-    nav .links a:hover { color: #fff; }
-
-    .header { padding: 64px 24px 32px; text-align: center; }
-    .header h1 { font-size: 32px; font-weight: 800; color: #000; margin-bottom: 12px; }
-    .header p { font-size: 17px; color: #666; max-width: 560px; margin: 0 auto; }
-
-    .container { max-width: 720px; margin: 0 auto; padding: 0 24px 64px; }
-
-    .section { border-top: 1px solid #e0e0e0; padding-top: 40px; margin-top: 40px; }
-    .section:first-child { border-top: none; margin-top: 0; }
-    .kicker {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #999;
-      margin-bottom: 6px;
-    }
-    .section h2 { font-size: 22px; font-weight: 800; color: #000; margin-bottom: 12px; }
-    .section h3 { font-size: 16px; font-weight: 700; color: #000; margin: 24px 0 8px; }
-    .section p { font-size: 15px; color: #444; margin-bottom: 12px; }
-    .section ul, .section ol { padding-left: 22px; margin-bottom: 12px; }
-    .section li { font-size: 15px; color: #444; margin-bottom: 6px; }
-    .section code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 13px;
-      background: #f5f5f5;
-      border: 1px solid #e0e0e0;
-      border-radius: 3px;
-      padding: 1px 5px;
-    }
-    pre {
-      background: #f8f8f8;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      padding: 14px 16px;
-      overflow-x: auto;
-      margin-bottom: 12px;
-    }
-    pre code { background: none; border: none; padding: 0; font-size: 13px; color: #222; }
-
-    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
-    th, td { border: 1px solid #e0e0e0; padding: 8px 10px; text-align: left; vertical-align: top; }
-    th { background: #f8f8f8; font-weight: 700; color: #000; }
-    td { color: #444; }
-
-    .path-badge {
-      display: inline-block;
-      font-size: 12px;
-      font-weight: 700;
-      background: #000;
-      color: #fff;
-      border-radius: 10px;
-      padding: 2px 10px;
-      margin-bottom: 8px;
-    }
-    .note {
-      border-left: 3px solid #000;
-      background: #f8f8f8;
-      padding: 12px 16px;
-      margin: 16px 0;
-      font-size: 14px;
-      color: #444;
-    }
-    .note strong { color: #000; }
-
-    .toc {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 20px 24px;
-      margin-bottom: 40px;
-    }
-    .toc h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #999; margin-bottom: 10px; }
-    .toc ol { padding-left: 22px; }
-    .toc li { font-size: 15px; margin-bottom: 4px; }
-    .toc a { color: #222; border-bottom: 1px solid #ccc; }
-    .toc a:hover { border-color: #000; }
-
-    footer {
-      border-top: 1px solid #e0e0e0;
-      padding: 32px 24px;
-      text-align: center;
-      font-size: 13px;
-      color: #999;
-    }
-  </style>
+  <meta name="description" content="How to create Canvas course content (visually with Canvas Designer or with an AI agent) and how to publish it (copy/paste, course package import, or API sync).">
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
 
-<nav>
-  <span class="brand">Canvas Design Agent</span>
+<nav class="site-nav">
+  <a class="brand" href="index.html"><span class="logo"></span>Canvas Design Agent</a>
   <span class="links">
     <a href="index.html">Home</a>
-    <a href="workflows.html">Workflows</a>
+    <a href="designer.html">Designer</a>
+    <a href="workflows.html" class="active">Workflows</a>
     <a href="elements.html">Elements</a>
     <a href="examples.html">Examples</a>
     <a href="downloads.html">Downloads</a>
@@ -131,9 +23,9 @@
   </span>
 </nav>
 
-<div class="header">
-  <h1>Getting Content Into Canvas</h1>
-  <p>Three ways to move AI-generated pages and assignments into your Canvas course — from pasting a single page to building an entire semester in one import.</p>
+<div class="page-head">
+  <h1>Workflows</h1>
+  <p>Every workflow is two choices: <strong>how you create</strong> content (visually or with AI) and <strong>how you publish</strong> it into Canvas (paste, package import, or API). Pick one of each — and change your mind anytime.</p>
 </div>
 
 <div class="container">
@@ -141,176 +33,188 @@
 <div class="toc">
   <h2>On this page</h2>
   <ol>
-    <li><a href="#choosing">Which path should I use?</a></li>
-    <li><a href="#course-repo">The course repo: where the real workflow lives</a></li>
-    <li><a href="#paste">Path 1 — Copy &amp; Paste into the editor</a></li>
-    <li><a href="#package">Path 2 — Course Package Import (bulk)</a></li>
-    <li><a href="#api">Path 3 — Direct API Sync (hands-off)</a></li>
+    <li><a href="#methods">Creating: Designer vs. AI agent</a></li>
+    <li><a href="#designer">Create with Canvas Designer (visual)</a></li>
+    <li><a href="#agent">Create with an AI agent</a></li>
+    <li><a href="#course-repo">The course folder both methods share</a></li>
+    <li><a href="#choosing">Publishing: which path?</a></li>
+    <li><a href="#paste">Publish 1 — Copy &amp; paste</a></li>
+    <li><a href="#package">Publish 2 — Course package import</a></li>
+    <li><a href="#api">Publish 3 — Direct API sync</a></li>
     <li><a href="#updating">Updating a course in bulk</a></li>
   </ol>
 </div>
 
+<div class="section" id="methods">
+  <div class="kicker">Step 1 · Create</div>
+  <h2>Two ways to make course content</h2>
+  <p>Both methods produce the same thing — Canvas-safe pages and assignments as small text files in a <a href="#course-repo">course folder</a> — so this isn't a fork in the road. Start with whichever fits how you like to work, and mix them freely.</p>
+  <table>
+    <thead>
+      <tr><th></th><th><span class="pill pill-ui" style="margin:0;">Visual</span> Canvas Designer</th><th><span class="pill pill-agent" style="margin:0;">AI</span> Agent + SKILL.md</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>You work by</strong></td><td>Clicking blocks together, editing text in place</td><td>Describing what you want in plain language</td></tr>
+      <tr><td><strong>Best at</strong></td><td>Precise control, quick edits, seeing exactly what you'll get</td><td>Generating lots of content fast, bulk changes, working from rough notes</td></tr>
+      <tr><td><strong>Needs</strong></td><td>The free Mac app, or Python 3 for the script version</td><td>Any AI chat (free tiers work), or an AI coding tool for whole courses</td></tr>
+      <tr><td><strong>AI involved?</strong></td><td>None — fully local and deterministic</td><td>Yes — that's the point</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><strong>They're teammates, not rivals.</strong> A common pattern: an agent drafts the semester from your notes, and you polish pages in the Designer — or you design one page you love and ask the agent to repeat its structure for every week.</div>
+</div>
+
+<div class="section" id="designer">
+  <span class="pill pill-ui">Create · Visual</span>
+  <h2>Canvas Designer — the visual editor</h2>
+  <p><a href="designer.html">Canvas Designer</a> looks and feels like the Canvas page editor, with three important upgrades: every block you insert is guaranteed to survive the Canvas sanitizer, your whole course is open at once (not one page at a time), and assignment settings live in a form beside the content instead of scattered Canvas menus.</p>
+  <h3>Steps</h3>
+  <ol>
+    <li><a href="https://github.com/npuckett/canvas-design-agent/releases/latest">Download the Mac app</a> and drag it to Applications — or, on any platform, run <code>python3 tools/designer.py .</code> inside a course folder.</li>
+    <li>Create a new course from the welcome screen (it scaffolds the folder for you) or open an existing course folder.</li>
+    <li>Build pages from the element palette: click a page, insert blocks, edit text in place, switch themes, save.</li>
+    <li>For assignments, fill in the settings form — points, due date, submission type, grading, group.</li>
+    <li>Click <strong>Build</strong> to produce the <code>.imscc</code> import package, then publish with <a href="#package">Publish path 2</a>.</li>
+  </ol>
+  <p>Full feature tour on the <a href="designer.html">Designer page</a>.</p>
+</div>
+
+<div class="section" id="agent">
+  <span class="pill pill-agent">Create · AI</span>
+  <h2>AI agent — describe it, review it</h2>
+  <p>The AI method comes in two sizes:</p>
+  <h3>Web chat — single pages, zero setup</h3>
+  <p>Best for a first try, workshops, and one-off pages.</p>
+  <ol>
+    <li>Paste the contents of <a href="downloads/SKILL.md">SKILL.md</a> into Microsoft Copilot, ChatGPT, or Claude (or upload the file). It opens with instructions that tell the AI what to do; wait for its ready message.</li>
+    <li>Paste your course content — rough notes are fine — plus any style preferences.</li>
+    <li>Copy the <strong>HTML source</strong> it produces and publish with <a href="#paste">Publish path 1</a>.</li>
+  </ol>
+  <h3>Coding agent in a course folder — whole courses</h3>
+  <p>For actually building and managing a course, open a <a href="#course-repo">course folder</a> in an AI coding tool (Claude Code, Cursor, VS Code + Copilot). The folder's included instructions teach the agent the rules automatically, and you work in plain language:</p>
+  <pre><code>"Set up style.md for a warm, approachable studio course."
+"Create class pages for weeks 1-12 from my notes in notes.txt."
+"Add Project 1: 100 points, letter grade, PDF upload, due Oct 7."
+"Shift every due date after reading week one week later."</code></pre>
+  <p>The agent writes one file per page and assignment; you review the changes, then build and publish with <a href="#package">Publish path 2</a> (or push single edits with <a href="#api">path 3</a>).</p>
+</div>
+
+<div class="section" id="course-repo">
+  <div class="kicker">The shared foundation</div>
+  <h2>The course folder both methods share</h2>
+  <p>Designer and agent meet in the middle: a folder of small, readable text files — one per page, one per assignment, plus your grading scheme, module structure, and course style. The folder, not Canvas, is the source of truth:</p>
+  <ul>
+    <li><strong>Consistency for free</strong> — your theme, colors, and recurring sections are saved in the folder (<code>style.md</code>, and <code>styles.json</code> for Designer-made custom styles), so everything you or an agent creates matches.</li>
+    <li><strong>Course-wide edits are cheap</strong> — an agent can edit fifty files from one sentence, and the Designer's theme switch restyles a page in one click.</li>
+    <li><strong>History and reuse</strong> — keep the folder in git for a record of every change; next semester is a copy of the folder with new dates.</li>
+  </ul>
+  <h3>Start from the template</h3>
+  <p>The <a href="https://github.com/npuckett/canvas-course-template">canvas-course-template</a> repository is a ready-made course folder: build tools, the skill file, agent instructions, a fillable <code>style.md</code>, and starter content. Three ways to get one:</p>
+  <ul>
+    <li><strong>Canvas Designer</strong>: "New course" on the welcome screen scaffolds the same structure — no GitHub needed.</li>
+    <li><strong>On GitHub</strong> (recommended for history and backup): click <strong>"Use this template"</strong> on the template repo, name it for your course, and clone it.</li>
+    <li><strong>Without an account</strong>: <a href="https://github.com/npuckett/canvas-course-template/archive/refs/heads/main.zip">download the ZIP</a>, or run <code>npx degit npuckett/canvas-course-template my-course</code>.</li>
+  </ul>
+  <div class="note"><strong>No coding required.</strong> The files are short and readable — settings at the top, page content below. The Designer edits them visually, agents edit them from plain language, and you can always open them in any text editor.</div>
+</div>
+
 <div class="section" id="choosing">
-  <div class="kicker">Overview</div>
-  <h2>Which path should I use?</h2>
-  <p>All three paths start the same way: an AI working from <a href="downloads/SKILL.md">SKILL.md</a> — either a web chat or a coding agent in a <a href="#course-repo">course repo</a> — produces Canvas-safe HTML. The paths differ in how that HTML gets into your course, and how much each trip can carry.</p>
+  <div class="kicker">Step 2 · Publish</div>
+  <h2>Which publish path should I use?</h2>
+  <p>However you created the content, there are three ways to get it into your Canvas course. They differ in how much each trip carries and what your school lets you do.</p>
   <table>
     <thead>
       <tr><th>Path</th><th>Carries</th><th>Setup needed</th><th>Best for</th></tr>
     </thead>
     <tbody>
       <tr>
-        <td><strong>1. Copy &amp; Paste</strong></td>
-        <td>One page or one assignment description at a time. No settings (points, due dates) — you set those in Canvas.</td>
+        <td><strong>1. Copy &amp; paste</strong></td>
+        <td>One page or assignment description at a time. No settings — points and due dates are still clicked in Canvas.</td>
         <td>None</td>
-        <td>Single pages, quick fixes, workshops, trying things out</td>
+        <td>Single pages, quick fixes, web-chat outputs, workshops</td>
       </tr>
       <tr>
-        <td><strong>2. Course Package Import</strong></td>
-        <td>Everything at once: all pages, all assignments <em>with</em> points, due dates, submission types, and grading; assignment groups with grade weights; modules; syllabus; home page.</td>
-        <td>None — uses the Import button you already have</td>
-        <td>Building or restructuring a whole course; next semester's shell; bulk updates</td>
+        <td><strong>2. Package import</strong></td>
+        <td>Everything at once: all pages, all assignments <em>with</em> points, due dates, submission types, and grading; weighted assignment groups; modules; syllabus; home page.</td>
+        <td>None — uses the Import button teachers already have</td>
+        <td>Whole courses, restructures, next semester's shell, bulk updates. <strong>The Designer's Build button and the agent workflow both target this path.</strong></td>
       </tr>
       <tr>
-        <td><strong>3. Direct API Sync</strong></td>
+        <td><strong>3. API sync</strong></td>
         <td>Pages, assignments, and syllabus — pushed instantly, no import step.</td>
         <td>A Canvas access token (some schools disable these — see below)</td>
         <td>Day-to-day edits after the course structure exists</td>
       </tr>
     </tbody>
   </table>
-  <p>A common pattern: build the course once with Path 2, then make small edits during the semester with Path 1 or Path 3 — whichever your school makes easier.</p>
-</div>
-
-<div class="section" id="course-repo">
-  <div class="kicker">The recommended setup</div>
-  <h2>The course repo: where the real workflow lives</h2>
-  <p>There are two places you can work with the AI:</p>
-  <ul>
-    <li><strong>A web chat</strong> (Microsoft Copilot, ChatGPT, Claude in the browser) — you paste SKILL.md into the conversation, then paste content in and copy HTML out. Great for a first try and for one-off pages; nothing to install. But each conversation starts from scratch, and your course exists only as whatever you last pasted into Canvas.</li>
-    <li><strong>A course repo with an AI coding agent</strong> (Claude Code, Cursor, VS Code with Copilot — any tool that edits files in a folder) — your course lives as a folder of small text files: one file per page, one per assignment, plus your grading scheme, module structure, and a <code>style.md</code> that captures your course's visual identity. The agent reads the skill and your style automatically and edits the files; the build tool turns the folder into a Canvas import.</li>
-  </ul>
-  <p>For actually <em>managing</em> a course, the repo is the more reasonable workflow, because the files — not Canvas — become the source of truth:</p>
-  <ul>
-    <li><strong>Consistency for free</strong> — your customizations (theme, colors, recurring page sections) are saved in the repo, so every generated page matches without re-explaining anything.</li>
-    <li><strong>Course-wide edits become one sentence</strong> — "shift all due dates a week later", "restyle every class page", "add a grading table to each assignment" — the agent edits many files, you review the diff, rebuild, re-import.</li>
-    <li><strong>History and reuse</strong> — keep it in git and you get a record of every change, and next semester's course is a copy of the folder with new dates.</li>
-  </ul>
-  <h3>Start from the template</h3>
-  <p>There's a ready-made template repository: <a href="https://github.com/npuckett/canvas-course-template">canvas-course-template</a>. It's self-contained — the skill file, the build tools, agent instructions (<code>CLAUDE.md</code>), a fillable <code>style.md</code>, and one starter page and assignment. Get your own copy:</p>
-  <ul>
-    <li><strong>On GitHub</strong> (recommended — gives you history and backup): open <a href="https://github.com/npuckett/canvas-course-template">the template repo</a>, click the green <strong>"Use this template"</strong> button → "Create a new repository", name it for your course, then clone it to your computer.</li>
-    <li><strong>Without a GitHub account:</strong> <a href="https://github.com/npuckett/canvas-course-template/archive/refs/heads/main.zip">download it as a ZIP</a> and rename the folder, or run <code>npx degit npuckett/canvas-course-template my-course</code>.</li>
-  </ul>
-  <p>Then open the folder in your coding tool and describe your course:</p>
-  <pre><code># open it in your AI coding tool and work in plain language:
-#   "Set up style.md for a warm, approachable studio course."
-#   "Create class pages for weeks 1-12 from my notes in notes.txt."
-#   "Add Project 1: 100 points, letter grade, PDF upload, due Oct 7."
-
-# then build and import (Path 2)
-python3 tools/build_imscc.py . -o dist/course.imscc</code></pre>
-  <div class="note">
-    <strong>No coding required.</strong> A course repo sounds technical, but the files are short and readable — settings at the top, page content below. The AI agent does the editing; you describe what you want and review the results. The <a href="https://github.com/npuckett/canvas-course-template#readme">template's README</a> walks through setup step by step.
-  </div>
+  <p>A common pattern: build the course once with path 2, then make small edits during the semester with path 1 or 3 — whichever your school makes easier.</p>
 </div>
 
 <div class="section" id="paste">
-  <div class="path-badge">Path 1</div>
-  <h2>Copy &amp; Paste into the editor</h2>
-  <p>The original workflow, and still the fastest way to get one good-looking page into Canvas. No installs, no permissions — if you can edit a Canvas page, you can do this.</p>
+  <span class="pill pill-step">Publish 1</span>
+  <h2>Copy &amp; paste into the editor</h2>
+  <p>The fastest way to get one good-looking page into Canvas. No installs, no permissions — if you can edit a Canvas page, you can do this.</p>
   <h3>Steps</h3>
   <ol>
-    <li>Open an AI chat (Microsoft Copilot, ChatGPT, or Claude) and paste in the contents of <a href="downloads/SKILL.md">SKILL.md</a>, or upload the file. Wait for its ready message.</li>
-    <li>Paste your course content — rough notes, a syllabus section, an assignment description — and describe any style preferences.</li>
-    <li>Copy the <strong>HTML source</strong> the AI produces (not the rendered preview).</li>
-    <li>In Canvas, edit your page and click the <strong>HTML editor icon</strong> (<code>&lt;/&gt;</code> at the bottom-right of the toolbar, or "html editor" in older Canvas versions).</li>
+    <li>Get the page's <strong>HTML source</strong> — from a web chat (<a href="#agent">create with AI</a>) or from any block's HTML view in the Designer.</li>
+    <li>In Canvas, edit your page and click the <strong>HTML editor icon</strong> (<code>&lt;/&gt;</code> at the bottom-right of the toolbar).</li>
     <li>Paste, save, done.</li>
   </ol>
   <h3>Limits to know about</h3>
   <ul>
     <li>One page per trip. A 24-class course means 24 rounds of copy/paste.</li>
-    <li>Assignment <em>settings</em> — points, due dates, submission types, group weights — can't travel through the editor at all. You still click through Canvas's assignment forms for those. Path 2 removes exactly this limitation.</li>
+    <li>Assignment <em>settings</em> — points, due dates, submission types, group weights — can't travel through the editor at all. Path 2 removes exactly this limitation.</li>
   </ul>
 </div>
 
 <div class="section" id="package">
-  <div class="path-badge">Path 2</div>
-  <h2>Course Package Import — build a whole course in one import</h2>
-  <p>Canvas has always been able to import a full "Course Export Package" (a <code>.imscc</code> file) — that's how courses get copied between semesters. The <a href="https://github.com/npuckett/canvas-design-agent/tree/main/tools">tools folder</a> in this repository lets you <em>build</em> one of those packages yourself, from a plain folder of text files.</p>
-  <p>One import then creates (or updates) everything:</p>
+  <span class="pill pill-step">Publish 2</span>
+  <h2>Course package import — a whole course in one upload</h2>
+  <p>Canvas can import a full "Course Export Package" (a <code>.imscc</code> file) — that's how courses get copied between semesters. This project builds those packages from your course folder, so one import creates (or updates) everything:</p>
   <ul>
     <li>Every wiki page, including a designated course home page</li>
-    <li>Every assignment — description, points, due date, submission type (upload / URL / text), grading type (points, letter grade, pass/fail), file-type restrictions, group assignments</li>
+    <li>Every assignment — description, points, due date, submission type, grading type, file-type restrictions, group assignments</li>
     <li>Assignment groups with percentage weights and drop-lowest rules — your whole grading scheme</li>
     <li>Week-by-week modules with pages, assignments, text headers, and external links</li>
     <li>The syllabus</li>
   </ul>
-  <h3>What the source folder looks like</h3>
-  <p>Each page or assignment is one markdown file: a few settings lines at the top, then the Canvas HTML below. You don't have to write these by hand — an AI agent working with SKILL.md can generate the whole folder from your course notes, and you review the files before building.</p>
-  <pre><code>my-course/
-├── course.md          course title, code, timezone
-├── groups.md          grading scheme (a simple table of weights)
-├── syllabus.md
-├── modules.md         week-by-week structure
-├── assignments/
-│   ├── project-1.md   ← settings + HTML in one file
-│   └── ...
-└── pages/
-    ├── class-1.md
-    └── ...</code></pre>
-  <p>A sample assignment file:</p>
-  <pre><code>---
-title: Project 1 - Proposal
-group: Project 1
-points: 100
-grading_type: letter_grade
-submission_types: online_upload
-due: 2026-10-07 23:59
----
-
-&lt;h2&gt;About&lt;/h2&gt;
-&lt;p&gt;Write a one-page proposal...&lt;/p&gt;</code></pre>
   <h3>Steps</h3>
   <ol>
-    <li>Start a course folder from the <a href="#course-repo">course repo template</a> above (or from your existing course — see <a href="#updating">Updating a course in bulk</a> below). The template includes the build tools — plain Python scripts that run on any Mac (built in) or Windows machine with <a href="https://www.python.org/downloads/">Python 3.9+</a>. Nothing else to install.</li>
-    <li>Build the package:
-      <pre><code>python3 tools/build_imscc.py my-course</code></pre>
+    <li>Build the package — click <strong>Build</strong> in the Designer, or run:
+      <pre><code>python3 tools/build_imscc.py . -o dist/course.imscc</code></pre>
     </li>
-    <li>In Canvas: <strong>Settings → Import Course Content → Content Type: "Canvas Course Export Package"</strong> → choose your <code>.imscc</code> file → <strong>All Content</strong> → Import. Canvas queues the import and finishes in a minute or two.</li>
+    <li>In Canvas: <strong>Settings → Import Course Content → Content Type: "Canvas Course Export Package"</strong> → choose your <code>.imscc</code> file → <strong>All Content</strong> → Import. Canvas finishes in a minute or two.</li>
     <li>Spot-check: Assignments (weights under the ⋮ menu → Assignment Groups Weight), a page or two, and Modules.</li>
   </ol>
   <div class="note">
-    <strong>Re-importing updates, it doesn't duplicate.</strong> The builder gives every page and assignment a stable internal ID. Edit your markdown, rebuild, import again — Canvas updates the existing items in place. This is what makes the package path a real <em>management</em> workflow, not just a one-time setup.
+    <strong>Re-importing updates, it doesn't duplicate.</strong> Every page and assignment gets a stable internal ID. Edit, rebuild, import again — Canvas updates the existing items in place. That's what makes this a management workflow, not a one-time setup.
   </div>
   <div class="note">
-    <strong>No special permission required.</strong> This path uses the same Import Course Content button teachers already use to copy courses between semesters. If your school locks that down (rare), your teaching &amp; learning centre can run the import for you.
+    <strong>No special permission required.</strong> This uses the same Import Course Content button teachers already use. If your school locks it down (rare), your teaching &amp; learning centre can run the import for you.
   </div>
   <p>Full format reference: <a href="https://github.com/npuckett/canvas-design-agent/blob/main/tools/README.md">tools/README.md</a> · Worked example: <a href="https://github.com/npuckett/canvas-design-agent/tree/main/tools/example-course">tools/example-course</a></p>
 </div>
 
 <div class="section" id="api">
-  <div class="path-badge">Path 3</div>
-  <h2>Direct API Sync — no import step at all</h2>
-  <p>Canvas has a REST API — the same interface its own apps use. With an access token, the <code>canvas_api_sync.py</code> tool pushes a page or assignment straight into your course from the command line: edit a file, run one command, refresh your browser.</p>
+  <span class="pill pill-step">Publish 3</span>
+  <h2>Direct API sync — no import step at all</h2>
+  <p>With a Canvas access token, the <code>canvas_api_sync.py</code> tool pushes a page or assignment straight into your course from the command line: edit a file, run one command, refresh your browser.</p>
   <h3>First: does your school allow it?</h3>
-  <p>The API itself is always on; what schools control is whether <em>you</em> can create an access token. Check in two minutes:</p>
   <ol>
     <li>In Canvas, go to <strong>Account → Settings</strong> and scroll to <strong>Approved Integrations</strong>.</li>
-    <li>Look for a <strong>"+ New Access Token"</strong> button below the table of apps.</li>
-    <li><strong>Button there?</strong> You can use this path — create a token, give it a purpose ("course sync") and an expiry date, and copy it somewhere safe. Treat it like a password: it grants full access to your Canvas account.</li>
-    <li><strong>No button?</strong> Your institution has disabled self-service tokens (many do). You can ask IT for one, but Path 2 covers nearly everything this path does — you lose very little.</li>
+    <li>Look for a <strong>"+ New Access Token"</strong> button below the table.</li>
+    <li><strong>Button there?</strong> You can use this path — create a token with a purpose and an expiry date, and treat it like a password.</li>
+    <li><strong>No button?</strong> Your institution has disabled self-service tokens (many do). Path 2 covers nearly everything this path does — you lose very little.</li>
   </ol>
   <h3>Steps</h3>
   <pre><code>export CANVAS_API_TOKEN="paste-your-token-here"
 python3 tools/canvas_api_sync.py my-course \
     --base-url https://canvas.yourschool.edu \
     --course-id 12345</code></pre>
-  <p>The course ID is the number in your course's URL. Add <code>--only pages/class-3.md</code> to push a single file, or <code>--dry-run</code> to preview exactly what would be sent without sending anything.</p>
+  <p>The course ID is the number in your course's URL. Add <code>--only pages/class-3.md</code> to push a single file, or <code>--dry-run</code> to preview what would be sent.</p>
   <h3>Limits to know about</h3>
   <ul>
-    <li>Creates and updates pages, assignments, and the syllabus — but <em>not</em> assignment groups, grade weights, or modules. Do the course structure with Path 2 first.</li>
-    <li>Assignments are matched by exact title, so renaming one in your files creates a new one rather than updating. (Path 2 is immune to this.)</li>
+    <li>Creates and updates pages, assignments, and the syllabus — but <em>not</em> assignment groups, grade weights, or modules. Do the course structure with path 2 first.</li>
+    <li>Assignments are matched by exact title, so renaming one creates a new one rather than updating. (Path 2 is immune to this.)</li>
     <li>Test on a sandbox course first, and prefer tokens with an expiry date.</li>
   </ul>
 </div>
@@ -323,22 +227,22 @@ python3 tools/canvas_api_sync.py my-course \
     <li><strong>Export</strong> your existing course: Canvas → Settings → Export Course Content → "Course" → download the <code>.imscc</code>.</li>
     <li><strong>Extract</strong> it into an editable folder:
       <pre><code>python3 tools/extract_imscc.py my-export.imscc -o my-course</code></pre>
-      Every page and assignment becomes a small markdown file with its settings at the top.</li>
-    <li><strong>Edit</strong> — by hand, or by handing the folder to an AI agent with SKILL.md: <em>"restyle every class page with the Studio Dark theme"</em>, <em>"shift all due dates one week later"</em>, <em>"add a rubric section to every Workshop assignment"</em>.</li>
+      Every page and assignment becomes a small text file with its settings at the top.</li>
+    <li><strong>Edit</strong> — visually in the Designer, by hand, or with an agent: <em>"restyle every class page with the Studio Dark theme"</em>, <em>"shift all due dates one week later"</em>.</li>
     <li><strong>Rebuild and import</strong>:
       <pre><code>python3 tools/build_imscc.py my-course</code></pre>
     </li>
   </ol>
   <div class="note">
-    <strong>One caveat on the round trip.</strong> Extracting an export assigns fresh internal IDs, so importing a rebuilt package back into the <em>same</em> live course creates copies alongside the originals. The round trip shines for populating a <em>new</em> course shell — next semester's section, a sandbox, a redesigned version. Once a course is managed from a source folder, repeated rebuild-and-import cycles into that course update cleanly in place.
+    <strong>One caveat on the round trip.</strong> Extracting an export assigns fresh internal IDs, so importing a rebuilt package back into the <em>same</em> live course creates copies alongside the originals. The round trip shines for populating a <em>new</em> course shell — next semester's section, a sandbox, a redesign. Once a course is managed from a source folder, repeated rebuild-and-import cycles update cleanly in place.
   </div>
 </div>
 
 </div>
 
-<footer>
-  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
-  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a>
+<footer class="site-footer">
+  Canvas Design Agent — design Canvas LMS courses visually or with AI, from the same plain files.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a> · <a href="about.html">About &amp; license</a>
 </footer>
 
 </body>

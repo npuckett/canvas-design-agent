@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Designer — Canvas Design Agent</title>
+  <meta name="description" content="Canvas Designer is a free visual editor for Canvas LMS courses: block editing, themes, custom styles, assignment settings, and one-click Canvas import packages. No AI required.">
+  <link rel="stylesheet" href="site.css">
+  <style>
+    /* Illustrated editor mockup */
+    .mock {
+      max-width: 860px;
+      margin: 44px auto 0;
+      padding: 0 24px;
+    }
+    .mock-window {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(22,22,26,0.10);
+      background: var(--paper);
+      font-size: 11px;
+    }
+    .mock-titlebar {
+      background: #ececf0;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--line);
+    }
+    .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mock-titlebar .title { flex: 1; text-align: center; color: var(--muted); font-size: 11px; font-weight: 600; }
+    .mock-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--wash);
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+    .mock-toolbar .chip {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      border-radius: 5px;
+      padding: 3px 9px;
+      white-space: nowrap;
+    }
+    .mock-toolbar .chip.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .mock-body { display: grid; grid-template-columns: 150px 1fr 170px; min-height: 300px; }
+    .mock-files { border-right: 1px solid var(--line); background: var(--wash); padding: 10px; }
+    .mock-files .h, .mock-palette .h {
+      font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--faint); margin: 8px 0 5px;
+    }
+    .mock-files .f { padding: 3px 8px; border-radius: 4px; color: var(--body); white-space: nowrap; overflow: hidden; }
+    .mock-files .f.sel { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+    .mock-canvas { padding: 18px 20px; background: var(--paper); }
+    .mock-block { border: 1px dashed transparent; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; }
+    .mock-block.sel { border-color: var(--accent); background: var(--accent-soft); position: relative; }
+    .mock-block.sel::after {
+      content: "V05 · header";
+      position: absolute; top: -8px; right: 8px;
+      background: var(--accent); color: #fff;
+      font-size: 8px; font-weight: 700; padding: 1px 7px; border-radius: 999px;
+    }
+    .mock-hero { background: linear-gradient(135deg, #4f46e5, #7c74f2); border-radius: 6px; padding: 14px; color: #fff; }
+    .mock-hero .t { font-weight: 800; font-size: 14px; }
+    .mock-hero .s { opacity: 0.85; font-size: 10px; }
+    .mock-cols { display: flex; gap: 8px; }
+    .mock-col { flex: 1; border: 1px solid var(--line); border-radius: 6px; padding: 9px; }
+    .mock-col .t { font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+    .mock-line { height: 5px; border-radius: 3px; background: #e8e8ee; margin-top: 4px; }
+    .mock-line.w60 { width: 60%; }
+    .mock-alert { border-left: 3px solid #d97706; background: #fef6e7; border-radius: 0 6px 6px 0; padding: 8px 10px; color: #7c5205; }
+    .mock-palette { border-left: 1px solid var(--line); background: var(--wash); padding: 10px; }
+    .mock-el { background: var(--paper); border: 1px solid var(--line); border-radius: 5px; padding: 5px 8px; margin-bottom: 5px; color: var(--body); display: flex; gap: 6px; align-items: center; }
+    .mock-el b { font-family: var(--mono); font-size: 9px; color: var(--accent); }
+    @media (max-width: 700px) {
+      .mock-body { grid-template-columns: 1fr; }
+      .mock-files, .mock-palette { display: none; }
+    }
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width: 640px) { .feature-grid { grid-template-columns: 1fr; } }
+    .feature { border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; }
+    .feature h3 { font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 5px; }
+    .feature p { font-size: 14px; color: var(--muted); margin: 0; }
+    .dl-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 28px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: var(--wash);
+    }
+    .dl-box .icon {
+      width: 64px; height: 64px; border-radius: 16px; background: var(--accent);
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .dl-box .icon::before {
+      content: "";
+      width: 34px; height: 34px;
+      background:
+        linear-gradient(#fff, #fff) 0 0 / 34px 11px no-repeat,
+        linear-gradient(#fff, #fff) 0 16px / 15px 18px no-repeat,
+        linear-gradient(#fff, #fff) 19px 16px / 15px 18px no-repeat;
+    }
+    .dl-box .info { flex: 1; min-width: 220px; }
+    .dl-box h3 { font-size: 18px; font-weight: 800; color: var(--ink); margin: 0 0 4px; }
+    .dl-box p { font-size: 14px; color: var(--muted); margin: 0 0 4px; }
+    .dl-box .fine { font-size: 12px; color: var(--faint); }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="brand" href="index.html"><span class="logo"></span>Canvas Design Agent</a>
+  <span class="links">
+    <a href="index.html">Home</a>
+    <a href="designer.html" class="active">Designer</a>
+    <a href="workflows.html">Workflows</a>
+    <a href="elements.html">Elements</a>
+    <a href="examples.html">Examples</a>
+    <a href="downloads.html">Downloads</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
+  </span>
+</nav>
+
+<div class="hero">
+  <span class="eyebrow">Visual editor · No AI required</span>
+  <h1>Canvas Designer</h1>
+  <p class="lede">A free visual editor for whole Canvas courses. Click Canvas-safe blocks together, restyle everything with one dropdown, set assignment points and due dates in a form, and build the Canvas import package with one button.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="https://github.com/npuckett/canvas-design-agent/releases/latest">Download for Mac&nbsp;<small>free · Apple Silicon</small></a>
+    <a class="btn btn-ghost" href="#script">Run the script instead</a>
+  </div>
+</div>
+
+<div class="mock">
+  <div class="mock-window" role="img" aria-label="Illustration of the Canvas Designer editor: course files on the left, the page as selectable blocks in the middle, and the element palette on the right.">
+    <div class="mock-titlebar">
+      <span class="mock-dot" style="background:#ff5f57;"></span>
+      <span class="mock-dot" style="background:#febc2e;"></span>
+      <span class="mock-dot" style="background:#28c840;"></span>
+      <span class="title">Canvas Designer — DIGF-2014 Fall 2026</span>
+    </div>
+    <div class="mock-toolbar">
+      <span class="chip">Theme: Clean Modern ▾</span>
+      <span class="chip">✎ Style</span>
+      <span class="chip">↩ Undo</span>
+      <span style="flex:1;"></span>
+      <span class="chip">✓ Canvas-safe</span>
+      <span class="chip primary">Build .imscc</span>
+    </div>
+    <div class="mock-body">
+      <div class="mock-files">
+        <div class="h">Pages</div>
+        <div class="f">home</div>
+        <div class="f sel">class-1-intro</div>
+        <div class="f">class-2-sensors</div>
+        <div class="h">Assignments</div>
+        <div class="f">exercise-1</div>
+        <div class="f">project-1-proposal</div>
+      </div>
+      <div class="mock-canvas">
+        <div class="mock-block sel">
+          <div class="mock-hero">
+            <div class="t">Class 01 · Introduction</div>
+            <div class="s">DIGF-2014 · Week 1 · September 9</div>
+          </div>
+        </div>
+        <div class="mock-block">
+          <div class="mock-cols">
+            <div class="mock-col"><div class="t">Agenda</div><div class="mock-line"></div><div class="mock-line w60"></div></div>
+            <div class="mock-col"><div class="t">Materials</div><div class="mock-line"></div><div class="mock-line w60"></div></div>
+          </div>
+        </div>
+        <div class="mock-block">
+          <div class="mock-alert"><b>Due before class:</b> read the course syllabus.</div>
+        </div>
+      </div>
+      <div class="mock-palette">
+        <div class="h">Insert element</div>
+        <div class="mock-el"><b>L03</b> Column layout</div>
+        <div class="mock-el"><b>C01</b> Collapsible</div>
+        <div class="mock-el"><b>C03</b> Card</div>
+        <div class="mock-el"><b>D05</b> Schedule grid</div>
+        <div class="mock-el"><b>V03</b> Alert box</div>
+        <div class="mock-el"><b>V05</b> Gradient header</div>
+        <div class="mock-el"><b>N02</b> Button link</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="padding-top:56px;">
+
+  <div class="section" style="border-top:none;margin-top:0;">
+    <div class="kicker">Why it exists</div>
+    <h2>The Canvas editor, without the Canvas limits</h2>
+    <p>Canvas's built-in editor works on one page at a time, silently strips most styling, and keeps assignment settings in separate forms scattered across the site. Canvas Designer flips that: your <strong>whole course</strong> is open at once as a folder of plain files, every block you insert is <strong>guaranteed to survive</strong> the Canvas sanitizer, and pages, assignment settings, grading groups, and modules travel into Canvas together in <strong>one import</strong>.</p>
+    <p>It's also the visual half of this project's two creation methods: the Designer and the <a href="workflows.html#agent">AI agent workflow</a> read and write the same files, so you can start a course with one and continue with the other.</p>
+  </div>
+
+  <div class="section">
+    <div class="kicker">Features</div>
+    <h2>What you can do</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>Block editing</h3>
+        <p>Every page is a stack of blocks. Click to select, type to edit text in place, reorder, duplicate, or open any block's raw HTML.</p>
+      </div>
+      <div class="feature">
+        <h3>Nested layouts</h3>
+        <p>Click inside a block to select a column, card body, or collapsible's content — a breadcrumb shows where you are, and inserts land inside the selected container.</p>
+      </div>
+      <div class="feature">
+        <h3>Full element palette</h3>
+        <p>The complete catalog — 51 elements, 82 variants — with live previews that follow your active theme. What you insert is exactly the catalog HTML.</p>
+      </div>
+      <div class="feature">
+        <h3>Themes &amp; course styles</h3>
+        <p>Switch a page between the seven standard themes with one dropdown, or design your own: nine color roles, font, corner radius, header gradient — saved as a named course style.</p>
+      </div>
+      <div class="feature">
+        <h3>Assignment settings as a form</h3>
+        <p>Points, due dates, submission types, grading type, assignment group — the settings Canvas hides in forms, edited right next to the page content.</p>
+      </div>
+      <div class="feature">
+        <h3>Canvas-safety checker</h3>
+        <p>A deterministic check of the Canvas sanitizer's rules. Palette blocks pass by construction; the checker guards anything hand-edited.</p>
+      </div>
+      <div class="feature">
+        <h3>One-click build</h3>
+        <p>Produces a Canvas Course Export Package (<code>.imscc</code>) with pages, assignments, weighted grading groups, modules, and syllabus. Re-imports update in place.</p>
+      </div>
+      <div class="feature">
+        <h3>New course scaffolding</h3>
+        <p>Start a fresh course from the welcome screen — it creates the folder structure for you — or open any existing course repo, including agent-generated ones.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="download">
+    <div class="kicker">Get it</div>
+    <h2>Download the Mac app</h2>
+    <div class="dl-box">
+      <span class="icon" aria-hidden="true"></span>
+      <div class="info">
+        <h3>Canvas Designer for macOS</h3>
+        <p>Signed and notarized — opens without security warnings. Drag to Applications.</p>
+        <span class="fine">Requires macOS on Apple Silicon (M1 or later) · Free &amp; open source · SHA-256 checksums on the release page</span>
+      </div>
+      <a class="btn btn-primary" href="https://github.com/npuckett/canvas-design-agent/releases/latest">Download&nbsp;DMG</a>
+    </div>
+    <p style="margin-top:14px;"><a href="https://github.com/npuckett/canvas-design-agent/releases">All releases and version notes &rarr;</a></p>
+
+    <h3 id="script">On Windows, Linux, or without installing anything</h3>
+    <p>The app is a shell around a single dependency-free Python script that's included in every course repo made from the <a href="https://github.com/npuckett/canvas-course-template">course template</a>. From your course folder, run:</p>
+    <pre><code>python3 tools/designer.py .</code></pre>
+    <p>It starts a local-only server and opens the same editor in your browser. Any Python 3.9+ works; nothing is installed and nothing leaves your machine.</p>
+  </div>
+
+  <div class="section">
+    <div class="kicker">Interop</div>
+    <h2>Plays well with the AI workflow</h2>
+    <p>Because the Designer edits the same course folder the agent workflow uses, the two combine naturally:</p>
+    <ul>
+      <li><strong>Agent drafts, you polish.</strong> Have an AI generate a semester of pages from your notes, then fine-tune layout and wording visually.</li>
+      <li><strong>You design, agent scales.</strong> Build one class page you love in the Designer, then ask an agent to "make pages for weeks 2–12 in the same structure."</li>
+      <li><strong>Custom styles carry over.</strong> Styles you create in the Designer are saved to a machine-readable <code>styles.json</code>, and the agent instructions tell AI tools to honor your default style instead of inventing colors.</li>
+    </ul>
+    <div class="note"><strong>Everything stays local.</strong> The Designer has no accounts, no cloud, and no AI calls — it reads and writes files in your course folder, full stop. Using an AI agent on the same folder is always your choice, made in your own AI tool.</div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  Canvas Design Agent — design Canvas LMS courses visually or with AI, from the same plain files.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a> · <a href="about.html">About &amp; license</a>
+</footer>
+
+</body>
+</html>

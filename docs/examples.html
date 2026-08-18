@@ -3,139 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Examples -- Canvas Design Agent</title>
+  <title>Examples — Canvas Design Agent</title>
+  <link rel="stylesheet" href="site.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #222;
-      line-height: 1.6;
-      background: #fff;
-    }
-    a { color: #222; text-decoration: none; }
-    a:hover { color: #000; }
-
-    /* NAV */
-    nav {
-      background: #000;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    nav .brand { font-weight: 700; font-size: 18px; color: #fff; }
-    nav .links { display: flex; flex-wrap: wrap; gap: 14px; }
-    nav .links a { color: #999; font-size: 15px; }
-    nav .links a:hover { color: #fff; }
-
-    /* LAYOUT */
-    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
-
-    /* HEADER */
-    .header {
-      padding: 64px 24px 16px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .header h1 {
-      font-size: 28px;
-      font-weight: 800;
-      color: #000;
-    }
-    .header p {
-      font-size: 15px;
-      color: #666;
-      margin-top: 8px;
-    }
-
-    /* EXAMPLE CARDS */
-    .examples {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 32px 24px 64px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
+    .examples { max-width: 760px; margin: 0 auto; padding: 8px 24px 72px; display: flex; flex-direction: column; gap: 18px; }
     .example-card {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 26px 28px;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 16px;
       align-items: start;
-      transition: border-color 0.15s;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .example-card:hover { border-color: #999; }
-    .example-card h2 {
-      font-size: 18px;
-      font-weight: 700;
-      color: #000;
-      margin-bottom: 6px;
-    }
-    .example-card p {
-      font-size: 14px;
-      color: #666;
-      line-height: 1.5;
-      margin: 0;
-    }
-    .example-card .elements {
-      margin-top: 10px;
-      font-size: 12px;
-      font-family: monospace;
-      color: #999;
-    }
-    .example-card .meta {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #777;
-    }
-    .example-card .arrow {
-      font-size: 20px;
-      color: #ccc;
-      margin-top: 4px;
-    }
-    .example-card:hover .arrow { color: #000; }
-
+    .example-card:hover { border-color: var(--faint); box-shadow: 0 4px 18px rgba(22,22,26,0.06); color: inherit; }
+    .example-card h2 { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+    .example-card p { font-size: 14px; color: var(--muted); line-height: 1.55; margin: 0; }
+    .example-card .elements { margin-top: 10px; font-size: 12px; font-family: var(--mono); color: var(--faint); }
+    .example-card .meta { margin-top: 8px; font-size: 12px; color: var(--faint); }
+    .example-card .arrow { font-size: 20px; color: var(--line); margin-top: 4px; }
+    .example-card:hover .arrow { color: var(--accent); }
     @media (max-width: 540px) {
       .example-card { grid-template-columns: 1fr; }
       .example-card .arrow { display: none; }
-    }
-
-    /* FOOTER */
-    footer {
-      border-top: 1px solid #e0e0e0;
-      padding: 32px 24px;
-      text-align: center;
-      font-size: 13px;
-      color: #999;
     }
   </style>
 </head>
 <body>
 
-<nav>
-  <span class="brand">Canvas Design Agent</span>
+<nav class="site-nav">
+  <a class="brand" href="index.html"><span class="logo"></span>Canvas Design Agent</a>
   <span class="links">
     <a href="index.html">Home</a>
+    <a href="designer.html">Designer</a>
     <a href="workflows.html">Workflows</a>
     <a href="elements.html">Elements</a>
-    <a href="examples.html">Examples</a>
+    <a href="examples.html" class="active">Examples</a>
     <a href="downloads.html">Downloads</a>
     <a href="about.html">About</a>
     <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a>
   </span>
 </nav>
 
-<div class="header">
+<div class="page-head">
   <h1>Examples</h1>
-  <p>Finished Canvas page and component sketch outputs. Use these to choose what kind of result to ask the skill for.</p>
+  <p>Finished Canvas pages built from the element catalog. Every element you see is in the <a href="designer.html">Designer's</a> palette and the <a href="downloads.html">skill file's</a> library — use these to decide what to build or ask for.</p>
 </div>
 
 <div class="examples">
@@ -212,9 +125,9 @@
 
 </div>
 
-<footer>
-  Canvas Design Agent -- A portable AI skill for generating Canvas LMS-compatible HTML.<br>
-  <a href="https://github.com/npuckett/canvas-design-agent" style="color:#999;">GitHub Repository</a>
+<footer class="site-footer">
+  Canvas Design Agent — design Canvas LMS courses visually or with AI, from the same plain files.<br>
+  <a href="https://github.com/npuckett/canvas-design-agent">GitHub</a> · <a href="about.html">About &amp; license</a>
 </footer>
 
 </body>
