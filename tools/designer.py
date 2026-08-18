@@ -27,7 +27,35 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
-APP_DIR = Path(__file__).resolve().parent / "designer"
+if getattr(sys, "frozen", False):  # running inside a PyInstaller bundle
+    APP_DIR = Path(sys._MEIPASS) / "designer"  # type: ignore[attr-defined]
+else:
+    APP_DIR = Path(__file__).resolve().parent / "designer"
+
+# Remembered courses (standalone app mode).
+STATE_FILE = Path.home() / "Library" / "Application Support" / "Canvas Designer" / "state.json"
+
+
+def load_state() -> dict:
+    try:
+        return json.loads(STATE_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def save_state(state: dict) -> None:
+    try:
+        STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        STATE_FILE.write_text(json.dumps(state, indent=2), encoding="utf-8")
+    except OSError:
+        pass
+
+
+def remember_course(root: Path) -> None:
+    state = load_state()
+    recent = [str(root)] + [p for p in state.get("recent", []) if p != str(root)]
+    state["recent"] = recent[:8]
+    save_state(state)
 
 # Content files the editor may read/write, relative to the course root.
 EDITABLE_DIRS = ("pages", "assignments")
@@ -112,6 +140,7 @@ class Designer:
             "pages": [],
             "assignments": [],
             "canBuild": self._build_script() is not None,
+            "recent": [p for p in load_state().get("recent", []) if Path(p).is_dir()],
         }
         course_md = self.root / "course.md"
         if course_md.is_file():
@@ -217,8 +246,39 @@ class Designer:
         }
 
 
+COURSE_SCAFFOLD = {
+    "course.md": (
+        "---\n"
+        "title: {title}\n"
+        "course_code: {code}\n"
+        "timezone: America/Toronto\n"
+        "---\n"
+    ),
+    "style.md": (
+        "# Course Style\n\n"
+        "Base theme: **S01 Clean Modern**\n\n"
+        "Font stack: **F01 System Sans-Serif**\n"
+    ),
+    "modules.md": "",
+    "groups.md": "",
+    "syllabus.md": "---\ntitle: Syllabus\n---\n",
+}
+
+
+def scaffold_course(root: Path, title: str, code: str) -> None:
+    root.mkdir(parents=True, exist_ok=True)
+    if (root / "course.md").exists():
+        raise FileExistsError(f"{root} already contains a course.md")
+    if any(root.iterdir()):
+        raise PermissionError(f"{root} is not empty — choose an empty or new folder")
+    for name, tpl in COURSE_SCAFFOLD.items():
+        (root / name).write_text(tpl.format(title=title, code=code), encoding="utf-8")
+    for sub in ("pages", "assignments", "web_resources"):
+        (root / sub).mkdir()
+
+
 class Handler(BaseHTTPRequestHandler):
-    designer: Designer  # set by serve()
+    designer: "Designer | None"  # set by create_server / /api/open
 
     # -- helpers ---------------------------------------------------------
     def _json(self, data: dict, status: int = 200) -> None:
@@ -247,7 +307,14 @@ class Handler(BaseHTTPRequestHandler):
         url = urlparse(self.path)
         try:
             if url.path == "/api/course":
-                self._json(self.designer.course_info())
+                if self.designer is None:
+                    self._json({"empty": True, "recent": [
+                        p for p in load_state().get("recent", []) if Path(p).is_dir()
+                    ]})
+                else:
+                    self._json(self.designer.course_info())
+            elif url.path.startswith("/api/") and self.designer is None and url.path != "/api/open":
+                self._json({"error": "no course open"}, 400)
             elif url.path == "/api/styles":
                 self._json(self.designer.read_styles())
             elif url.path == "/api/file":
@@ -262,7 +329,22 @@ class Handler(BaseHTTPRequestHandler):
         url = urlparse(self.path)
         try:
             data = self._body_json()
-            if url.path == "/api/save":
+            if url.path == "/api/open":
+                root = Path(data["path"]).expanduser().resolve()
+                if not root.is_dir():
+                    raise FileNotFoundError(str(root))
+                if data.get("create"):
+                    scaffold_course(root, data.get("title", root.name),
+                                    data.get("code", root.name.upper()))
+                elif not (root / "course.md").is_file() and not (root / "pages").is_dir():
+                    raise PermissionError(
+                        f"{root.name} doesn't look like a course folder (no course.md or pages/)")
+                Handler.designer = Designer(root)
+                remember_course(root)
+                self._json(Handler.designer.course_info())
+            elif self.designer is None:
+                self._json({"error": "no course open"}, 400)
+            elif url.path == "/api/save":
                 self._json(self.designer.save_file(
                     data["path"], data.get("frontmatter", {}), data.get("body", "")))
             elif url.path == "/api/create":
@@ -293,11 +375,20 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
 
-def serve(root: Path, port: int, open_browser: bool) -> None:
-    Handler.designer = Designer(root)
-    server = HTTPServer(("127.0.0.1", port), Handler)
-    url = f"http://127.0.0.1:{port}/"
-    print(f"Canvas Designer — editing {root}")
+def create_server(root: "Path | None", port: int = 0) -> HTTPServer:
+    """Create the designer HTTP server. root=None starts with no course open
+    (the UI shows a welcome screen); the standalone app uses this and picks a
+    random free port with port=0."""
+    Handler.designer = Designer(root) if root else None
+    if root:
+        remember_course(root.resolve())
+    return HTTPServer(("127.0.0.1", port), Handler)
+
+
+def serve(root: "Path | None", port: int, open_browser: bool) -> None:
+    server = create_server(root, port)
+    url = f"http://127.0.0.1:{server.server_address[1]}/"
+    print(f"Canvas Designer — editing {root}" if root else "Canvas Designer")
     print(f"Open {url}  (Ctrl+C to stop)")
     if open_browser:
         webbrowser.open(url)

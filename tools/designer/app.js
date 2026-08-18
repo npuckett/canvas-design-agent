@@ -626,10 +626,94 @@ function renderFmForm() {
   }
 }
 
+/* ================= course open / create ================= */
+
+async function pickFolder() {
+  if (window.pywebview) return await window.pywebview.api.choose_folder();
+  return prompt("Full path to the course folder:");
+}
+
+async function openCourse(path, createOpts) {
+  if (!path) return;
+  try {
+    await postJSON("/api/open", createOpts ? { path, create: true, ...createOpts } : { path });
+    window.location.reload();
+  } catch (e) {
+    showMsg("Could not open course", e.message);
+  }
+}
+
+function renderWelcome(recent) {
+  state.file = null;
+  state.selected = null;
+  $("#doc-title").textContent = "No file open";
+  $("#doc-title").classList.add("dim");
+  $("#save-btn").disabled = true;
+  $("#build-btn").disabled = true;
+  $("#blk-tools").hidden = true;
+  canvas.classList.remove("empty-hint");
+  canvas.removeAttribute("style");
+  canvas.textContent = "";
+  const box = document.createElement("div");
+  box.className = "welcome";
+  box.innerHTML = `
+    <h2>Canvas Designer</h2>
+    <p>Design Canvas LMS pages and assignments as simple local files,<br>
+       then build a package you can import into Canvas.</p>
+    <div class="welcome-actions">
+      <button id="w-open" class="primary">Open course folder…</button>
+      <button id="w-new">New course…</button>
+    </div>`;
+  if (recent && recent.length) {
+    const h = document.createElement("h4");
+    h.textContent = "Recent";
+    const ul = document.createElement("ul");
+    ul.className = "recent-list";
+    for (const p of recent) {
+      const li = document.createElement("li");
+      li.textContent = p;
+      li.title = p;
+      li.addEventListener("click", () => openCourse(p));
+      ul.appendChild(li);
+    }
+    box.append(h, ul);
+  }
+  canvas.appendChild(box);
+  $("#w-open").addEventListener("click", async () => openCourse(await pickFolder()));
+  $("#w-new").addEventListener("click", newCourseDialog);
+}
+
+function newCourseDialog() {
+  const modal = $("#course-modal");
+  $("#nc-path").value = "";
+  modal.showModal();
+  $("#nc-choose").onclick = async () => { $("#nc-path").value = (await pickFolder()) || ""; };
+  $("#nc-cancel").onclick = () => modal.close();
+  $("#nc-create").onclick = () => {
+    const path = $("#nc-path").value.trim();
+    const title = $("#nc-title").value.trim();
+    if (!path) { $("#nc-choose").focus(); return; }
+    if (!title) { $("#nc-title").focus(); return; }
+    modal.close();
+    openCourse(path, { title, code: $("#nc-code").value.trim() || title.split(" ")[0] });
+  };
+}
+
+$("#switch-course").addEventListener("click", async () => {
+  if (state.dirty && !confirm("Discard unsaved changes?")) return;
+  renderWelcome((state.course && state.course.recent) || []);
+});
+
 /* ================= course / files ================= */
 
 async function loadCourse() {
   state.course = await api("/api/course");
+  if (state.course.empty) {
+    $("#course-name").textContent = "Canvas Designer";
+    $("#course-root").textContent = "";
+    renderWelcome(state.course.recent || []);
+    return;
+  }
   $("#course-name").textContent = state.course.course.title || state.course.name;
   $("#course-root").textContent = state.course.root;
   $("#build-btn").disabled = !state.course.canBuild;

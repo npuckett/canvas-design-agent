@@ -31,6 +31,7 @@
     </div>
     <div class="side-foot">
       <button id="build-btn" class="wide">Build .imscc package</button>
+      <button id="switch-course" class="wide subtle">Open / new course…</button>
     </div>
   </aside>
 
@@ -132,6 +133,22 @@
     <span class="spacer"></span>
     <button id="st-cancel">Cancel</button>
     <button id="st-save" class="primary">Save &amp; apply</button>
+  </div>
+</dialog>
+
+<dialog id="course-modal">
+  <h3>New course</h3>
+  <label class="field">Folder
+    <div class="path-row">
+      <input id="nc-path" placeholder="Choose an empty folder…" readonly>
+      <button id="nc-choose">Choose…</button>
+    </div>
+  </label>
+  <label class="field">Course title <input id="nc-title" placeholder="DIGF-2014-301 (Fall 2026) Atelier I"></label>
+  <label class="field">Course code <input id="nc-code" placeholder="DIGF-2014"></label>
+  <div class="dialog-row">
+    <button id="nc-cancel">Cancel</button>
+    <button id="nc-create" class="primary">Create course</button>
   </div>
 </dialog>
 

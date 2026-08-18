@@ -4,3 +4,7 @@ dist/
 
 # OS noise
 .DS_Store
+app/.venv/
+app/build/
+app/dist/
+__pycache__/
