@@ -28,7 +28,10 @@ from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
 if getattr(sys, "frozen", False):  # running inside a PyInstaller bundle
-    APP_DIR = Path(sys._MEIPASS) / "designer"  # type: ignore[attr-defined]
+    # resolve() so the traversal guard in _static compares real paths even
+    # when the bundle reaches the assets through a symlink (PyInstaller
+    # links Contents/Frameworks/designer -> Contents/Resources/designer)
+    APP_DIR = (Path(sys._MEIPASS) / "designer").resolve()  # type: ignore[attr-defined]
 else:
     APP_DIR = Path(__file__).resolve().parent / "designer"
 
