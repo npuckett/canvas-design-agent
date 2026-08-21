@@ -9,7 +9,12 @@ Usage:
 Produces the folder layout that build_imscc.py consumes:
 
     course.md, groups.md, syllabus.md, modules.md,
-    assignments/*.md, pages/*.md, web_resources/ (only with --include-media)
+    assignments/*.md, pages/*.md, rubrics/*.md,
+    web_resources/ (only with --include-media)
+
+Rubrics come out as one .md file per rubric with an explicit rating-points
+column per rating label, so criterion points survive the round trip exactly.
+Assignments that had a rubric attached get a `rubric:` front matter key.
 
 Datetimes are written as explicit UTC (e.g. `due: 2025-09-18T03:59:59Z`),
 which build_imscc.py accepts as-is. Edit them freely into local formats.
@@ -60,6 +65,16 @@ def meta_of(html: str, name: str) -> str:
 def title_of(html: str) -> str:
     match = re.search(r"<title>(.*?)</title>", html, re.DOTALL)
     return match.group(1).strip() if match else ""
+
+
+def slugify(name: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    return slug or "item"
+
+
+def table_cell(text: str) -> str:
+    """Make text safe inside a markdown table cell (build_imscc.py splits on |)."""
+    return text.replace("|", "&#124;").replace("\n", " ").strip()
 
 
 def front_matter(pairs: list[tuple[str, str]]) -> str:
@@ -121,6 +136,46 @@ def extract(package: Path, out: Path, include_media: bool) -> None:
             lines += [f"| {t} | {w} | {d} |" for t, w, d in rows]
             (out / "groups.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
+    # --- rubrics -----------------------------------------------------------
+    id_to_rubric_slug: dict[str, str] = {}
+    if "course_settings/rubrics.xml" in names:
+        rubrics_root = ET.fromstring(read("course_settings/rubrics.xml"))
+        rubrics_dir = out / "rubrics"
+        for rubric in rubrics_root.findall(f"{CC}rubric"):
+            r_title = text_of(rubric, "title", "rubric")
+            slug = slugify(r_title)
+            while slug in id_to_rubric_slug.values():
+                slug += "-2"
+            id_to_rubric_slug[rubric.get("identifier", slug)] = slug
+
+            criteria = rubric.findall(f"{CC}criteria/{CC}criterion")
+            # Rating labels can vary per criterion in Canvas; the markdown
+            # format shares one label set per rubric, so use the first
+            # criterion's labels as column headers (points stay exact).
+            labels = [text_of(rt, "description") for rt in
+                      criteria[0].findall(f"{CC}ratings/{CC}rating")] if criteria else []
+            lines = ["| Criterion | Points | Description |" + "".join(f" {table_cell(l)} |" for l in labels),
+                     "|---|---|---|" + "---|" * len(labels)]
+            for criterion in criteria:
+                ratings = criterion.findall(f"{CC}ratings/{CC}rating")
+                points = [text_of(rt, "points") for rt in ratings[:len(labels)]]
+                points += [""] * (len(labels) - len(points))
+                lines.append(f"| {table_cell(text_of(criterion, 'description'))} "
+                             f"| {text_of(criterion, 'points')} "
+                             f"| {table_cell(text_of(criterion, 'long_description'))} |"
+                             + "".join(f" {p} |" for p in points))
+
+            pairs = [("title", r_title)]
+            if text_of(rubric, "free_form_criterion_comments") == "true":
+                pairs.append(("free_form_comments", "true"))
+            if text_of(rubric, "hide_score_total") == "true":
+                pairs.append(("hide_score_total", "true"))
+            if criteria and text_of(criteria[0], "criterion_use_range") == "false":
+                pairs.append(("use_range", "false"))
+            rubrics_dir.mkdir(exist_ok=True)
+            (rubrics_dir / f"{slug}.md").write_text(
+                front_matter(pairs) + "\n\n" + "\n".join(lines) + "\n", encoding="utf-8")
+
     # --- syllabus.md -------------------------------------------------------
     if "course_settings/syllabus.html" in names:
         (out / "syllabus.md").write_text(
@@ -165,6 +220,15 @@ def extract(package: Path, out: Path, include_media: bool) -> None:
         group_ref = text_of(a, "assignment_group_identifierref")
         if group_ref and group_ref in group_titles:
             pairs.append(("group", group_titles[group_ref]))
+        rubric_ref = text_of(a, "rubric_identifierref")
+        if rubric_ref and rubric_ref in id_to_rubric_slug:
+            pairs.append(("rubric", id_to_rubric_slug[rubric_ref]))
+            if text_of(a, "rubric_use_for_grading") == "false":
+                pairs.append(("rubric_use_for_grading", "false"))
+            if text_of(a, "rubric_hide_points") == "true":
+                pairs.append(("rubric_hide_points", "true"))
+            if text_of(a, "rubric_hide_score_total") == "true":
+                pairs.append(("rubric_hide_score_total", "true"))
         pairs += [
             ("points", text_of(a, "points_possible")),
             ("grading_type", text_of(a, "grading_type")),
@@ -238,6 +302,8 @@ def extract(package: Path, out: Path, include_media: bool) -> None:
     print(f"  pages:       {len(page_names)}")
     print(f"  assignments: {assignment_count}")
     print(f"  groups:      {len(group_titles)}")
+    if id_to_rubric_slug:
+        print(f"  rubrics:     {len(id_to_rubric_slug)}")
     if media and not include_media:
         print(f"  media:       {len(media)} files in web_resources/ skipped (use --include-media)")
     print(f"\nRebuild with: python3 tools/build_imscc.py {out}")

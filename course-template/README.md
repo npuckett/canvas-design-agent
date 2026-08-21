@@ -43,6 +43,7 @@ modules.md           week-by-week module structure
 syllabus.md          syllabus content
 assignments/         one .md file per assignment (settings + HTML)
 pages/               one .md file per page (settings + HTML)
+rubrics/             one .md file per grading rubric (optional)
 web_resources/       images/files shipped into Canvas
 SKILL.md             the Canvas HTML rules your AI agent follows
 CLAUDE.md            instructions for AI coding agents working in this repo

@@ -15,6 +15,7 @@ Course folder layout (all files optional except course.md):
     modules.md         module structure (see below)
     assignments/*.md   one file per assignment: front matter + HTML body
     pages/*.md         one file per wiki page: front matter + HTML body
+    rubrics/*.md       one file per grading rubric: front matter + criteria table
     web_resources/     files copied into the package (referenced via $IMS-CC-FILEBASE$)
 
 Each .md body is a Canvas-safe HTML fragment (inline styles only), normally
@@ -47,6 +48,43 @@ assignments/*.md front matter keys (all optional except title):
     peer_review_count: 2
     omit_from_final_grade: true | false
     position:          1                     (default: alphabetical file order)
+    rubric:            rubric filename slug or title from rubrics/
+    rubric_use_for_grading: true | false     (default true: rubric fills the grade)
+    rubric_hide_points:     true | false     (default false)
+    rubric_hide_score_total: true | false    (default false)
+
+rubrics/*.md format — front matter + one markdown criteria table:
+
+    ---
+    title: Project Rubric
+    scale: Excellent 100, Good 85, Needs Work 70, Below 55, No Evidence 0
+    ---
+
+    | Criterion | Points | Description |
+    |---|---|---|
+    | Concept | 30 | Clarity and depth of the idea |
+    | Craft   | 40 | Quality of execution |
+    | Documentation | 30 | Completeness of the writeup |
+
+    Each rating in `scale` is "Label percent" — every criterion gets that
+    rating ladder, with points computed as a percentage of the criterion's
+    points. Omit `scale` for the default 100/75/50/25/0 five-step ladder.
+    For full control, add one column per rating with explicit points:
+
+    | Criterion | Points | Description | Excellent | Good | Poor |
+    |---|---|---|---|---|---|
+    | Concept | 30 | Clarity and depth | 30 | 24 | 0 |
+
+    Other front matter keys (all optional):
+    title:              rubric name shown in Canvas (default: from filename)
+    scale:              shared rating ladder (ignored for explicit columns)
+    free_form_comments: true | false  (comment box instead of rating buttons)
+    use_range:          true | false  (default true: ratings act as ranges)
+    hide_score_total:   true | false  (default false)
+
+    Every file in rubrics/ is created in Canvas on import (even if no
+    assignment references it). Write a literal | inside a description cell
+    as &#124; so it doesn't split the table.
 
 pages/*.md front matter keys:
     title:        Class 1 - W September 3    (default: derived from filename)
@@ -87,6 +125,11 @@ except ImportError:  # pragma: no cover
     sys.exit("Python 3.9+ is required (zoneinfo not found).")
 
 CC_NS = 'xmlns="http://canvas.instructure.com/xsd/cccv1p0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://canvas.instructure.com/xsd/cccv1p0 https://canvas.instructure.com/xsd/cccv1p0.xsd"'
+
+DEFAULT_RATING_SCALE = [
+    ("Excellent", 100.0), ("Good", 75.0), ("Needs Work", 50.0),
+    ("Below", 25.0), ("No Evidence", 0.0),
+]
 
 VALID_GRADING_TYPES = {"points", "percent", "letter_grade", "gpa_scale", "pass_fail", "not_graded"}
 VALID_SUBMISSION_TYPES = {
@@ -193,6 +236,63 @@ def parse_groups_table(text: str) -> list[dict]:
     return groups
 
 
+def parse_rating_scale(value: str) -> list[tuple[str, float]]:
+    """Parse a rubric rating scale: 'Excellent 100, Good 75, No Evidence 0'.
+
+    Each entry is a label followed by a percentage of the criterion's points.
+    """
+    scale = []
+    for part in value.split(","):
+        part = part.strip()
+        match = re.fullmatch(r"(.+?)\s+(\d+(?:\.\d+)?)\s*%?", part)
+        if not match:
+            raise ValueError(f"bad scale entry {part!r} (expected 'Label percent', e.g. 'Good 75')")
+        scale.append((match.group(1).strip(), float(match.group(2))))
+    if not scale:
+        raise ValueError("scale is empty")
+    return scale
+
+
+def parse_rubric_table(text: str) -> list[dict]:
+    """Parse the criteria table in a rubrics/*.md body.
+
+    Header: | Criterion | Points | Description [| RatingLabel ...] |
+    Columns after Description are rating labels; their cells hold the points
+    for that rating. Without rating columns, callers apply a shared scale.
+    """
+    criteria: list[dict] = []
+    labels: list[str] = []
+    header_seen = False
+    for line in text.split("\n"):
+        line = line.strip()
+        if not line.startswith("|"):
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if not cells or set("".join(cells)) <= set("-: "):
+            continue  # separator row
+        if not header_seen:
+            if cells[0].lower() != "criterion":
+                raise ValueError("table header must start with a 'Criterion' column "
+                                 "(| Criterion | Points | Description |)")
+            labels = [c for c in cells[3:] if c]
+            header_seen = True
+            continue
+        if len(cells) < 2 or not cells[1]:
+            raise ValueError(f"criterion row needs Criterion and Points columns: {line!r}")
+        criterion = {
+            "description": cells[0],
+            "points": float(cells[1]),
+            "long_description": cells[2] if len(cells) > 2 else "",
+        }
+        if labels:
+            points = cells[3:3 + len(labels)]
+            if len(points) < len(labels) or any(not p for p in points):
+                raise ValueError(f"criterion {cells[0]!r}: every rating column needs a points value")
+            criterion["ratings"] = [(label, float(p)) for label, p in zip(labels, points)]
+        criteria.append(criterion)
+    return criteria
+
+
 def parse_modules(text: str) -> list[dict]:
     """Parse modules.md: '# Title' headings with '- kind: value' items."""
     text = re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL)  # allow HTML comments
@@ -233,6 +333,43 @@ def load_course(source: Path) -> dict:
     return {"title": fm["title"], "course_code": fm["course_code"], "tz": tz}
 
 
+def load_rubrics(folder: Path, course_code: str) -> list[dict]:
+    rubrics = []
+    if not folder.is_dir():
+        return rubrics
+    for path in sorted(folder.glob("*.md")):
+        try:
+            fm, body = parse_front_matter(path.read_text(encoding="utf-8"))
+            criteria = parse_rubric_table(body)
+            scale = parse_rating_scale(fm["scale"]) if fm.get("scale") else DEFAULT_RATING_SCALE
+        except ValueError as err:
+            sys.exit(f"error: rubrics/{path.name}: {err}")
+        if not criteria:
+            sys.exit(f"error: rubrics/{path.name}: no criteria table found "
+                     "(| Criterion | Points | Description |)")
+        slug = slugify(path.stem)
+        for i, criterion in enumerate(criteria, start=1):
+            criterion["id"] = f"crit_{i}"
+            if "ratings" not in criterion:
+                criterion["ratings"] = [(label, round(criterion["points"] * pct / 100, 2))
+                                        for label, pct in scale]
+            points = [p for _, p in criterion["ratings"]]
+            if points != sorted(points, reverse=True):
+                sys.exit(f"error: rubrics/{path.name}: criterion {criterion['description']!r} "
+                         "rating points must be in descending order")
+        rubrics.append({
+            "slug": slug,
+            "title": fm.get("title") or path.stem.replace("-", " ").title(),
+            "identifier": stable_id(course_code, "rubric", slug),
+            "criteria": criteria,
+            "points_possible": round(sum(c["points"] for c in criteria), 2),
+            "free_form_comments": parse_bool(fm.get("free_form_comments"), False),
+            "hide_score_total": parse_bool(fm.get("hide_score_total"), False),
+            "use_range": parse_bool(fm.get("use_range"), True),
+        })
+    return rubrics
+
+
 def load_items(folder: Path, kind: str, course_code: str, tz: ZoneInfo) -> list[dict]:
     items = []
     if not folder.is_dir():
@@ -268,6 +405,10 @@ def load_items(folder: Path, kind: str, course_code: str, tz: ZoneInfo) -> list[
                 "peer_reviews": parse_bool(fm.get("peer_reviews"), False),
                 "peer_review_count": int(fm.get("peer_review_count", 0)),
                 "omit_from_final_grade": parse_bool(fm.get("omit_from_final_grade"), False),
+                "rubric": fm.get("rubric", ""),
+                "rubric_use_for_grading": parse_bool(fm.get("rubric_use_for_grading"), True),
+                "rubric_hide_points": parse_bool(fm.get("rubric_hide_points"), False),
+                "rubric_hide_score_total": parse_bool(fm.get("rubric_hide_score_total"), False),
             })
             for key in ("due", "unlock", "lock"):
                 if fm.get(key):
@@ -303,10 +444,16 @@ def xml_assignment_settings(a: dict, group_ids: dict[str, str]) -> str:
         lines.append(f"  <all_day_date>{due[2]}</all_day_date>")
     if group_ref:
         lines.append(f"  <assignment_group_identifierref>{group_ref}</assignment_group_identifierref>")
-    lines += [
-        f"  <workflow_state>{'published' if a['published'] else 'unpublished'}</workflow_state>",
-        f"  <allowed_extensions>{escape(a['allowed_extensions'])}</allowed_extensions>",
-    ]
+    lines.append(f"  <workflow_state>{'published' if a['published'] else 'unpublished'}</workflow_state>")
+    if a.get("rubric_ref"):
+        lines += [
+            f"  <rubric_identifierref>{a['rubric_ref']}</rubric_identifierref>",
+            f"  <rubric_use_for_grading>{'true' if a['rubric_use_for_grading'] else 'false'}</rubric_use_for_grading>",
+            f"  <rubric_hide_points>{'true' if a['rubric_hide_points'] else 'false'}</rubric_hide_points>",
+            "  <rubric_hide_outcome_results>false</rubric_hide_outcome_results>",
+            f"  <rubric_hide_score_total>{'true' if a['rubric_hide_score_total'] else 'false'}</rubric_hide_score_total>",
+        ]
+    lines.append(f"  <allowed_extensions>{escape(a['allowed_extensions'])}</allowed_extensions>")
     if a["group_category"]:
         lines += [
             "  <has_group_category>true</has_group_category>",
@@ -361,6 +508,49 @@ def xml_assignment_groups(groups: list[dict], group_ids: dict[str, str]) -> str:
             ]
         lines.append("  </assignmentGroup>")
     lines.append("</assignmentGroups>")
+    return "\n".join(lines) + "\n"
+
+
+def xml_rubrics(rubrics: list[dict]) -> str:
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        f"<rubrics {CC_NS}>",
+    ]
+    for r in rubrics:
+        lines += [
+            f'  <rubric identifier="{r["identifier"]}">',
+            "    <read_only>false</read_only>",
+            f"    <title>{escape(r['title'])}</title>",
+            "    <reusable>false</reusable>",
+            "    <public>false</public>",
+            f"    <points_possible>{r['points_possible']}</points_possible>",
+            f"    <hide_score_total>{'true' if r['hide_score_total'] else 'false'}</hide_score_total>",
+            f"    <free_form_criterion_comments>{'true' if r['free_form_comments'] else 'false'}</free_form_criterion_comments>",
+            "    <rating_order>descending</rating_order>",
+            "    <criteria>",
+        ]
+        for criterion in r["criteria"]:
+            lines += [
+                "      <criterion>",
+                f"        <criterion_id>{criterion['id']}</criterion_id>",
+                f"        <points>{criterion['points']}</points>",
+                f"        <description>{escape(criterion['description'])}</description>",
+                f"        <long_description>{escape(criterion['long_description'])}</long_description>",
+                f"        <criterion_use_range>{'true' if r['use_range'] else 'false'}</criterion_use_range>",
+                "        <ratings>",
+            ]
+            for j, (label, points) in enumerate(criterion["ratings"], start=1):
+                lines += [
+                    "          <rating>",
+                    f"            <description>{escape(label)}</description>",
+                    f"            <points>{points}</points>",
+                    f"            <criterion_id>{criterion['id']}</criterion_id>",
+                    f"            <id>{criterion['id']}_r{j}</id>",
+                    "          </rating>",
+                ]
+            lines += ["        </ratings>", "      </criterion>"]
+        lines += ["    </criteria>", "  </rubric>"]
+    lines.append("</rubrics>")
     return "\n".join(lines) + "\n"
 
 
@@ -465,7 +655,7 @@ def html_assignment(a: dict) -> str:
 
 
 def xml_manifest(course: dict, course_id: str, pages: list[dict], assignments: list[dict],
-                 has_syllabus: bool, web_resource_paths: list[str]) -> str:
+                 has_syllabus: bool, has_rubrics: bool, web_resource_paths: list[str]) -> str:
     export_date = datetime.now(dt_timezone.utc).strftime("%Y-%m-%d")
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -520,6 +710,10 @@ def xml_manifest(course: dict, course_id: str, pages: list[dict], assignments: l
         'href="course_settings/canvas_export.txt">',
         '      <file href="course_settings/course_settings.xml"/>',
         '      <file href="course_settings/assignment_groups.xml"/>',
+    ]
+    if has_rubrics:
+        lines.append('      <file href="course_settings/rubrics.xml"/>')
+    lines += [
         '      <file href="course_settings/module_meta.xml"/>',
         '      <file href="course_settings/canvas_export.txt"/>',
         "    </resource>",
@@ -566,6 +760,24 @@ def build(source: Path, output: Path, only: list[str] | None = None) -> None:
 
     assignments = load_items(source / "assignments", "assignment", code, course["tz"])
     pages = load_items(source / "pages", "page", code, course["tz"])
+    rubrics = load_rubrics(source / "rubrics", code)
+
+    # Resolve assignment `rubric:` references (by filename slug or title).
+    rubrics_by_key: dict[str, dict] = {}
+    for r in rubrics:
+        rubrics_by_key[r["slug"]] = r
+        rubrics_by_key.setdefault(slugify(r["title"]), r)
+    for a in assignments:
+        if a["rubric"]:
+            r = rubrics_by_key.get(slugify(a["rubric"]))
+            if not r:
+                sys.exit(f"error: assignments/{a['slug']}.md references unknown rubric "
+                         f"{a['rubric']!r} — add rubrics/{slugify(a['rubric'])}.md or fix the name")
+            a["rubric_ref"] = r["identifier"]
+            if a["rubric_use_for_grading"] and r["points_possible"] != a["points"]:
+                print(f"note: {a['slug']}: rubric {r['slug']!r} totals {r['points_possible']} "
+                      f"points but the assignment is worth {a['points']} — grading via the "
+                      "rubric scores out of the rubric total, so these usually should match")
 
     front_pages = [p for p in pages if p.get("front_page")]
     if len(front_pages) > 1:
@@ -658,11 +870,14 @@ def build(source: Path, output: Path, only: list[str] | None = None) -> None:
         files[path] = content.encode("utf-8")
 
     add("imsmanifest.xml",
-        xml_manifest(course, course_id, pages, assignments, syllabus_body is not None, web_paths),
+        xml_manifest(course, course_id, pages, assignments, syllabus_body is not None,
+                     bool(rubrics), web_paths),
         validate_xml=True)
     add("course_settings/course_settings.xml",
         xml_course_settings(course, course_id, has_weights, bool(front_pages)), validate_xml=True)
     add("course_settings/assignment_groups.xml", xml_assignment_groups(groups, group_ids), validate_xml=True)
+    if rubrics:
+        add("course_settings/rubrics.xml", xml_rubrics(rubrics), validate_xml=True)
     add("course_settings/module_meta.xml",
         xml_module_meta(modules, code, pages_by_slug, assignments_by_slug), validate_xml=True)
     add("course_settings/canvas_export.txt",
@@ -687,6 +902,8 @@ def build(source: Path, output: Path, only: list[str] | None = None) -> None:
     print(f"  pages:       {len(pages)}" + (f" (front page: {front_pages[0]['slug']})" if front_pages else ""))
     print(f"  assignments: {len(assignments)}")
     print(f"  groups:      {len(groups)}")
+    if rubrics:
+        print(f"  rubrics:     {len(rubrics)}")
     print(f"  modules:     {len(modules)}")
     if web_paths:
         print(f"  files:       {len(web_paths)}")
@@ -703,8 +920,8 @@ def main() -> None:
     parser.add_argument("--only", action="append", default=[], metavar="FILE",
                         help="build a partial package with just this page/assignment "
                              "(e.g. pages/class-7.md; repeatable; 'syllabus.md' also allowed). "
-                             "Assignment groups are always included so weights stay in sync; "
-                             "modules and web_resources are skipped")
+                             "Assignment groups and rubrics are always included so weights and "
+                             "attached rubrics stay in sync; modules and web_resources are skipped")
     args = parser.parse_args()
     source = args.source.resolve()
     if not source.is_dir():

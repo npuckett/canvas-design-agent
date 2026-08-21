@@ -22,6 +22,10 @@ importable package — not to output one-off HTML in chat.
      `grading_type`, `submission_types`, `due`, `group`, …) + body =
      assignment description HTML (start headings at `<h2>` — Canvas shows
      the title itself)
+   - `rubrics/<slug>.md` — grading rubric: front matter (`title`, optional
+     `scale`) + a `| Criterion | Points | Description |` table; attach to an
+     assignment with `rubric: <slug>` in its front matter. Every file in
+     `rubrics/` is created in Canvas on import, so no drafts there.
    - `groups.md` — grading scheme table; `modules.md` — module structure;
      `syllabus.md` — syllabus body; `course.md` — course metadata
    - Full front-matter key reference: [tools/README.md](tools/README.md)
@@ -41,6 +45,17 @@ importable package — not to output one-off HTML in chat.
    is a specific local time.
 7. **Don't duplicate what Canvas shows.** Assignment bodies never repeat
    the title, points, or due date. See SKILL.md's CONTEXT RULE.
+   **Placeholder assignments:** when scaffolding a semester before briefs
+   are written, give each assignment complete front matter (title, due,
+   points, group — those are final from day one) and a minimal body:
+   an HTML comment `<!-- PLACEHOLDER -->` on its own line, then one
+   muted `<p>` such as "Full brief coming — date, points, and weighting
+   above are final." Don't invent brief content the instructor hasn't
+   provided. When asked to fill in or list remaining briefs, find them by
+   searching assignment files for `<!-- PLACEHOLDER -->`, and remove the
+   marker when real content replaces it. Placeholders default to
+   `published: true` so dates and points appear in students' calendars;
+   use `published: false` only if the instructor asks.
 8. The instructor may also edit files visually with the Canvas Designer
    (the desktop app, or `python3 tools/designer.py .` — a local block
    editor over these same files).
@@ -50,7 +65,16 @@ importable package — not to output one-off HTML in chat.
    gradient) created in the designer; when generating or restyling content,
    use the style marked `default` there (it refines style.md's theme
    choice) rather than inventing colors.
-9. If the instructor's Canvas instance allows API tokens,
+9. **The Official Course Outline is `syllabus.md` and has a required
+   format.** When asked to create or update the course outline / syllabus,
+   follow [templates/outline/FORMAT.md](templates/outline/FORMAT.md) exactly
+   and copy the boilerplate matching `level` in course.md
+   (`templates/outline/boilerplate-undergrad.md` or `-grad.md`) **verbatim —
+   never paraphrase institutional language**. It uses plain hierarchical
+   text, not the style.md theme, and restyle passes must skip it. It is a
+   different document from any designed front page in `pages/` (e.g. a
+   `course-outline` page) — never merge the two.
+10. If the instructor's Canvas instance allows API tokens,
    `tools/canvas_api_sync.py` can push individual files directly — but
    never ask for or handle the token value yourself; the instructor sets
    `CANVAS_API_TOKEN` in their own shell.

@@ -2,6 +2,7 @@
 title: COURSE-CODE-SECTION (Term Year) Course Title
 course_code: COURSE-CODE
 timezone: America/Toronto
+level: undergrad
 ---
 
 Edit the front matter above:
@@ -12,5 +13,9 @@ Edit the front matter above:
   content instead of updating it)
 - `timezone` — IANA name; all assignment due dates are interpreted in this
   timezone (`America/Toronto`, `America/New_York`, `America/Vancouver`, `UTC`, …)
+- `level` — `undergrad` or `grad`; selects which institutional boilerplate
+  the Official Course Outline (`syllabus.md`) uses, see
+  [templates/outline/FORMAT.md](templates/outline/FORMAT.md). Ignored by the
+  build itself.
 
 This body text is ignored by the build.

@@ -6,6 +6,7 @@ grading_type: letter_grade
 submission_types: online_upload,online_url
 allowed_extensions: pdf
 due: 2026-10-07 23:59
+rubric: proposal-rubric
 ---
 
 <h2 style="color: #333333; font-family: system-ui, -apple-system, sans-serif;">About</h2>

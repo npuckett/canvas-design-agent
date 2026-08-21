@@ -116,6 +116,8 @@ my-course/
 │   └── project-1.md
 ├── pages/             one .md file per wiki page
 │   └── class-1.md
+├── rubrics/           one .md file per grading rubric
+│   └── project-rubric.md
 └── web_resources/     files shipped inside the package (images, PDFs)
 ```
 
@@ -183,9 +185,78 @@ due: 2026-10-07 23:59
 | `peer_reviews` / `peer_review_count` | `true` / number | off |
 | `omit_from_final_grade` | `true` / `false` | `false` |
 | `position` | number (order in the group) | file order |
+| `rubric` | rubric filename slug or title from `rubrics/` | none |
+| `rubric_use_for_grading` | `true` / `false` — rubric score fills the grade | `true` |
+| `rubric_hide_points` / `rubric_hide_score_total` | `true` / `false` | `false` |
 
 Assignment descriptions should start at `<h2>` — Canvas already shows the
 assignment name, points, and due date above the description.
+
+### rubrics/*.md — grading rubrics
+
+Canvas's rubric editor is one of its clunkiest screens; here a rubric is one
+markdown file — front matter + a criteria table — attached to an assignment
+with a single `rubric:` front-matter key:
+
+```markdown
+---
+title: Project Rubric
+scale: Excellent 100, Good 85, Needs Work 70, Below 55, No Evidence 0
+---
+
+| Criterion | Points | Description |
+|---|---|---|
+| Concept | 30 | Clarity and depth of the idea |
+| Craft | 40 | Quality of execution and attention to detail |
+| Documentation | 30 | Completeness and polish of the writeup |
+```
+
+```markdown
+# assignments/project-1.md front matter
+rubric: project-rubric        # filename slug (or the rubric's title)
+```
+
+Every criterion gets the rating ladder from `scale` — each entry is
+`Label percent`, applied to the criterion's points (Craft above rates
+40 / 34 / 28 / 22 / 0). Omit `scale` for the default
+`Excellent 100, Good 75, Needs Work 50, Below 25, No Evidence 0`.
+
+When one shared ladder isn't enough, spell out exact points by adding one
+column per rating — column headers are the rating labels:
+
+```markdown
+| Criterion | Points | Description | Excellent | Good | Poor |
+|---|---|---|---|---|---|
+| Concept | 30 | Clarity and depth | 30 | 24 | 0 |
+| Craft | 40 | Quality of execution | 40 | 30 | 0 |
+```
+
+Front matter keys (all optional):
+
+| Key | Values | Default |
+|---|---|---|
+| `title` | rubric name shown in Canvas | filename |
+| `scale` | `Label percent` list, ignored when the table has rating columns | `Excellent 100, Good 75, Needs Work 50, Below 25, No Evidence 0` |
+| `free_form_comments` | `true` — graders write a comment per criterion instead of clicking a rating | `false` |
+| `use_range` | `false` — ratings are exact values instead of ranges | `true` |
+| `hide_score_total` | `true` / `false` | `false` |
+
+Details worth knowing:
+
+- The rubric's total points is the sum of the criterion points. If an
+  assignment uses the rubric **for grading** (the default), the build warns
+  when the totals don't match the assignment's `points`.
+- Rating points must descend left-to-right; the build errors otherwise.
+- **Every file in `rubrics/` is created in Canvas on import**, whether or
+  not an assignment references it — don't keep drafts in the folder.
+- Descriptions are plain text (inline HTML allowed). Write a literal `|`
+  inside a cell as `&#124;` so it doesn't split the table.
+- Partial builds (`--only`) always include all rubrics, like assignment
+  groups, so attachments stay in sync.
+- `extract_imscc.py` round-trips rubrics into this format (using explicit
+  rating columns so points survive exactly). One nuance: Canvas allows each
+  criterion to have differently-named rating labels; this format shares one
+  label set per rubric, taken from the first criterion.
 
 ### pages/*.md
 
@@ -285,6 +356,8 @@ After importing, spot-check in Canvas:
 
 - **Assignments** → groups, weights (Assignments → ⋮ → Assignment Groups
   Weight), points, due dates
+- **Rubrics** → open an assignment that has one attached; criteria, ratings,
+  and totals should match your `rubrics/*.md`
 - **Pages** → formatting survived (Canvas re-sanitizes HTML on import, same
   rules as the RCE — SKILL.md-generated HTML passes cleanly)
 - **Modules** → structure and item order
@@ -292,9 +365,11 @@ After importing, spot-check in Canvas:
 
 ## Limitations
 
-- Discussions, quizzes, announcements, rubrics, and files-tab organization
-  are not generated (extract keeps none of them either). Add those in Canvas
+- Discussions, quizzes, announcements, and files-tab organization are not
+  generated (extract keeps none of them either). Add those in Canvas
   directly, or extend the tools.
+- Rubrics travel through the `.imscc` path only — `canvas_api_sync.py`
+  doesn't create or attach them, so push rubric changes via build + import.
 - `canvas_api_sync.py` matches assignments by exact title — renaming an
   assignment in the front matter creates a new one via the API path (the
   .imscc path is immune: it matches on stable identifiers).
