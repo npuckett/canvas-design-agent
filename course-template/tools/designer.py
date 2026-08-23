@@ -18,6 +18,8 @@ content files inside the course folder.
 
 from __future__ import annotations
 
+import re
+
 import argparse
 import json
 import subprocess
@@ -236,7 +238,9 @@ class Designer:
         script = self._build_script()
         if script is None:
             return {"ok": False, "output": "build_imscc.py not found (expected in tools/)"}
-        out = self.root / "dist" / f"{self.root.name}.imscc"
+        title = self.course_info().get("course", {}).get("title") or self.root.name
+        safe = re.sub(r'[\\/:*?"<>|]+', "-", title).strip(" .") or self.root.name
+        out = self.root / "dist" / f"{safe}.imscc"   # matches build_imscc.py's default
         out.parent.mkdir(exist_ok=True)
         proc = subprocess.run(
             [sys.executable, str(script), str(self.root), "-o", str(out)],

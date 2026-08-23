@@ -7,6 +7,9 @@ Requires Python 3.9+.
 Usage:
     python3 build_imscc.py <course-folder> [-o output.imscc]
 
+Default output: <course-folder>/dist/<course title>.imscc, e.g.
+    dist/DIGF-6037-301 (Fall 2026) Creation & Computation.imscc
+
 Course folder layout (all files optional except course.md):
 
     course.md          course metadata (front matter). Body is ignored.
@@ -317,6 +320,17 @@ def parse_modules(text: str) -> list[dict]:
 # ---------------------------------------------------------------------------
 # Content loading
 # ---------------------------------------------------------------------------
+
+def default_output(source: Path) -> Path:
+    """dist/<course title>.imscc inside the course folder.
+
+    Uses the course.md title verbatim, replacing only characters that are
+    illegal in file names, so the package is recognisable at a glance.
+    """
+    title = load_course(source)["title"]
+    safe = re.sub(r'[\\/:*?"<>|]+', "-", title).strip(" .") or source.name
+    return source / "dist" / f"{safe}.imscc"
+
 
 def load_course(source: Path) -> dict:
     course_file = source / "course.md"
@@ -916,7 +930,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Build a Canvas .imscc package from a course folder.")
     parser.add_argument("source", type=Path, help="course source folder (contains course.md)")
     parser.add_argument("-o", "--output", type=Path, default=None,
-                        help="output .imscc path (default: <source-name>.imscc next to the folder)")
+                        help="output .imscc path (default: dist/<course title>.imscc inside the folder)")
     parser.add_argument("--only", action="append", default=[], metavar="FILE",
                         help="build a partial package with just this page/assignment "
                              "(e.g. pages/class-7.md; repeatable; 'syllabus.md' also allowed). "
@@ -926,7 +940,8 @@ def main() -> None:
     source = args.source.resolve()
     if not source.is_dir():
         sys.exit(f"error: {source} is not a directory")
-    output = args.output or source.parent / f"{source.name}.imscc"
+    output = args.output or default_output(source)
+    output.parent.mkdir(parents=True, exist_ok=True)
     build(source, output, args.only)
 
 

@@ -36,6 +36,7 @@ Python 3.9+ works (`python3` on macOS, `py -3` on Windows).
 | `build_imscc.py` | Builds a Canvas-importable `.imscc` course package from a course folder |
 | `extract_imscc.py` | Converts an existing Canvas course export into an editable course folder |
 | `canvas_api_sync.py` | Pushes pages/assignments directly into Canvas via the REST API (no import step) |
+| `canvas_html_sync.py` | Pulls manual Canvas edits back into the folder from a page's saved HTML (diff + optional apply) |
 | `designer.py` | Opens the [Canvas Designer](designer/README.md) — a local visual block editor over the course folder |
 
 ## Getting HTML into Canvas: the three methods
@@ -349,6 +350,49 @@ originals (identifiers change during extraction), so this round trip is best
 for populating a *new* course shell — e.g. next semester's section. For
 updating a live course in place, either re-import the *same* source folder
 after edits (rebuilds keep identifiers stable) or use `canvas_api_sync.py`.
+
+## Pulling manual Canvas edits back (`canvas_html_sync.py`)
+
+Someone will eventually edit a page in Canvas directly. Because every
+import (and every API push) overwrites Canvas with the folder's version,
+those edits must come back into the folder first. You don't need a full
+export for that:
+
+1. In Canvas open the page (or Syllabus → Edit) and either switch the
+   editor to its `</>` raw-HTML view and copy everything into
+   `sourceDocs/canvas-html/<name>.html`, **or** use the browser's
+   File → Save Page As → "Webpage, HTML Only" on the normal page view.
+   Both forms work; the tool finds Canvas's content container itself.
+2. Run it:
+
+   ```bash
+   python3 tools/canvas_html_sync.py sourceDocs/canvas-html/syllabus.html
+   ```
+
+   It infers the target file from the name (`syllabus` → `syllabus.md`,
+   otherwise a page/assignment matched by slug, title, or `<h1>`; use
+   `--target pages/home.md` to force it), rewrites Canvas URLs back into
+   `$WIKI_REFERENCE$` / `$CANVAS_OBJECT_REFERENCE$` / `$IMS-CC-FILEBASE$`
+   tokens (numeric assignment and file ids are resolved by link text,
+   `title`/`alt`, and the links already in the repo file), strips the
+   `data-api-*`/`class` attributes and link icons Canvas adds, and prints:
+   - a **text diff** with tags stripped — the actual wording changes,
+   - a **link diff** — links added or removed,
+   - a **markup report** — style/`<strong>`/anchor counts, with a warning
+     if the Canvas copy lost markup (the editor strips `font-weight`,
+     `text-transform`, and block-level anchors on save).
+   For an **assignment** saved as a full page it also lists the points, due
+   date, and submission type shown on that page next to the front matter
+   values — those live in front matter, not the HTML, so update them there
+   if Canvas differs.
+3. Carry the wording changes into the repo file by hand (keeps the repo's
+   markup), or, when the markup report shows no loss — or the repo file is
+   still a `<!-- PLACEHOLDER -->` — take the Canvas body wholesale with
+   `--apply` (front matter is kept). `--out FILE` saves the
+   cleaned body for a manual merge; `--raw` adds a raw HTML diff.
+4. Rebuild and re-import (or push) so Canvas carries the clean version.
+
+Without `--apply` the tool changes nothing, so it doubles as a drift check.
 
 ## Verifying an import
 

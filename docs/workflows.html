@@ -233,6 +233,11 @@ python3 tools/canvas_api_sync.py my-course \
   </ul>
   <p>Two things imports won't do: they never <strong>delete</strong> (removing a file from the repo doesn't remove the Canvas item — do that in Canvas), and they never <strong>merge</strong> (if you hand-edit an item inside Canvas, the next import that includes it overwrites the Canvas version — so keep edits in the repo, or use a partial package that leaves that item alone).</p>
 
+  <h3>When someone edits inside Canvas anyway</h3>
+  <p>It happens — a co-instructor tweaks the syllabus, you fix a typo from your phone. Before the next import, pull those edits back into the folder with <code>canvas_html_sync.py</code>. No export needed: open the page in Canvas and either copy everything from the editor's <code>&lt;/&gt;</code> raw-HTML view into a file, or use the browser's <em>Save Page As → "Webpage, HTML Only"</em>. Then:</p>
+  <pre><code>python3 tools/canvas_html_sync.py sourceDocs/canvas-html/syllabus.html</code></pre>
+  <p>It works out which file the HTML belongs to (syllabus, page, or assignment), converts Canvas's links back into the repo's portable form, and shows you exactly what changed — the wording differences, any links added or removed, and a warning if Canvas's editor stripped formatting on save. Nothing is written unless you add <code>--apply</code>; most of the time you read the diff and carry the wording changes into your file by hand, keeping the repo's clean markup. For assignments saved as a full page it also lists the points, due date, and submission type shown in Canvas next to the values in your file.</p>
+
   <h3>Bootstrapping a repo from an existing Canvas course</h3>
   <p>The tools also work in reverse — a one-time step for courses that so far exist only in Canvas:</p>
   <ol>
